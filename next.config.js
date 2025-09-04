@@ -1,10 +1,4 @@
-/** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  images: { unoptimized: true },
+  output: 'standalone',
+  outputFileTracingRoot: '/var/www/vhosts/vh172.by3020.ihb.by/testend.site',
 };
-
-module.exports = nextConfig;
