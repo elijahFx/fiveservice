@@ -2,7 +2,6 @@ const createDbConnection = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
-const cloudinary = require("../utils/cloudinary");
 const multer = require("multer");
 
 require("dotenv").config();
@@ -82,15 +81,15 @@ async function login(req, res) {
   try {
     connection = await createDbConnection();
 
-    const { nickname, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!nickname || !password) {
-      return res.status(400).json({ error: "Требуются nickname и пароль" });
+    if (!email || !password) {
+      return res.status(400).json({ error: "Требуются email и пароль" });
     }
 
     const [users] = await connection.query(
-      "SELECT id, password, nickname, status, avatar, rank, fullName, createdAt FROM users WHERE nickname = ? LIMIT 1",
-      [nickname]
+      "SELECT id, password, email, status, rank, fullName, createdAt FROM users WHERE email = ? LIMIT 1",
+      [email]
     );
 
     if (users.length === 0) {
@@ -102,56 +101,18 @@ async function login(req, res) {
     if (!isMatch) {
       return res.status(401).json({ error: "Неверные учетные данные" });
     }
-
-    // Кол-во всех дел
-    const [caseCountResult] = await connection.query(
-      "SELECT COUNT(*) AS count FROM cases WHERE responsibleEmployee = ?",
-      [user.fullName]
-    );
-    const caseCount = caseCountResult[0]?.count || 0;
-
-    // Кол-во дел по каждому из 4 нужных статусов
-    const [statusCounts] = await connection.query(
-      `SELECT status, COUNT(*) as count
-       FROM cases
-       WHERE responsibleEmployee = ?
-         AND status IN (?, ?, ?, ?)
-       GROUP BY status`,
-      [
-        user.fullName,
-        "Новое",
-        "Ведется работа по делу",
-        "В архиве",
-        "Вынесено решение (определение)",
-      ]
-    );
-
-    // Преобразуем массив результатов в объект вида { "Новое": 5, ... }
-    const statusCountMap = {
-      Новое: 0,
-      "Ведется работа по делу": 0,
-      "В архиве": 0,
-      "Вынесено решение (определение)": 0,
-    };
-    statusCounts.forEach(({ status, count }) => {
-      statusCountMap[status] = count;
-    });
-
     const token = jwt.sign({ id: user.id }, process.env.SECRET, {
       expiresIn: "5h",
     });
 
     const userResponse = {
       id: user.id,
-      nickname: user.nickname,
+      email: user.email,
       status: user.status,
-      avatar: user.avatar,
       rank: user.rank,
       fullName: user.fullName,
       createdAt: user.createdAt || "нет",
       token,
-      caseCount,
-      caseStatuses: statusCountMap,
     };
 
     return res.status(200).json(userResponse);

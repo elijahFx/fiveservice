@@ -1,4 +1,4 @@
-import { BookOpen } from 'lucide-react';
+import { BookOpen } from "lucide-react";
 
 const ArticlesHero = () => {
   return (
@@ -6,13 +6,11 @@ const ArticlesHero = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="flex items-center justify-center mb-4 sm:mb-6">
           <BookOpen className="w-8 h-8 sm:w-12 sm:h-12 text-blue-400 mr-2 sm:mr-4" />
-          <h1 className="text-4xl md:text-5xl font-bold">
-            Полезные статьи
-          </h1>
+          <h1 className="text-4xl md:text-5xl font-bold">Полезные статьи</h1>
         </div>
         <p className="text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
-          Изучайте полезные материалы о ремонте и обслуживании ноутбуков 
-          от наших экспертов с многолетним опытом
+          Изучайте полезные материалы о ремонте и обслуживании ноутбуков от
+          наших экспертов с многолетним опытом
         </p>
       </div>
     </section>

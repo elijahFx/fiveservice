@@ -10,14 +10,20 @@ const {
   deleteArticle,
   likeArticle,
   unlikeArticle,
-  searchArticles
+  searchArticles,
+  getArticlesByID
 } = require("../controllers/articlesControllers");
 const requireAuth = require("../requireAuth");
 
 const router = express.Router();
 
+router.get("/", getArticles);
+
+// Получение одной статьи
+router.get("/:id", getSingleArticle);
+
 // Получение всех статей (должен быть выше динамических маршрутов)
-router.get("/", requireAuth, getArticles);
+
 
 // Поиск статей
 router.get("/search", requireAuth, searchArticles);
@@ -31,8 +37,7 @@ router.get("/user/:user_id", requireAuth, getArticlesByUser);
 // Получение статей по категории
 router.get("/category/:category", requireAuth, getArticlesByCategory);
 
-// Получение одной статьи
-router.get("/:id", requireAuth, getSingleArticle);
+
 
 // Редактирование статьи
 router.put("/:id", requireAuth, editArticle);

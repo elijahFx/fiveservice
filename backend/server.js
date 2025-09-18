@@ -13,12 +13,16 @@ app.use(express.json());
 const userRoutes = require("./routes/users")
 const articlesRoutes = require("./routes/articles")
 const uploads = require("./routes/upload")
-
+const questions = require("./routes/questions")
+const claims = require("./routes/claims")
 
 app.use("/api/auth", userRoutes)
 app.use("/upload", uploads)
-app.use("/articles", articlesRoutes)
-app.use("/files", express.static(path.join(__dirname, "../files")));
+app.use("/api/articles", articlesRoutes)
+app.use("/api/questions", questions)
+app.use("/api/claims", claims)
+app.use("/api/files", express.static(path.join(__dirname, "../files")));
+
 
 
 const db = mysql.createConnection({

@@ -3,264 +3,289 @@ const createDbConnection = require("../db");
 
 require("dotenv").config();
 
-const addArticle = async (req, res) => {
+const addQuestion = async (req, res) => {
   let connection;
   try {
     connection = await createDbConnection();
 
-    const { title, content, user_id, category, tags } = req.body;
+    const { content, author } = req.body;
 
     const id = uuidv4();
     const createdAt = new Date().toISOString();
-    const updatedAt = createdAt;
-    const likes = 0;
+    const isFeatured = 0;
+    const answer = null;
 
     const [result] = await connection.execute(
-      `INSERT INTO articles 
-      (id, title, content, user_id, category, tags, createdAt, updatedAt, likes) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, title, content, user_id, category, tags || null, createdAt, updatedAt, likes]
+      `INSERT INTO questions 
+      (id, createdAt, content, answer, isFeatured, author) 
+      VALUES (?, ?, ?, ?, ?, ?)`,
+      [id, createdAt, content, answer, isFeatured, author || null]
     );
 
     res.status(201).json({
       id,
-      message: "Article created successfully",
+      message: "Question created successfully",
     });
   } catch (error) {
-    console.error("Error creating article:", error);
+    console.error("Error creating question:", error);
     res.status(500).json({ error: error.message });
   } finally {
     if (connection) await connection.end();
   }
 };
 
-const getArticles = async (req, res) => {
+const getQuestions = async (req, res) => {
   let connection;
   try {
     connection = await createDbConnection();
 
     const [rows] = await connection.execute(`
       SELECT * 
-      FROM articles 
+      FROM questions 
       ORDER BY createdAt DESC
     `);
 
     res.status(200).json(rows);
   } catch (error) {
-    console.error("Error fetching articles:", error);
+    console.error("Error fetching questions:", error);
     res.status(500).json({ error: "Internal server error" });
   } finally {
     if (connection) await connection.end();
   }
 };
 
-const getArticlesByUser = async (req, res) => {
+const getFeaturedQuestions = async (req, res) => {
   let connection;
   try {
     connection = await createDbConnection();
-    const { user_id } = req.params;
+
+    const [rows] = await connection.execute(`
+      SELECT * 
+      FROM questions 
+      WHERE isFeatured = 1
+      ORDER BY createdAt DESC
+    `);
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching featured questions:", error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    if (connection) await connection.end();
+  }
+};
+
+const getUnansweredQuestions = async (req, res) => {
+  let connection;
+  try {
+    connection = await createDbConnection();
+
+    const [rows] = await connection.execute(`
+      SELECT * 
+      FROM questions 
+      WHERE answer IS NULL OR answer = ''
+      ORDER BY createdAt DESC
+    `);
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching unanswered questions:", error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    if (connection) await connection.end();
+  }
+};
+
+const getAnsweredQuestions = async (req, res) => {
+  let connection;
+  try {
+    connection = await createDbConnection();
+
+    const [rows] = await connection.execute(`
+      SELECT * 
+      FROM questions 
+      WHERE answer IS NOT NULL AND answer != ''
+      ORDER BY createdAt DESC
+    `);
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching answered questions:", error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    if (connection) await connection.end();
+  }
+};
+
+const getQuestionsByAuthor = async (req, res) => {
+  let connection;
+  try {
+    connection = await createDbConnection();
+    const { author } = req.params;
 
     const [rows] = await connection.execute(
-      `SELECT * FROM articles WHERE user_id = ? 
+      `SELECT * FROM questions WHERE author = ? 
        ORDER BY createdAt DESC`,
-      [user_id]
+      [author]
     );
 
     res.status(200).json(rows);
   } catch (error) {
-    console.error("Error fetching articles by user:", error);
+    console.error("Error fetching questions by author:", error);
     res.status(500).json({ error: "Internal server error" });
   } finally {
     if (connection) await connection.end();
   }
 };
 
-const getArticlesByCategory = async (req, res) => {
-  let connection;
-  try {
-    connection = await createDbConnection();
-    const { category } = req.params;
-
-    const [rows] = await connection.execute(
-      `SELECT * FROM articles WHERE category = ?`,
-      [category]
-    );
-
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error("Error fetching articles by category:", error);
-    res.status(500).json({ error: "Internal server error" });
-  } finally {
-    if (connection) await connection.end();
-  }
-};
-
-const getArticlesByID = async (req, res) => {
+const getSingleQuestion = async (req, res) => {
   let connection;
   try {
     connection = await createDbConnection();
     const { id } = req.params;
 
     const [rows] = await connection.execute(
-      `SELECT * FROM articles WHERE id = ? 
-       ORDER BY createdAt DESC`,
-      [id]
-    );
-
-    res.status(200).json(rows);
-  } catch (error) {
-    console.error("Error fetching articles by category:", error);
-    res.status(500).json({ error: "Internal server error" });
-  } finally {
-    if (connection) await connection.end();
-  }
-};
-
-const getSingleArticle = async (req, res) => {
-  let connection;
-  try {
-    connection = await createDbConnection();
-    const { id } = req.params;
-
-    const [rows] = await connection.execute(
-      `SELECT * FROM articles WHERE id = ?`,
+      `SELECT * FROM questions WHERE id = ?`,
       [id]
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({ error: "Article not found" });
+      return res.status(404).json({ error: "Question not found" });
     }
 
     res.status(200).json(rows[0]);
   } catch (error) {
-    console.error("Error fetching article:", error);
+    console.error("Error fetching question:", error);
     res.status(500).json({ error: "Internal server error" });
   } finally {
     if (connection) await connection.end();
   }
 };
 
-const editArticle = async (req, res) => {
+const answerQuestion = async (req, res) => {
   let connection;
   try {
     connection = await createDbConnection();
     const { id } = req.params;
-    const { title, content, category, tags } = req.body;
-
-    const updatedAt = new Date().toISOString();
+    const { answer } = req.body;
 
     const [result] = await connection.execute(
-      `UPDATE articles 
-      SET title = ?, content = ?, category = ?, tags = ?, updatedAt = ?
+      `UPDATE questions 
+      SET answer = ?
       WHERE id = ?`,
-      [title, content, category, tags || null, updatedAt, id]
+      [answer, id]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Article not found" });
+      return res.status(404).json({ error: "Question not found" });
     }
 
-    res.status(200).json({ message: "Article updated successfully" });
+    res.status(200).json({ message: "Question answered successfully" });
   } catch (error) {
-    console.error("Error updating article:", error);
+    console.error("Error answering question:", error);
     res.status(500).json({ error: "Internal server error" });
   } finally {
     if (connection) await connection.end();
   }
 };
 
-const deleteArticle = async (req, res) => {
+const toggleFeatured = async (req, res) => {
+  let connection;
+  try {
+    connection = await createDbConnection();
+    const { id } = req.params;
+    const { isFeatured } = req.body;
+
+    const [result] = await connection.execute(
+      `UPDATE questions 
+      SET isFeatured = ?
+      WHERE id = ?`,
+      [isFeatured ? 1 : 0, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+
+    res.status(200).json({ 
+      message: `Question ${isFeatured ? 'featured' : 'unfeatured'} successfully`,
+      isFeatured: isFeatured ? 1 : 0
+    });
+  } catch (error) {
+    console.error("Error toggling featured status:", error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    if (connection) await connection.end();
+  }
+};
+
+const editQuestion = async (req, res) => {
+  let connection;
+  try {
+    connection = await createDbConnection();
+    const { id } = req.params;
+    const { content, author } = req.body;
+
+    const [result] = await connection.execute(
+      `UPDATE questions 
+      SET content = ?, author = ?
+      WHERE id = ?`,
+      [content, author || null, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+
+    res.status(200).json({ message: "Question updated successfully" });
+  } catch (error) {
+    console.error("Error updating question:", error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    if (connection) await connection.end();
+  }
+};
+
+const deleteQuestion = async (req, res) => {
   let connection;
   try {
     connection = await createDbConnection();
     const { id } = req.params;
 
     const [result] = await connection.execute(
-      `DELETE FROM articles WHERE id = ?`,
+      `DELETE FROM questions WHERE id = ?`,
       [id]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Article not found" });
+      return res.status(404).json({ error: "Question not found" });
     }
 
-    res.status(200).json({ message: "Article deleted successfully" });
+    res.status(200).json({ message: "Question deleted successfully" });
   } catch (error) {
-    console.error("Error deleting article:", error);
+    console.error("Error deleting question:", error);
     res.status(500).json({ error: "Internal server error" });
   } finally {
     if (connection) await connection.end();
   }
 };
 
-const likeArticle = async (req, res) => {
-  let connection;
-  try {
-    connection = await createDbConnection();
-    const { id } = req.params;
-
-    const [result] = await connection.execute(
-      `UPDATE articles 
-      SET likes = likes + 1 
-      WHERE id = ?`,
-      [id]
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Article not found" });
-    }
-
-    res.status(200).json({ message: "Article liked successfully" });
-  } catch (error) {
-    console.error("Error liking article:", error);
-    res.status(500).json({ error: "Internal server error" });
-  } finally {
-    if (connection) await connection.end();
-  }
-};
-
-const unlikeArticle = async (req, res) => {
-  let connection;
-  try {
-    connection = await createDbConnection();
-    const { id } = req.params;
-
-    const [result] = await connection.execute(
-      `UPDATE articles 
-      SET likes = GREATEST(likes - 1, 0) 
-      WHERE id = ?`,
-      [id]
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: "Article not found" });
-    }
-
-    res.status(200).json({ message: "Article unliked successfully" });
-  } catch (error) {
-    console.error("Error unliking article:", error);
-    res.status(500).json({ error: "Internal server error" });
-  } finally {
-    if (connection) await connection.end();
-  }
-};
-
-const searchArticles = async (req, res) => {
+const searchQuestions = async (req, res) => {
   let connection;
   try {
     connection = await createDbConnection();
     const { query } = req.query;
 
     const [rows] = await connection.execute(
-      `SELECT * FROM articles 
-       WHERE title LIKE ? OR content LIKE ? OR tags LIKE ?
+      `SELECT * FROM questions 
+       WHERE content LIKE ? OR answer LIKE ? OR author LIKE ?
        ORDER BY createdAt DESC`,
       [`%${query}%`, `%${query}%`, `%${query}%`]
     );
 
     res.status(200).json(rows);
   } catch (error) {
-    console.error("Error searching articles:", error);
+    console.error("Error searching questions:", error);
     res.status(500).json({ error: "Internal server error" });
   } finally {
     if (connection) await connection.end();
@@ -268,15 +293,16 @@ const searchArticles = async (req, res) => {
 };
 
 module.exports = {
-  addArticle,
-  getArticles,
-  getArticlesByUser,
-  getArticlesByCategory,
-  getSingleArticle,
-  editArticle,
-  deleteArticle,
-  likeArticle,
-  unlikeArticle,
-  searchArticles,
-  getArticlesByID
+  addQuestion,
+  getQuestions,
+  getFeaturedQuestions,
+  getUnansweredQuestions,
+  getAnsweredQuestions,
+  getQuestionsByAuthor,
+  getSingleQuestion,
+  answerQuestion,
+  toggleFeatured,
+  editQuestion,
+  deleteQuestion,
+  searchQuestions
 };

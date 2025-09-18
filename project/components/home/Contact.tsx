@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { ClickableAddress } from '@/components/ui/clickable-address';
-import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, Loader2 } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,13 +15,54 @@ const Contact = () => {
     phone: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    // Reset form
-    setFormData({ name: '', phone: '', message: '' });
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+
+    try {
+      const response = await fetch('https://testend2.site/api/claims', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          phone: formData.phone,
+          message: formData.message,
+          type: 'contact_form',
+          source: 'contact_page'
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Form submitted successfully:', result);
+        setSubmitStatus('success');
+        setFormData({ name: '', phone: '', message: '' });
+        
+        // Автоматическое скрытие успешного сообщения через 5 секунд
+        setTimeout(() => {
+          setSubmitStatus('idle');
+        }, 5000);
+      } else {
+        throw new Error(`Server error: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus('error');
+      
+      // Автоматическое скрытие ошибки через 5 секунд
+      setTimeout(() => {
+        setSubmitStatus('idle');
+      }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -112,6 +153,23 @@ const Contact = () => {
           <Card className="p-8 bg-white lg:pl-8">
             <h3 className="text-2xl font-semibold text-gray-900 mb-6">Оставить заявку</h3>
             
+            {/* Сообщения о статусе отправки */}
+            {submitStatus === 'success' && (
+              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-green-800 font-medium">
+                  ✅ Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.
+                </p>
+              </div>
+            )}
+            
+            {submitStatus === 'error' && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-800 font-medium">
+                  ❌ Ошибка при отправке заявки. Пожалуйста, попробуйте еще раз или позвоните нам.
+                </p>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <Label htmlFor="name" className="text-base font-medium text-gray-700">
@@ -126,6 +184,7 @@ const Contact = () => {
                   onChange={handleInputChange}
                   className="mt-2"
                   placeholder="Введите ваше имя"
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -142,6 +201,7 @@ const Contact = () => {
                   onChange={handleInputChange}
                   className="mt-2"
                   placeholder="+375 __ ___ __ __"
+                  disabled={isSubmitting}
                 />
               </div>
 
@@ -157,12 +217,26 @@ const Contact = () => {
                   className="mt-2"
                   rows={4}
                   placeholder="Опишите вашу проблему..."
+                  disabled={isSubmitting}
                 />
               </div>
 
-              <Button type="submit" className="w-full bg-navy-600 hover:bg-navy-700 py-3">
-                <Send className="w-4 h-4 mr-2" />
-                Отправить заявку
+              <Button 
+                type="submit" 
+                className="w-full bg-navy-600 hover:bg-navy-700 py-3"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Отправка...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    Отправить заявку
+                  </>
+                )}
               </Button>
 
               <p className="text-sm text-gray-600 text-center">

@@ -8,11 +8,12 @@ import { Button } from '@/components/ui/button';
 const Hero = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [form, setForm] = useState({ name: '', phone: '', note: '', agree: false });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const benefits = [
-    'Качественная диагностика',
-    'Гарантия',
-    'Ремонт за 1-3 дня'
+    'Ремонт за 1-3 дня',
+    'Средняя оценка по отзывам — 5,0',
+    'Гарантия на детали и работы'
   ];
 
   const handleChange = (e) => {
@@ -30,23 +31,36 @@ const Hero = () => {
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
-      const res = await fetch('/api/request-callback', {
+      const res = await fetch('https://testend.site/api/claims', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        headers: { 
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          message: form.note,
+          type: 'callback_request'
+        }),
       });
 
       if (res.ok) {
-        alert('Заявка отправлена!');
+        const result = await res.json();
+        alert('Заявка отправлена! Мы свяжемся с вами в ближайшее время.');
         setIsOpen(false);
         setForm({ name: '', phone: '', note: '', agree: false });
       } else {
-        alert('Ошибка при отправке заявки');
+        throw new Error(`Ошибка сервера: ${res.status}`);
       }
     } catch (err) {
-      console.error(err);
-      alert('Ошибка соединения');
+      console.error('Ошибка при отправке заявки:', err);
+      alert('Ошибка при отправке заявки. Пожалуйста, попробуйте еще раз.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -122,71 +136,84 @@ const Hero = () => {
 
       {/* Modal */}
       {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-[#111] text-white p-6 rounded-lg shadow-lg w-[400px] relative border border-green-600">
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
+          <div className="bg-[#90D5FF] text-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md relative border-2 border-green-400 shadow-green-400/50">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-2 right-2 text-green-400 hover:text-green-200 text-xl"
+              className="absolute top-3 right-3 text-blue-800 hover:text-blue-600 text-xl font-bold"
             >
               ✕
             </button>
 
-            <h2 className="text-xl font-bold text-green-400 mb-2">
+            <h2 className="text-xl font-bold text-blue-800 mb-3">
               Перезвоним Вам в рабочее время с 9:00 до 19:00
             </h2>
 
-            <p className="text-sm text-green-300 mb-4">
-              Если вам срочно нужна помощь вне рабочего времени, укажите в примечании слово <b>СРОЧНО</b>.
-            </p>
+            <div className="space-y-3 mb-4">
+              <p className="text-sm text-blue-700">
+                <strong>Звонок поступит в рабочее время.</strong>
+              </p>
+              
+              <p className="text-sm text-blue-700">
+                <strong>Время работы сервиса:</strong><br />
+                пн.-пт. с 9:00 до 19:00<br />
+                сб., вс. с 10:00 до 16:00
+              </p>
+
+              <p className="text-sm text-blue-700">
+                Если вам срочно нужна помощь вне рабочего времени, укажите в примечании слово <b>СРОЧНО</b>.
+              </p>
+            </div>
 
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label className="block text-sm mb-1">Имя *</label>
+                <label className="block text-sm mb-1 text-blue-800 font-medium">Имя *</label>
                 <input
                   type="text"
                   name="name"
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-green-600 rounded-md bg-[#222] text-white"
+                  className="w-full px-3 py-2 border border-blue-400 rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm mb-1">Телефон *</label>
+                <label className="block text-sm mb-1 text-blue-800 font-medium">Телефон *</label>
                 <input
                   type="tel"
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 border border-green-600 rounded-md bg-[#222] text-white"
+                  className="w-full px-3 py-2 border border-blue-400 rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm mb-1">Примечание</label>
+                <label className="block text-sm mb-1 text-blue-800 font-medium">Примечание</label>
                 <textarea
                   name="note"
                   value={form.note}
                   onChange={handleChange}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-green-600 rounded-md bg-[#222] text-white"
+                  rows={2}
+                  className="w-full px-3 py-2 border border-blue-400 rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                  placeholder="Укажите 'СРОЧНО' если нужен срочный звонок"
                 />
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-start gap-2">
                 <input
                   type="checkbox"
                   name="agree"
                   checked={form.agree}
                   onChange={handleChange}
-                  className="accent-green-600"
+                  className="accent-blue-600 mt-1"
                   required
                 />
-                <span className="text-sm">
+                <span className="text-xs text-blue-800">
                   Я принимаю условия обработки моих{" "}
-                  <a href="/privacy-policy" target="_blank" className="text-green-400 underline">
+                  <a href="/privacy-policy" target="_blank" className="text-blue-600 underline font-medium">
                     персональных данных
                   </a>
                 </span>
@@ -194,9 +221,10 @@ const Hero = () => {
 
               <button
                 type="submit"
-                className="w-full py-2 bg-green-600 text-white rounded-md shadow-md hover:bg-green-700 transition"
+                disabled={isSubmitting}
+                className="w-full py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Отправить
+                {isSubmitting ? 'Отправка...' : 'Отправить'}
               </button>
             </form>
           </div>

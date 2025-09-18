@@ -4,8 +4,8 @@ const Benefits = () => {
   const benefits = [
     {
       icon: Award,
-      title: 'Опыт более 13 лет',
-      description: 'Наши специалисты имеют богатый опыт ремонта ноутбуков всех марок'
+      title: 'Чиним ноутбуки 13 лет',
+      description: 'Отремонтировали 25.000 ноутбуков. Средняя оценка по отзывам — 4,9'
     },
     {
       icon: Clock,
@@ -15,22 +15,17 @@ const Benefits = () => {
     {
       icon: Shield,
       title: 'Гарантия качества',
-      description: 'Предоставляем гарантию на все виды работ и комплектующие'
-    },
-    {
-      icon: Users,
-      title: 'Довольные клиенты',
-      description: 'Отремонтировали 25.000 ноутбуков, средняя оценка по отзывам — 4,9'
+      description: 'Даём гарантию на все виды работ и комплектующие'
     },
     {
       icon: Heart,
       title: 'Социальный сервис',
-      description: 'Скидки для пенсионеров, студентов и новых клиентов'
+      description: 'Скидки для пенсионеров и студентов — 20%; для новых клиентов — 10%'
     }
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -41,7 +36,7 @@ const Benefits = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {benefits.map((benefit, index) => (
             <div key={index} className="text-center group">
               <div className="flex items-center justify-center w-20 h-20 bg-navy-100 rounded-2xl mx-auto mb-6 group-hover:bg-navy-600 group-hover:scale-110 transition-all duration-300">

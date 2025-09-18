@@ -1,17 +1,32 @@
-import { Metadata } from 'next';
-import ArticlesList from '@/components/articles/ArticlesList';
-import ArticlesHero from '@/components/articles/ArticlesHero';
+import { Metadata } from "next";
+import ArticlesList from "@/components/articles/ArticlesList";
+import { getAllArticles } from "@/lib/api/articles";
+import { formatDateToDDMMYYYY } from "@/lib/utils/dates.ts";
 
 export const metadata: Metadata = {
-  title: 'Полезные статьи о ремонте ноутбуков | FiveService',
-  description: 'Узнайте больше о ремонте и обслуживании ноутбуков. Полезные советы и инструкции от профессионалов.',
+  title: "Статьи о ремонте техники | FiveService",
+  description:
+    "Полезные статьи и советы по ремонту ноутбуков, компьютеров и другой техники в Минске.",
 };
 
-export default function ArticlesPage() {
+export default async function ArticlesPage() {
+  const articles = await getAllArticles();
+
   return (
-    <div className="pt-16">
-      <ArticlesHero />
-      <ArticlesList />
+    <div className="min-h-screen bg-gray-50 py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center ">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Полезные статьи
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Советы, инструкции и полезная информация по ремонту и обслуживанию
+            техники
+          </p>
+        </div>
+
+        <ArticlesList articles={articles} />
+      </div>
     </div>
   );
 }
