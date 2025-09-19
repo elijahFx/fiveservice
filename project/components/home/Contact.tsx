@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { ClickableAddress } from '@/components/ui/clickable-address';
-import { Phone, Mail, MapPin, Clock, Send, Loader2 } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, Loader2, Navigation } from 'lucide-react';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -45,7 +45,6 @@ const Contact = () => {
         setSubmitStatus('success');
         setFormData({ name: '', phone: '', message: '' });
         
-        // Автоматическое скрытие успешного сообщения через 5 секунд
         setTimeout(() => {
           setSubmitStatus('idle');
         }, 5000);
@@ -56,7 +55,6 @@ const Contact = () => {
       console.error('Error submitting form:', error);
       setSubmitStatus('error');
       
-      // Автоматическое скрытие ошибки через 5 секунд
       setTimeout(() => {
         setSubmitStatus('idle');
       }, 5000);
@@ -70,6 +68,10 @@ const Contact = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  const openYandexMaps = () => {
+    window.open('https://yandex.by/maps/?rtext=~53.939402,27.597530', '_blank');
   };
 
   return (
@@ -101,10 +103,29 @@ const Contact = () => {
                     className="text-gray-600"
                     showIcon={false}
                   />
-                  <a href="" className="text-navy-600 hover:text-navy-700 text-sm mt-1 inline-block">
-                    Как к нам пройти
-                  </a>
+                  <Button
+                    onClick={openYandexMaps}
+                    variant="outline"
+                    size="sm"
+                    className="mt-2 bg-white border-navy-600 text-navy-600 hover:bg-navy-50"
+                  >
+                    <Navigation className="w-4 h-4 mr-2" />
+                    Построить маршрут
+                  </Button>
                 </div>
+              </div>
+
+              {/* Яндекс Карта */}
+              <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden">
+                <iframe 
+  src="https://yandex.ru/map-widget/v1/?um=constructor%3Aeae9dc037665c292726dd0ce09b66ed04342ebe1f57a6230392d0f3d05c08454&amp;source=constructor" 
+  width="100%" 
+  height="400" 
+  frameBorder="0"
+  className="rounded-lg"
+  loading="lazy"
+  style={{ minHeight: '400px'}}
+></iframe>
               </div>
 
               <div className="flex items-start space-x-4">
@@ -150,10 +171,9 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <Card className="p-8 bg-white lg:pl-8">
+          <Card className="p-8 bg-white">
             <h3 className="text-2xl font-semibold text-gray-900 mb-6">Оставить заявку</h3>
             
-            {/* Сообщения о статусе отправки */}
             {submitStatus === 'success' && (
               <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                 <p className="text-green-800 font-medium">

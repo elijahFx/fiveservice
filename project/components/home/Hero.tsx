@@ -137,37 +137,37 @@ const Hero = () => {
       {/* Modal */}
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-          <div className="bg-black text-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md relative border-2 border-[#90D5FF] shadow-green-400/50">
+          <div className="bg-black text-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md relative border-2 border-[#90D5FF] ">
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-3 right-3 text-blue-800 hover:text-blue-600 text-xl font-bold"
+              className="absolute top-3 right-3 text-white hover:text-blue-600 text-xl font-bold"
             >
               ✕
             </button>
 
-            <h2 className="text-xl font-bold text-blue-800 mb-3">
-              Перезвоним Вам в рабочее время с 9:00 до 19:00
+            <h2 className="text-xl font-bold text-white mb-3">
+              Перезвоним Вам в рабочее время
             </h2>
 
             <div className="space-y-3 mb-4">
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-white">
                 <strong>Звонок поступит в рабочее время.</strong>
               </p>
               
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-white">
                 <strong>Время работы сервиса:</strong><br />
                 пн.-пт. с 9:00 до 19:00<br />
                 сб., вс. с 10:00 до 16:00
               </p>
 
-              <p className="text-sm text-blue-700">
+              <p className="text-sm text-white">
                 Если вам срочно нужна помощь вне рабочего времени, укажите в примечании слово <b>СРОЧНО</b>.
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-3">
               <div>
-                <label className="block text-sm mb-1 text-blue-800 font-medium">Имя *</label>
+                <label className="block text-sm mb-1 text-white font-medium">Имя *</label>
                 <input
                   type="text"
                   name="name"
@@ -179,7 +179,7 @@ const Hero = () => {
               </div>
 
               <div>
-                <label className="block text-sm mb-1 text-blue-800 font-medium">Телефон *</label>
+                <label className="block text-sm mb-1 text-white font-medium">Телефон *</label>
                 <input
                   type="tel"
                   name="phone"
@@ -191,7 +191,7 @@ const Hero = () => {
               </div>
 
               <div>
-                <label className="block text-sm mb-1 text-blue-800 font-medium">Примечание</label>
+                <label className="block text-sm mb-1 text-white font-medium">Примечание</label>
                 <textarea
                   name="note"
                   value={form.note}
@@ -208,10 +208,10 @@ const Hero = () => {
                   name="agree"
                   checked={form.agree}
                   onChange={handleChange}
-                  className="accent-blue-600 mt-1"
+                  className="accent-blue-600 mt-auto mb-auto"
                   required
                 />
-                <span className="text-xs text-blue-800">
+                <span className="text-xs text-white">
                   Я принимаю условия обработки моих{" "}
                   <a href="/privacy-policy" target="_blank" className="text-blue-600 underline font-medium">
                     персональных данных
