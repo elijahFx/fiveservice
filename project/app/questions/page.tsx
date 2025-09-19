@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import QuestionsHero from '@/components/questions/QuestionsHero';
 import QuestionsList from '@/components/questions/QuestionsList';
+import DynamicQuestionList from '@/components/questions/DynamicQuestionsList';
 
 export const metadata: Metadata = {
   title: 'Частые вопросы о ремонте ноутбуков | FiveService',
@@ -13,6 +14,7 @@ export default function QuestionsPage() {
     <div className="pt-16">
       <QuestionsHero />
       <QuestionsList />
+      <DynamicQuestionList />
     </div>
   );
 }

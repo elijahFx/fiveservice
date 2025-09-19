@@ -104,7 +104,9 @@ const getAnsweredQuestions = async (req, res) => {
     const [rows] = await connection.execute(`
       SELECT * 
       FROM questions 
-      WHERE answer IS NOT NULL AND answer != ''
+      WHERE answer IS NOT NULL 
+        AND answer != ''
+        AND isFeatured = 1
       ORDER BY createdAt DESC
     `);
 

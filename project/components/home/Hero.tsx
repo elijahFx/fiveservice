@@ -137,7 +137,7 @@ const Hero = () => {
       {/* Modal */}
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#90D5FF] text-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md relative border-2 border-green-400 shadow-green-400/50">
+          <div className="bg-black text-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md relative border-2 border-[#90D5FF] shadow-green-400/50">
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-3 right-3 text-blue-800 hover:text-blue-600 text-xl font-bold"

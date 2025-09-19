@@ -19,7 +19,7 @@ const requireAuth = require("../requireAuth")
 // Маршруты для вопросов
 
 // GET /api/questions - Получить все вопросы
-router.get('/', requireAuth, getQuestions);
+router.get('/', getQuestions);
 
 // GET /api/questions/featured - Получить избранные вопросы
 router.get('/featured', requireAuth, getFeaturedQuestions);
@@ -28,7 +28,7 @@ router.get('/featured', requireAuth, getFeaturedQuestions);
 router.get('/unanswered', requireAuth, getUnansweredQuestions);
 
 // GET /api/questions/answered - Получить отвеченные вопросы
-router.get('/answered', requireAuth, getAnsweredQuestions);
+router.get('/answered', getAnsweredQuestions);
 
 // GET /api/questions/search - Поиск вопросов
 router.get('/search', requireAuth, searchQuestions);
@@ -40,7 +40,7 @@ router.get('/author/:author', requireAuth, getQuestionsByAuthor);
 router.get('/:id', requireAuth, getSingleQuestion);
 
 // POST /api/questions - Создать новый вопрос
-router.post('/', requireAuth, addQuestion);
+router.post('/', addQuestion);
 
 // PUT /api/questions/:id/answer - Ответить на вопрос
 router.put('/:id/answer', requireAuth, answerQuestion);
