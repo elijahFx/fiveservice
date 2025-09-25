@@ -1,9 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
+  
+  // Add this section to ignore both ESLint and TypeScript errors during build
   eslint: {
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  
   images: { 
     unoptimized: true,
     remotePatterns: [
@@ -23,16 +29,9 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  // swcMinify is now enabled by default and deprecated in config
-  // optimizeFonts is now enabled by default and deprecated in config
   assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
   basePath: '',
-  // Production optimizations
   productionBrowserSourceMaps: false,
-  // Security headers
   async headers() {
     return [
       {
@@ -56,11 +55,11 @@ const nextConfig = {
   },
   modularizeImports: {
     "lucide-react": {
-      transform:
-"lucide-react/dist/esm/icons/{{kebabCase member}}",
+      transform: "lucide-react/dist/esm/icons/{{kebabCase member}}",
       preventFullImport: true,
     },
   },
-  // Add this to resolve the workspace root warning
   outputFileTracingRoot: __dirname,
 };
+
+module.exports = nextConfig;

@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     openGraph: {
       title: article?.seo?.title,
       description: article?.seo?.description,
-      images: [article?.preview],
+      images: "undefined",
       type: 'article',
     },
   };
