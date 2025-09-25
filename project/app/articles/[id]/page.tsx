@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ArticleContent from '@/components/articles/ArticleContent';
 import { getAllArticles, getArticleBySlug, getArticleBySlugFromList } from '@/lib/api/articles';
+import FAQ from '@/components/common/FAQ';
 
 interface ArticlePageProps {
   params: {
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     openGraph: {
       title: article?.seo?.title,
       description: article?.seo?.description,
-      images: [article.preview],
+      images: [article?.preview],
       type: 'article',
     },
   };
