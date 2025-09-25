@@ -64,7 +64,7 @@ const Reviews = () => {
               </div>
 
               <p className="text-gray-700 mb-4 leading-relaxed">
-                "{review.text}"
+                &quot{review.text}&quot
               </p>
 
               <div className="flex justify-between items-center pt-4 border-t border-gray-100">
