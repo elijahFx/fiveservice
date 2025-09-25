@@ -1,30 +1,83 @@
-import { Monitor, HardDrive, Keyboard, Zap, Shield, Wrench } from 'lucide-react';
+import { 
+  Laptop, 
+  Keyboard, 
+  Monitor, 
+  Zap, 
+  Droplets, 
+  Battery, 
+  Brush, 
+  Cpu, 
+  Hammer 
+} from 'lucide-react';
 import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
 
 const Services = () => {
+  const discountOffers = [
+    {
+      title: 'Скидка -10% при первом обращении к нам',
+      description: 'Скидка на работы сервиса. Фиксируем в заказ-подряде.',
+      discount: '-10%'
+    },
+    {
+      title: 'Скидка -20% студентам и пенсионерам',
+      description: 'Укажите основание при оформлении заявки.',
+      discount: '-20%'
+    },
+    {
+      title: 'Скидка -30% на чистку ноутбука или ПК по субботам',
+      description: 'Профилактика, термопаста/прокладки, тест под нагрузкой.',
+      discount: '-30%'
+    }
+  ];
+
   const services = [
     {
-      icon: Monitor,
-      title: 'Замена экранов',
-      description: 'Замена разбитых и неисправных матриц любых размеров и разрешений',
-      price: 'от 80 BYN',
-      time: '1-2 дня'
+      name: 'Ремонт ноутбука',
+      icon: Laptop,
+      description: 'Ремонт любых неисправностей ноутбука'
     },
     {
-      icon: HardDrive,
-      title: 'Чистка от пыли',
-      description: 'Профессиональная чистка системы охлаждения и замена термопасты',
-      price: 'от 75 BYN',
-      time: '2-3 часа'
-    },
-    {
+      name: 'Замена клавиатуры',
       icon: Keyboard,
-      title: 'Замена клавиатур',
-      description: 'Замена неисправных клавиатур с подбором точных аналогов',
-      price: 'от 45 BYN',
-      time: '1 день'
+      description: 'Залипают или не работают клавиши — заменим клавиатуру или шлейф'
     },
+    {
+      name: 'Замена экрана',
+      icon: Monitor,
+      description: 'Трещины, полосы или нет подсветки — подберём и заменим матрицу'
+    },
+    {
+      name: 'Разъём питания',
+      icon: Zap,
+      description: 'Плохой контакт и не заряжает — заменим DC-jack и усилим крепление'
+    },
+    {
+      name: 'После залития',
+      icon: Droplets,
+      description: 'Мойка платы, удаление окислов, восстановление дорожек'
+    },
+    {
+      name: 'Замена аккумулятора',
+      icon: Battery,
+      description: 'Быстро садится или не заряжается — подберём и установим АКБ'
+    },
+    {
+      name: 'Чистка системы',
+      icon: Brush,
+      description: 'Чистка, термопаста/прокладки, проверка температур'
+    },
+    {
+      name: 'Ремонт платы / пайка',
+      icon: Cpu,
+      description: 'Диагностика питания, реболл, восстановление цепей и BGA'
+    },
+    {
+      name: 'Ремонт корпуса',
+      icon: Hammer,
+      description: 'Сломаны петли/крепления, трещины — восстановим или заменим элемент'
+    }
   ];
 
   return (
@@ -39,32 +92,54 @@ const Services = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {services.map((service, index) => (
-            <Card key={index} className="p-6 hover:shadow-xl transition-all duration-300 group cursor-pointer">
-              <div className="flex items-center justify-center w-16 h-16 bg-navy-100 rounded-xl mb-4 group-hover:bg-navy-600 group-hover:scale-110 transition-all duration-300">
-                <service.icon className="w-8 h-8 text-navy-600 group-hover:text-white transition-colors duration-300" />
+        {/* Discount Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          {discountOffers.map((offer, index) => (
+            <Card key={index} className="p-6 bg-navy-600 text-white border-navy-700 hover:bg-navy-700 transition-all duration-300 shadow-lg">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold mb-2 leading-tight">
+                    {offer.title}
+                  </h3>
+                </div>
+                <div className="ml-4">
+                  <Badge className="bg-white text-navy-600 font-bold text-lg px-3 py-1 hover:bg-gray-100">
+                    {offer.discount}
+                  </Badge>
+                </div>
               </div>
-              
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                {service.title}
-              </h3>
-              
-              <p className="text-gray-600 mb-4 leading-relaxed">
-                {service.description}
+              <p className="text-navy-100 leading-relaxed">
+                {offer.description}
               </p>
-              
-              <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                <div>
-                  <p className="text-sm text-gray-500">Цена</p>
-                  <p className="font-bold text-navy-600">{service.price}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-500">Срок</p>
-                  <p className="font-bold text-gray-900">{service.time}</p>
-                </div>
-              </div>
             </Card>
+          ))}
+        </div>
+
+        {/* Service Badges */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+          {services.map((service, index) => (
+            <div
+              key={index}
+              className="group flex items-center p-6 bg-gray-50 rounded-2xl border border-gray-200 hover:bg-navy-50 hover:border-navy-300 hover:shadow-lg transition-all duration-300 cursor-pointer"
+              role="button"
+              tabIndex={0}
+              aria-label={`Узнать больше о услуге: ${service.name}`}
+            >
+              <div className="flex items-center justify-center w-12 h-12 bg-white rounded-xl mr-4 group-hover:bg-navy-600 group-hover:scale-110 transition-all duration-300 shadow-sm">
+                <service.icon 
+                  className="w-6 h-6 text-navy-600 group-hover:text-white transition-colors duration-300" 
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-gray-900 group-hover:text-navy-700 transition-colors duration-300 mb-1">
+                  {service.name}
+                </h3>
+                <p className="text-sm text-gray-600 group-hover:text-navy-600 transition-colors duration-300">
+                  {service.description}
+                </p>
+              </div>
+            </div>
           ))}
         </div>
 

@@ -115,18 +115,7 @@ const Contact = () => {
                 </div>
               </div>
 
-              {/* Яндекс Карта */}
-              <div className="w-full bg-white rounded-lg shadow-lg overflow-hidden">
-                <iframe 
-  src="https://yandex.ru/map-widget/v1/?um=constructor%3Aeae9dc037665c292726dd0ce09b66ed04342ebe1f57a6230392d0f3d05c08454&amp;source=constructor" 
-  width="100%" 
-  height="400" 
-  frameBorder="0"
-  className="rounded-lg"
-  loading="lazy"
-  style={{ minHeight: '400px'}}
-></iframe>
-              </div>
+              
 
               <div className="flex items-start space-x-4">
                 <div className="flex items-center justify-center w-12 h-12 bg-navy-600 rounded-lg">

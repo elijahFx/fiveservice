@@ -82,13 +82,12 @@ const Hero = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Экспертный
-            <span className="block text-blue-400">ремонт ноутбуков</span>
-            в Минске
+           <span className='text-blue-400'>Ремонт ноутбуков</span>
+           <span className='block'>в Минске за 1 день с гарантией</span>
           </h1>
           
           <p className="text-xl text-gray-200 mb-8 leading-relaxed">
-            Отремонтируем ваш ноутбук быстро, качественно и с гарантией.  
+            13 лет опыта, официальные гарантии, аккуратная работа с платами, бесплатный курьер по городу.
           </p>
 
           {/* Benefits */}

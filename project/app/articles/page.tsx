@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import ArticlesList from "@/components/articles/ArticlesList";
 import { getAllArticles } from "@/lib/api/articles";
 import { formatDateToDDMMYYYY } from "@/lib/utils/dates.ts";
+import FAQ from "@/components/common/FAQ";
 
 export const metadata: Metadata = {
   title: "Статьи о ремонте техники | FiveService",
@@ -26,6 +27,7 @@ export default async function ArticlesPage() {
         </div>
 
         <ArticlesList articles={articles} />
+        <FAQ />
       </div>
     </div>
   );

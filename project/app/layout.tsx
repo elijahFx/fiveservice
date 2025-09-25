@@ -31,6 +31,8 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231e3a8a'/><text x='16' y='20' text-anchor='middle' fill='white' font-family='Arial, sans-serif' font-size='14' font-weight='bold'>FS</text></svg>" />
+        <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%231e3a8a'/><text x='90' y='110' text-anchor='middle' fill='white' font-family='Arial, sans-serif' font-size='80' font-weight='bold'>FS</text></svg>" />
         <link rel="canonical" href="https://fiveservice.by" />
         <script
           type="application/ld+json"

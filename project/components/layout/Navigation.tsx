@@ -24,6 +24,7 @@ const Navigation = () => {
     { href: '/corporate', label: 'Юр. лицам' },
     { href: '/questions', label: 'Вопросы' },
     { href: '/reviews', label: 'Отзывы' },
+    { href: '/about', label: 'О нас' },
   ];
 
   return (
@@ -45,7 +46,7 @@ const Navigation = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className="block px-3 py-2 text-base font-medium text-gray-800 hover:text-navy-700 hover:bg-navy-50 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-600 rounded-md"
+                className="flex items-center px-4 py-3 text-base font-semibold text-navy-600 bg-white border-b-2 border-navy-600 hover:bg-navy-50 hover:border-navy-700 active:bg-navy-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-500 mb-2"
               >
                 {item.label}
               </Link>
@@ -60,7 +61,7 @@ const Navigation = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-md text-gray-800 hover:text-navy-700 hover:bg-navy-50 transition-colors focus:outline-none focus:ring-2 focus:ring-navy-600 focus:ring-offset-2"
+              className="inline-flex items-center px-4 py-2.5 text-sm font-semibold text-navy-600 bg-white border-b-2 border-navy-600 hover:bg-navy-50 hover:border-navy-700 active:bg-navy-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-500"
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -75,7 +76,7 @@ const Navigation = () => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="block px-3 py-2 text-base font-medium text-gray-800 hover:bg-navy-50 hover:text-navy-700 rounded-md focus:outline-none focus:ring-2 focus:ring-navy-600 focus:ring-offset-2"
+                  className="flex items-center px-4 py-3 text-base font-semibold text-navy-700 bg-white border-b-2 border-navy-600 hover:bg-navy-50 hover:border-navy-700 active:bg-navy-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-500 mb-2"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.label}

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import ReviewsHero from '@/components/reviews/ReviewsHero';
 import ReviewsList from '@/components/reviews/ReviewsList';
+import FAQ from '@/components/common/FAQ';
 
 export const metadata: Metadata = {
   title: 'Отзывы клиентов о ремонте ноутбуков | FiveService',
@@ -12,6 +13,7 @@ export default function ReviewsPage() {
     <div className="pt-16">
       <ReviewsHero />
       <ReviewsList />
+      <FAQ />
     </div>
   );
 }
