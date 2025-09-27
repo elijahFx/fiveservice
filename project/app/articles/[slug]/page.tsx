@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ArticleContent from '@/components/articles/ArticleContent';
-import { getArticleBySlug, getArticleBySlugFromList } from '@/lib/api/articles';
+import { getArticleBySlug, getArticleBySlugFromList, getAllArticles } from '@/lib/api/articles';
 
 interface ArticlePageProps {
   params: {
@@ -9,37 +9,52 @@ interface ArticlePageProps {
   };
 }
 
-export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
-  let article = await getArticleBySlug(params.slug);
-  
-  if (!article) {
-    article = await getArticleBySlugFromList(params.slug);
+export async function generateStaticParams() {
+  try {
+    const articles = await getAllArticles(); // или специальный метод для получения slug
+    return articles.map((article) => ({
+      slug: article.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    return [];
   }
-  
-  if (!article) {
+}
+
+export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+  try {
+    let article = await getArticleBySlug(params.slug);
+    
+    if (!article) {
+      article = await getArticleBySlugFromList(params.slug);
+    }
+    
+    if (!article) {
+      return {
+        title: 'Статья не найдена | FiveService',
+      };
+    }
+
     return {
-      title: 'Статья не найдена | FiveService',
+      title: article?.seo?.title || `${article.title} | FiveService`,
+      description: article?.seo?.description || article.annotation,
+      keywords: article?.seo?.keywords?.join(', '),
+      openGraph: {
+        title: article?.seo?.title || article.title,
+        description: article?.seo?.description || article.annotation,
+        images: article.image || "/og-image.jpg",
+        type: 'article',
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    return {
+      title: 'Статья | FiveService',
     };
   }
-
-  return {
-    title: article?.seo?.title,
-    description: article?.seo?.description,
-    keywords: article?.seo?.keywords.join(', '),
-    openGraph: {
-      title: article?.seo?.title,
-      description: article?.seo?.description,
-      images: "undefined",
-      type: 'article',
-    },
-  };
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-
-  console.log(params);
-  
-
   try {
     let article = await getArticleBySlug(params.slug);
     
