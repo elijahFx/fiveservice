@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "start:server": "node server.js",
+    "lint": "next lint",
+    "install": "npm install",
+    "deploy:prepare": "npm run build && npm run deploy:copy",
+    "deploy:copy": "node scripts/copy-deploy-files.js",
+    "self-host": "npm run build && npm run start:server",
+    "dota": "npm install dotenv"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
