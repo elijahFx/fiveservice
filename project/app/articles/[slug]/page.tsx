@@ -36,25 +36,30 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-  // Пробуем получить статью напрямую по API
-  let article = await getArticleBySlug(params.slug);
-  
-  // Если не получилось, пробуем из списка
-  if (!article) {
-    article = await getArticleBySlugFromList(params.slug);
-  }
 
-  if (!article) {
+  console.log(params);
+  
+
+  try {
+    let article = await getArticleBySlug(params.slug);
+    
+    if (!article) {
+      article = await getArticleBySlugFromList(params.slug);
+    }
+
+    if (!article) {
+      notFound();
+    }
+
+    const articleWithFormattedDate = {
+      ...article,
+      date: new Date(article.createdAt).toLocaleDateString('ru-RU'),
+      annotation: article.annotation
+    };
+
+    return <ArticleContent article={articleWithFormattedDate} />;
+  } catch (error) {
+    console.error('Error loading article:', error);
     notFound();
   }
-
-  // Преобразуем дату и добавляем readTime (если нужно)
-  const articleWithFormattedDate = {
-    ...article,
-    date: new Date(article.createdAt).toLocaleDateString('ru-RU'),
-    //@ts-ignore
-    annotation: article.annotation // Используем excerpt вместо annotation
-  };
-  //@ts-ignore
-  return <ArticleContent article={articleWithFormattedDate} />;
 }
