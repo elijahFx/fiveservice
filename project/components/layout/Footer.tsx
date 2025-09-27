@@ -20,7 +20,7 @@ const Footer = () => {
             </p>
             <div className="space-y-2 text-sm text-gray-400">
               <p>УНП 193013342</p>
-              <p>ООО &quotНаши инновации&quot</p>
+              <p>ООО {`«Наши инновации»`}</p>
             </div>
           </div>
 
