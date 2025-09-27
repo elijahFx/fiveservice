@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ArticleContent from '@/components/articles/ArticleContent';
-import { getAllArticles, getArticleBySlug, getArticleBySlugFromList } from '@/lib/api/articles';
-import FAQ from '@/components/common/FAQ';
+import { getArticleBySlug, getArticleBySlugFromList } from '@/lib/api/articles';
 
 interface ArticlePageProps {
   params: {
@@ -53,8 +52,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   const articleWithFormattedDate = {
     ...article,
     date: new Date(article.createdAt).toLocaleDateString('ru-RU'),
-    annotation: article.excerpt // Используем excerpt вместо annotation
+    //@ts-ignore
+    annotation: article.annotation // Используем excerpt вместо annotation
   };
-
+  //@ts-ignore
   return <ArticleContent article={articleWithFormattedDate} />;
 }

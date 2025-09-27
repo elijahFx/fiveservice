@@ -1,25 +1,27 @@
 export interface Article {
   id: number;
   title: string;
-  excerpt: string;
+  annotation: string;
   content: string;
-  image: string;
-  category: string;
-  date: string;
+  preview: string;
+  createdAt: string;
   readTime: string;
   slug: string;
+  author: string;
+  category?: string;
   seo: {
     title: string;
     description: string;
     keywords: string[];
   };
+  
 }
 
 export const articles: Article[] = [
   {
     id: 1,
     title: 'Как выбрать сервис по ремонту ноутбуков в 2025 году: полное руководство от практиков',
-    excerpt: 'Практическое руководство по выбору надежного сервиса. Избегайте типичных ошибок и экономьте до 60% стоимости ремонта.',
+    annotation: 'Практическое руководство по выбору надежного сервиса. Избегайте типичных ошибок и экономьте до 60% стоимости ремонта.',
     content: `
       Почему многие клиенты рассказывают, что не всегда довольны оказанными им услугами в сервисных центрах?!
       
@@ -255,11 +257,11 @@ export const articles: Article[] = [
 
       <p style="font-style: italic; color: #6b7280;">Материал основан на реальном опыте работы сервиса Five Service. Все советы проверены практикой и многократно подтверждены отзывами клиентов.</p>
     `,
-    image: 'https://images.pexels.com/photos/3861972/pexels-photo-3861972.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
-    category: 'Выбор сервиса',
-    date: '20 января 2025',
+    preview: 'https://images.pexels.com/photos/3861972/pexels-photo-3861972.jpeg?auto=compress&cs=tinysrgb&w=800&h=600&fit=crop',
+    createdAt: '20 января 2025',
     readTime: '12 мин',
     slug: 'how-to-choose-service-2025',
+    author: "Андрей",
     seo: {
       title: 'Как выбрать сервис по ремонту ноутбуков в 2025 году | FiveService',
       description: 'Полное руководство по выбору надежного сервиса ремонта ноутбуков. Избегайте типичных ошибок и экономьте до 60% стоимости.',
@@ -273,9 +275,10 @@ export function getArticleBySlug(slug: string): Article | undefined {
   return articles.find(article => article.slug === slug);
 }
 
+
 export function getArticlesByCategory(category: string): Article[] {
   if (category === 'Все' || !category) {
     return articles;
   }
-  return articles.filter(article => article.category === category);
+  return articles.filter(article => article?.category === category);
 }

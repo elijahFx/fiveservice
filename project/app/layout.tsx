@@ -16,10 +16,24 @@ export const metadata: Metadata = {
     description: 'Профессиональный ремонт ноутбуков в Минске. Быстро, качественно, с гарантией.',
     type: 'website',
     locale: 'ru_RU',
+    images: [
+      {
+        url: '/opengraph.webp', // Путь к изображению в папке public
+        width: 1200,
+        height: 630,
+        alt: 'Ремонт ноутбуков в Минске - FiveService',
+      }
+    ],
   },
   robots: {
     index: true,
     follow: true,
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Ремонт ноутбуков в Минске | FiveService',
+    description: 'Профессиональный ремонт ноутбуков в Минске. Быстро, качественно, с гарантией.',
+    images: ['/opengraph.webp'], // Для Twitter тоже добавляем изображение
   },
 };
 

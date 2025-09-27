@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Article } from "@/lib/data/articles";
-import { formatDateToDDMMYYYY } from "@/lib/utils/dates.ts";
+import { formatDateToDDMMYYYY } from "@/lib/utils/dates";
 
 interface ArticleContentProps {
   article: Article;
@@ -18,19 +18,21 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
   const relatedArticles = [
     {
       title: "Признаки неисправности жесткого диска",
-      excerpt: "Как распознать проблемы с накопителем на ранней стадии",
-      image:
+      annotation: "Как распознать проблемы с накопителем на ранней стадии",
+      preview:
         "https://images.pexels.com/photos/442150/pexels-photo-442150.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop",
       slug: "hdd-problems",
       readTime: "6 мин",
+      id: "dahbo321-3123das",
     },
     {
       title: "Почему ноутбук медленно работает",
-      excerpt: "Основные причины снижения производительности",
-      image:
+      annotation: "Основные причины снижения производительности",
+      preview:
         "https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop",
       slug: "slow-laptop",
       readTime: "5 мин",
+      id: "dahbo321-dasdasd3123",
     },
   ];
 
@@ -39,7 +41,7 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
       try {
         await navigator.share({
           title: article.title,
-          text: article.excerpt,
+          text: article.annotation,
           url: window.location.href,
         });
       } catch (err) {
