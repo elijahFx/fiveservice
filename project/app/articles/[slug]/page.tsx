@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import ArticleContent from '@/components/articles/ArticleContent';
 import { getArticleBySlug, getArticleBySlugFromList, getAllArticles } from '@/lib/api/articles';
+import { articles as localArticles, getArticleBySlug as getLocalArticleBySlug } from '@/lib/data/articles';
 
 interface ArticlePageProps {
   params: {
@@ -9,14 +10,29 @@ interface ArticlePageProps {
   };
 }
 
+// Allow dynamic routes for articles not pre-generated
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   try {
-    const articles = await getAllArticles(); // или специальный метод для получения slug
-    return articles.map((article) => ({
+    // Try to get articles from API first
+    const articles = await getAllArticles();
+    if (articles && articles.length > 0) {
+      return articles.map((article) => ({
+        slug: article.slug,
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching articles from API:', error);
+  }
+  
+  // Fallback to local articles if API fails
+  try {
+    return localArticles.map((article) => ({
       slug: article.slug,
     }));
   } catch (error) {
-    console.error('Error generating static params:', error);
+    console.error('Error generating static params from local data:', error);
     return [];
   }
 }
@@ -27,6 +43,11 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
     
     if (!article) {
       article = await getArticleBySlugFromList(params.slug);
+    }
+    
+    if (!article) {
+      // Try local articles as fallback
+      article = getLocalArticleBySlug(params.slug) as any || null;
     }
     
     if (!article) {
@@ -60,6 +81,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     
     if (!article) {
       article = await getArticleBySlugFromList(params.slug);
+    }
+    
+    if (!article) {
+      // Try local articles as fallback
+      article = getLocalArticleBySlug(params.slug) as any || null;
     }
 
     if (!article) {
