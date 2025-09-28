@@ -7,7 +7,7 @@ export interface Article {
   image: string;
   createdAt: string;
   updatedAt: string;
-  preview?: string;
+  preview: string;
   readTime: string;
   seo: {
     title: string;

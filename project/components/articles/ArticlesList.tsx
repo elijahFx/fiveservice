@@ -7,6 +7,7 @@ import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { formatDateToDDMMYYYY } from "@/lib/utils/dates.ts";
 import { Article } from "@/lib/api/articles";
 
+//@ts-ignore
 const ArticlesList = ({ articles }: Article[]) => {
 
   return (

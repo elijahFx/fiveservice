@@ -24,7 +24,7 @@ export default async function ArticlesPage() {
             техники
           </p>
         </div>
-
+       {/* @ts-ignore */}
         <ArticlesList articles={articles} />
         <FAQ />
       </div>

@@ -13,7 +13,10 @@ interface ArticleContentProps {
   article: Article;
 }
 
-const ArticleContent = ({ article }: ArticleContentProps) => {
+const ArticleContent = ({ article, params }: ArticleContentProps) => {
+
+  console.log(`А хуек то стоит): ${params}`);
+  
   // Safe default values
   const safeArticle = {
     id: article?.id || "unknown",
@@ -21,7 +24,7 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
     title: article?.title || "Заголовок не найден",
     annotation: article?.annotation || "Аннотация не найдена",
     content: article?.content || "<p>Содержание статьи временно недоступно.</p>",
-    preview: article?.preview || "/default-article.jpg",
+    preview: article?.preview || "/opengraph.webp",
     createdAt: article?.createdAt || new Date().toISOString(),
     readTime: article?.readTime || "5",
     author: article?.author || "Эксперты FiveService",
@@ -31,7 +34,7 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
     {
       title: "Признаки неисправности жесткого диска",
       annotation: "Как распознать проблемы с накопителем на ранней стадии",
-      preview: "/default-article.jpg",
+      preview: "/opengraph.webp",
       slug: "hdd-problems",
       readTime: "6 мин",
       id: "related-1",
@@ -39,32 +42,16 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
     {
       title: "Почему ноутбук медленно работает",
       annotation: "Основные причины снижения производительности",
-      preview: "/default-article.jpg",
+      preview: "/opengraph.webp",
       slug: "slow-laptop",
       readTime: "5 мин",
       id: "related-2",
     },
   ];
 
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: safeArticle.title,
-          text: safeArticle.annotation,
-          url: window.location.href,
-        });
-      } catch (err) {
-        console.log("Error sharing:", err);
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-    }
-  };
-
   return (
     <ErrorBoundary>
-      <div className="pt-16 min-h-screen bg-gray-50">
+      <div className="pt-20 min-h-screen bg-gray-50">
         {/* Breadcrumb */}
         <div className="bg-white border-b">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
@@ -186,7 +173,7 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
-                        e.currentTarget.src = "/default-article.jpg";
+                        e.currentTarget.src = "/opengraph.webp";
                       }}
                     />
                   </div>

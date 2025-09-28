@@ -1,9 +1,15 @@
 // app/articles/[slug]/page.tsx
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import ArticleContent from '@/components/articles/ArticleContent';
-import { getArticleBySlug, getArticleBySlugFromList, getAllArticles } from '@/lib/api/articles';
-import { articles as localArticles, getArticleBySlug as getLocalArticleBySlug } from '@/lib/data/articles';
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { Calendar, Clock, User, ArrowLeft, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Article } from "@/lib/api/articles";
+import { formatDateToDDMMYYYY } from "@/lib/utils/dates";
+import ErrorBoundary from "@/components/articles/ErrorBoundary";
+import { getArticleBySlug } from "@/lib/api/articles";
 
 interface ArticlePageProps {
   params: {
@@ -11,59 +17,36 @@ interface ArticlePageProps {
   };
 }
 
-// Generate static params for better performance
-export async function generateStaticParams() {
-  try {
-    const articles = await getAllArticles();
-    
-    // Combine with local articles for fallback
-    const allSlugs = [
-      ...articles.map(article => ({ slug: article.slug })),
-      ...localArticles.map(article => ({ slug: article.slug }))
-    ];
-    
-    return allSlugs;
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return localArticles.map(article => ({ slug: article.slug }));
-  }
-}
-
-export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ArticlePageProps): Promise<Metadata> {
   try {
     let article = await getArticleBySlug(params.slug);
-    
-    if (!article) {
-      article = await getArticleBySlugFromList(params.slug);
-    }
-    
-    if (!article) {
-      article = getLocalArticleBySlug(params.slug) as any || null;
-    }
-    
+
+    console.log(article);
+
     if (!article) {
       return {
-        title: 'Статья не найдена | FiveService',
-        description: 'Запрошенная статья не найдена',
+        title: "Статья не найдена | FiveService",
+        description: "Запрошенная статья не найдена",
       };
     }
 
     return {
-      title: article?.seo?.title || `${article.title} | FiveService`,
-      description: article?.seo?.description || (article as any).annotation || (article as any).excerpt || '',
-      keywords: article?.seo?.keywords?.join(', '),
+      title: `${article.title} | FiveService`,
+      description: article?.annotation,
       openGraph: {
-        title: article?.seo?.title || article.title,
-        description: article?.seo?.description || (article as any).annotation || (article as any).excerpt || '',
-        images: [(article as any).image || (article as any).preview || "/og-image.jpg"],
-        type: 'article',
+        title: article.title,
+        description: article?.annotation,
+        images: article?.preview ? [article.preview] : [],
+        type: "article",
       },
     };
   } catch (error) {
-    console.error('Error generating metadata:', error);
+    console.error("Error generating metadata:", error);
     return {
-      title: 'Статья | FiveService',
-      description: 'Полезная статья о ремонте техники',
+      title: "Статья | FiveService",
+      description: "Полезная статья о ремонте техники",
     };
   }
 }
@@ -71,36 +54,198 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 export default async function ArticlePage({ params }: ArticlePageProps) {
   try {
     let article = await getArticleBySlug(params.slug);
-    
-    if (!article) {
-      article = await getArticleBySlugFromList(params.slug);
-    }
-    
-    if (!article) {
-      article = getLocalArticleBySlug(params.slug) as any || null;
-    }
 
     if (!article) {
       notFound();
     }
 
-    // Normalize article data
-    const normalizedArticle: any = {
-      id: (article as any).id?.toString() || params.slug,
-      slug: (article as any).slug || params.slug,
-      title: (article as any).title || 'Статья',
-      annotation: (article as any).annotation || (article as any).excerpt || '',
-      content: (article as any).content || '<p>Содержание статьи временно недоступно.</p>',
-      preview: (article as any).preview || (article as any).image || '/default-article.jpg',
-      createdAt: (article as any).createdAt || new Date().toISOString(),
-      readTime: (article as any).readTime || '5',
-      author: (article as any).author || 'Эксперты FiveService',
-      seo: (article as any).seo || { title: '', description: '', keywords: [] },
+    // Safe default values
+    const safeArticle = {
+      id: article?.id || "unknown",
+      slug: article?.slug || "unknown",
+      title: article?.title || "Заголовок не найден",
+      annotation: article?.annotation || "Аннотация не найдена",
+      content: article?.content || "<p>Содержание статьи временно недоступно.</p>",
+      preview: article?.preview || "/opengraph.webp",
+      createdAt: article?.createdAt || new Date().toISOString(),
+      readTime: article?.readTime || "5",
+      author: article?.author || "Эксперты FiveService",
     };
 
-    return <ArticleContent article={normalizedArticle} />;
+    const relatedArticles = [
+      {
+        title: "Признаки неисправности жесткого диска",
+        annotation: "Как распознать проблемы с накопителем на ранней стадии",
+        preview: "/opengraph.webp",
+        slug: "hdd-problems",
+        readTime: "6 мин",
+        id: "related-1",
+      },
+      {
+        title: "Почему ноутбук медленно работает",
+        annotation: "Основные причины снижения производительности",
+        preview: "/opengraph.webp",
+        slug: "slow-laptop",
+        readTime: "5 мин",
+        id: "related-2",
+      },
+    ];
+
+    return (
+      <ErrorBoundary>
+        <div className="pt-20 min-h-screen bg-gray-50">
+          {/* Breadcrumb */}
+          <div className="bg-white border-b">
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+              <Link
+                href="/articles"
+                className="inline-flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Вернуться к статьям
+              </Link>
+            </div>
+          </div>
+
+          <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            {/* Article Header */}
+            <header className="mb-8">
+              <div className="mb-2">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-6">
+                  {safeArticle.title}
+                </h1>
+              </div>
+
+              {/* Meta Information */}
+              <div className="flex flex-wrap items-center gap-6 text-gray-600 mb-8">
+                <div className="flex items-center">
+                  <User className="w-5 h-5 mr-2" />
+                  <span>{safeArticle.author}</span>
+                </div>
+                <div className="flex items-center">
+                  <Calendar className="w-5 h-5 mr-2" />
+                  <span>{formatDateToDDMMYYYY(safeArticle.createdAt)}</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="w-5 h-5 mr-2" />
+                  <span>{safeArticle.readTime} минут чтения</span>
+                </div>
+              </div>
+
+              {/* Featured Image */}
+              <div className="relative h-64 md:h-96 rounded-2xl overflow-hidden mb-8 bg-gray-200">
+                <Image
+                  src={safeArticle.preview}
+                  alt={safeArticle.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </header>
+
+            {/* Article Content */}
+            <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm mb-8">
+              <div className="prose prose-lg max-w-none">
+                <div className="text-xl text-gray-700 leading-relaxed mb-6 font-medium">
+                  {safeArticle.annotation}
+                </div>
+
+                <div
+                  className="article-content"
+                  dangerouslySetInnerHTML={{
+                    __html: safeArticle.content.replace(/\n/g, "<br />"),
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Author Section */}
+            <Card className="p-8 mb-12 bg-blue-50 border-blue-200">
+              <div className="flex items-start space-x-6">
+                <div className="flex items-center justify-center w-16 h-16 bg-blue-600 rounded-full">
+                  <span className="text-white font-bold text-xl">FS</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    Команда экспертов FiveService
+                  </h3>
+                  <p className="text-gray-700 leading-relaxed mb-4">
+                    Наши специалисты имеют более 13 лет опыта в ремонте ноутбуков и
+                    компьютерной техники. Мы делимся знаниями и практическими
+                    советами, чтобы помочь вам лучше понимать и обслуживать вашу
+                    технику.
+                  </p>
+                  <div className="flex flex-wrap gap-4">
+                    <Button className="bg-blue-600 hover:bg-blue-700">
+                      <Phone className="w-4 h-4 mr-2" />
+                      <a href="tel:+375297349077">Консультация</a>
+                    </Button>
+                    <Link href="/services">
+                      <Button
+                        variant="outline"
+                        className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                      >
+                        Наши услуги
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Related Articles */}
+            <section>
+              <h3 className="text-2xl font-semibold text-gray-900 mb-8">
+                Похожие статьи
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {relatedArticles.map((relatedArticle) => (
+                  <Card
+                    key={relatedArticle.id}
+                    className="overflow-hidden hover:shadow-lg transition-all duration-300 group"
+                  >
+                    <div className="relative h-48 overflow-hidden bg-gray-200">
+                      <Image
+                        src={relatedArticle.preview}
+                        alt={relatedArticle.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+
+                    <div className="p-6">
+                      <h4 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                        {relatedArticle.title}
+                      </h4>
+
+                      <p className="text-gray-600 mb-4 text-sm leading-relaxed">
+                        {relatedArticle.annotation}
+                      </p>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center text-sm text-gray-500">
+                          <Clock className="w-4 h-4 mr-1" />
+                          <span>{relatedArticle.readTime}</span>
+                        </div>
+                        <Link
+                          href={`/articles/${relatedArticle.slug}`}
+                          className="text-blue-600 font-medium hover:text-blue-700 transition-colors text-sm"
+                        >
+                          Читать →
+                        </Link>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </section>
+          </article>
+        </div>
+      </ErrorBoundary>
+    );
   } catch (error) {
-    console.error('Error loading article:', error);
+    console.error("Error loading article:", error);
     notFound();
   }
 }
