@@ -7,6 +7,7 @@ import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { formatDateToDDMMYYYY } from "@/lib/utils/dates.ts";
 
 const ArticlesList = ({ articles }) => {
+
   return (
     <section className="py-6 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -51,7 +52,7 @@ const ArticlesList = ({ articles }) => {
                 </div>
 
                 <Link
-                  href={`/articles/${article.slug}`}
+                  href={`/articles/${article.id}`}
                   className="inline-flex items-center text-navy-600 font-medium hover:text-navy-700 transition-colors"
                 >
                   Читать статью

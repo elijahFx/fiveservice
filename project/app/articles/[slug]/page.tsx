@@ -18,6 +18,9 @@ export const revalidate = 0;
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   try {
     let article = await getArticleBySlug(params.slug);
+
+    console.log(article);
+    
     
     if (!article) {
       article = await getArticleBySlugFromList(params.slug);
