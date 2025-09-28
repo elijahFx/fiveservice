@@ -5,15 +5,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
 import { formatDateToDDMMYYYY } from "@/lib/utils/dates.ts";
+import { Article } from "@/lib/api/articles";
 
-const ArticlesList = ({ articles }) => {
+const ArticlesList = ({ articles }: Article[]) => {
 
   return (
     <section className="py-6 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Articles Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {articles.map((article) => (
+          {articles.map((article: Article) => (
             <Card
               key={article.id}
               className="overflow-hidden hover:shadow-xl transition-all duration-300 group"
