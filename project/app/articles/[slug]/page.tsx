@@ -37,12 +37,12 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
 
     return {
       title: article?.seo?.title || `${article.title} | FiveService`,
-      description: article?.seo?.description || article.annotation,
+      description: article?.seo?.description || (article as any).annotation || (article as any).excerpt || '',
       keywords: article?.seo?.keywords?.join(', '),
       openGraph: {
         title: article?.seo?.title || article.title,
-        description: article?.seo?.description || article.annotation,
-        images: article.image || "/og-image.jpg",
+        description: article?.seo?.description || (article as any).annotation || (article as any).excerpt || '',
+        images: (article as any).image || (article as any).preview || "/og-image.jpg",
         type: 'article',
       },
     };
@@ -66,13 +66,21 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       notFound();
     }
 
-    const articleWithFormattedDate = {
-      ...article,
-      date: new Date(article.createdAt).toLocaleDateString('ru-RU'),
-      annotation: article.annotation
+    // Normalize API article shape to UI Article expected by ArticleContent
+    const normalizedArticle: any = {
+      id: (article as any).id ?? params.slug,
+      slug: (article as any).slug ?? params.slug,
+      title: (article as any).title ?? '',
+      annotation: (article as any).annotation ?? (article as any).excerpt ?? '',
+      content: (article as any).content ?? '',
+      preview: (article as any).preview ?? (article as any).image ?? '/og-image.jpg',
+      createdAt: (article as any).createdAt ?? new Date().toISOString(),
+      readTime: (article as any).readTime ?? '5',
+      author: (article as any).author ?? 'Эксперты FiveService',
+      seo: (article as any).seo ?? { title: '', description: '', keywords: [] },
     };
 
-    return <ArticleContent article={articleWithFormattedDate} />;
+    return <ArticleContent article={normalizedArticle} />;
   } catch (error) {
     console.error('Error loading article:', error);
     notFound();

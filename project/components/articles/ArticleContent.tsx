@@ -192,7 +192,7 @@ const ArticleContent = ({ article }: ArticleContentProps) => {
                       <span>{relatedArticle.readTime}</span>
                     </div>
                     <Link
-                      href={`/articles/${relatedArticle.id}`}
+                      href={`/articles/${relatedArticle.slug}`}
                       className="text-navy-600 font-medium hover:text-navy-700 transition-colors text-sm"
                     >
                       Читать →
