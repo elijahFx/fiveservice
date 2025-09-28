@@ -17,7 +17,7 @@ export interface Article {
 export async function getAllArticles(): Promise<Article[]> {
   try {
     const response = await fetch('https://testend2.site/api/articles', {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -38,7 +38,7 @@ export async function getAllArticles(): Promise<Article[]> {
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   try {
     const response = await fetch(`https://testend2.site/api/articles/${slug}`, {
-      next: { revalidate: 3600 },
+      cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
       },

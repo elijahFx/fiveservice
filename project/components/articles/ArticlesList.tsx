@@ -51,7 +51,7 @@ const ArticlesList = ({ articles }) => {
                 </div>
 
                 <Link
-                  href={`/articles/${article.id}`}
+                  href={`/articles/${article.slug}`}
                   className="inline-flex items-center text-navy-600 font-medium hover:text-navy-700 transition-colors"
                 >
                   Читать статью

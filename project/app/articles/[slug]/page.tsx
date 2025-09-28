@@ -10,32 +10,10 @@ interface ArticlePageProps {
   };
 }
 
-// Allow dynamic routes for articles not pre-generated
+// Force dynamic rendering - no static generation
+export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  try {
-    // Try to get articles from API first
-    const articles = await getAllArticles();
-    if (articles && articles.length > 0) {
-      return articles.map((article) => ({
-        slug: article.slug,
-      }));
-    }
-  } catch (error) {
-    console.error('Error fetching articles from API:', error);
-  }
-  
-  // Fallback to local articles if API fails
-  try {
-    return localArticles.map((article) => ({
-      slug: article.slug,
-    }));
-  } catch (error) {
-    console.error('Error generating static params from local data:', error);
-    return [];
-  }
-}
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   try {
@@ -99,7 +77,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       title: (article as any).title ?? '',
       annotation: (article as any).annotation ?? (article as any).excerpt ?? '',
       content: (article as any).content ?? '',
-      preview: (article as any).preview ?? (article as any).image ?? '/og-image.jpg',
+      preview: (article as any).preview ?? (article as any).image ?? '/opengraph.webp',
       createdAt: (article as any).createdAt ?? new Date().toISOString(),
       readTime: (article as any).readTime ?? '5',
       author: (article as any).author ?? 'Эксперты FiveService',

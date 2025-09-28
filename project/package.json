@@ -8,7 +8,6 @@
     "start": "next start",
     "start:server": "node server.js",
     "lint": "next lint",
-    "install": "npm install",
     "deploy:prepare": "npm run build && npm run deploy:copy",
     "deploy:copy": "node scripts/copy-deploy-files.js",
     "self-host": "npm run build && npm run start:server",

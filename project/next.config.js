@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: false,
-  output: 'standalone',
   
   // Add this section to ignore both ESLint and TypeScript errors during build
   eslint: {
