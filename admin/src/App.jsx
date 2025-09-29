@@ -76,7 +76,7 @@ function AppWrapper() {
 // Главный компонент с маршрутизатором
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/admin">
       <AppWrapper />
     </BrowserRouter>
   );
