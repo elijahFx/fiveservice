@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { URL } from "../../config";
+const NEW_URL = `http://localhost:5000/api/`
 
 export const articlesApi = createApi({
   reducerPath: "articlesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${URL}articles`,
+    baseUrl: `${NEW_URL}articles`,
     prepareHeaders: (headers) => {
       const userInfo = localStorage.getItem("userASY");
 

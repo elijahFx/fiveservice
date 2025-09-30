@@ -42,12 +42,12 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 z-10 bg-white h-[11vh] w-screen flex justify-between items-center px-3.5 shadow-sm">
       <div className="flex items-center gap-2 max-w-[50%] h-full overflow-hidden">
-        <Link to="/main" className="flex items-center h-full">
+        <Link to="/" className="flex items-center h-full">
           {logoSvg}
         </Link>
         <div className="flex flex-col justify-center overflow-hidden text-ellipsis">
           <h3 className="text-sm sm:text-base md:text-xl leading-tight truncate">
-            fiveservice.by/admin
+            fiveservice.by/<span className="font-semibold">admin</span>
           </h3>
           <h4 className="text-[10px] sm:text-xs leading-tight truncate">
             Автоматизированная система управления fiveservice

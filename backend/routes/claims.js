@@ -4,9 +4,11 @@ const {
   addClaim,
   getClaims,
   updateClaim,
-  deleteClaim
+  deleteClaim,
+  getClaimById
 } = require('../controllers/claimsControllers');
 
+router.get('/:id', getClaimById)
 // Получить до 100 последних заявок
 router.get('/', getClaims);
 

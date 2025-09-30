@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { URL } from "../../config";
+const NEW_URL = `http://localhost:5000/api/`
 
 export const claimsApi = createApi({
   reducerPath: "claimsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${URL}claims`,
+    baseUrl: `${NEW_URL}claims`,
     prepareHeaders: (headers) => {
       const userInfo = localStorage.getItem("userASY");
       if (userInfo) {
@@ -50,10 +51,9 @@ export const claimsApi = createApi({
 
     // Удаление претензии
     deleteClaims: builder.mutation({
-      query: (ids) => ({
-        url: `/delete`,
-        method: "POST",
-        body: ids
+      query: (id) => ({
+        url: `/${id}`,
+        method: "DELETE",
       }),
       invalidatesTags: (result, error, id) => [{ type: "Claim", id }],
     }),

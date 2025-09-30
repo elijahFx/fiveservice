@@ -106,6 +106,28 @@ const getAnsweredQuestions = async (req, res) => {
       FROM questions 
       WHERE answer IS NOT NULL 
         AND answer != ''
+      ORDER BY createdAt DESC
+    `);
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching answered questions:", error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    if (connection) await connection.end();
+  }
+};
+
+const getAnsweredAndFeaturedQuestions = async (req, res) => {
+  let connection;
+  try {
+    connection = await createDbConnection();
+
+    const [rows] = await connection.execute(`
+      SELECT * 
+      FROM questions 
+      WHERE answer IS NOT NULL 
+        AND answer != ''
         AND isFeatured = 1
       ORDER BY createdAt DESC
     `);
@@ -300,6 +322,7 @@ module.exports = {
   getFeaturedQuestions,
   getUnansweredQuestions,
   getAnsweredQuestions,
+  getAnsweredAndFeaturedQuestions,
   getQuestionsByAuthor,
   getSingleQuestion,
   answerQuestion,

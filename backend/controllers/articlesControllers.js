@@ -8,18 +8,19 @@ const addArticle = async (req, res) => {
   try {
     connection = await createDbConnection();
 
-    const { title, content, user_id, category, tags } = req.body;
+    const { title, content, user_id, category, tags, preview, annotation, author, readTime } = req.body;
+
+    console.log(title, content, user_id, category, tags);
+    
 
     const id = uuidv4();
     const createdAt = new Date().toISOString();
-    const updatedAt = createdAt;
-    const likes = 0;
 
     const [result] = await connection.execute(
       `INSERT INTO articles 
-      (id, title, content, user_id, category, tags, createdAt, updatedAt, likes) 
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, title, content, user_id, category, tags || null, createdAt, updatedAt, likes]
+      (id, title, content, user_id, category, tags, createdAt, preview, annotation, author, readTime) 
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [id, title, content, user_id, category, tags || null, createdAt, preview, annotation, author, readTime]
     );
 
     res.status(201).json({
@@ -145,15 +146,14 @@ const editArticle = async (req, res) => {
   try {
     connection = await createDbConnection();
     const { id } = req.params;
-    const { title, content, category, tags } = req.body;
+    const { title, content, category, tags, readTime, annotation, preview } = req.body;
 
-    const updatedAt = new Date().toISOString();
 
     const [result] = await connection.execute(
       `UPDATE articles 
-      SET title = ?, content = ?, category = ?, tags = ?, updatedAt = ?
+      SET title = ?, content = ?, category = ?, tags = ?, readTime = ?, annotation = ?, preview = ?
       WHERE id = ?`,
-      [title, content, category, tags || null, updatedAt, id]
+      [title, content, category, tags || null, readTime, annotation, preview, id]
     );
 
     if (result.affectedRows === 0) {

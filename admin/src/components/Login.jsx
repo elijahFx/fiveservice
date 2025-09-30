@@ -20,7 +20,7 @@ const Login = () => {
     try {
       const userData = await login(formData).unwrap();
       dispatch(setCredentials(userData));
-      navigate("/main")
+      navigate("/")
     } catch (err) {
       dispatch(setError(err.data?.message || "Ошибка при входе"));
     }

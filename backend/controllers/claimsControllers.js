@@ -47,11 +47,11 @@ const updateClaim = async (req, res) => {
   try {
     connection = await createDbConnection();
     const { id } = req.params;
-    const { name, phone, content } = req.body;
+    const { status } = req.body;
 
     const [result] = await connection.execute(
-      `UPDATE claims SET name = ?, phone = ?, content = ? WHERE id = ?`,
-      [name, phone, content || null, id]
+      `UPDATE claims SET status = ? WHERE id = ?`,
+      [status, id]
     );
 
     if (result.affectedRows === 0) {
@@ -89,9 +89,34 @@ const deleteClaim = async (req, res) => {
   }
 };
 
+const getClaimById = async (req, res) => {
+  let connection;
+  try {
+    connection = await createDbConnection();
+    const { id } = req.params;
+
+    const [rows] = await connection.execute(
+      `SELECT * FROM claims WHERE id = ?`,
+      [id]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Заявка не найдена" });
+    }
+
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка получения заявки" });
+  } finally {
+    if (connection) await connection.end();
+  }
+};
+
+
 module.exports = {
   addClaim,
   getClaims,
+  getClaimById,
   updateClaim,
   deleteClaim
 };

@@ -153,4 +153,47 @@ input[type="number"] {
 }
 
 
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out forwards;
+}
+
+/* Улучшенные transition для плавности */
+.sidebar-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Убираем мерцание при анимации */
+* {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Плавный ховер-эффект */
+.menu-item {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Скрытие scrollbar для Chrome, Safari и Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Скрытие scrollbar для IE, Edge и Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+
 

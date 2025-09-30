@@ -42,7 +42,7 @@ const DynamicQuestionList = () => {
   const fetchQuestions = async () => {
     try {
       setLoading(true);
-      const response = await fetch('https://testend2.site/api/questions/answered');
+      const response = await fetch('https://testend2.site/api/questions/answered-featured');
       
       if (!response.ok) {
         throw new Error('Ошибка загрузки вопросов');

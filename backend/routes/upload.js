@@ -6,7 +6,14 @@ const requireAuth = require("../requireAuth");
 
 const router = express.Router();
 
-// Проверка типа файла
+// Функция для нормализации кириллических имен файлов
+const normalizeFileName = (fileName) => {
+  // Сохраняем оригинальное кириллическое имя, убираем только небезопасные символы
+  const safeName = fileName.replace(/[<>:"|?*]/g, '_');
+  return safeName;
+};
+
+// Проверка типа файла - ТОЛЬКО DOC и DOCX
 const fileFilter = (req, file, cb) => {
   const allowedTypes = [
     'application/msword',
@@ -16,23 +23,24 @@ const fileFilter = (req, file, cb) => {
 
   const fileExtension = path.extname(file.originalname).toLowerCase();
   
-  if (allowedTypes.includes(file.mimetype) || allowedExtensions.includes(fileExtension)) {
+  if (allowedTypes.includes(file.mimetype) && allowedExtensions.includes(fileExtension)) {
     cb(null, true);
   } else {
     cb(new Error('Разрешены только файлы DOC и DOCX'), false);
   }
 };
 
-// Настройка multer
+// Настройка multer с сохранением кириллических имен
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    // Создаем папку files, если она не существует
     const dir = path.join(__dirname, "../../files");
     fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
   filename: (req, file, cb) => {
-    const uniqueName = `${Date.now()}-${file.originalname}`;
+    // Сохраняем кириллическое имя файла
+    const originalName = normalizeFileName(file.originalname);
+    const uniqueName = `${Date.now()}-${originalName}`;
     cb(null, uniqueName);
   },
 });
@@ -66,12 +74,12 @@ router.post("/", requireAuth, upload.single("requisites"), handleMulterError, (r
   res.status(200).json({
     message: "Файл успешно загружен",
     filePath: `/files/${req.file.filename}`,
-    fileName: req.file.originalname,
+    fileName: req.file.originalname, // Возвращаем оригинальное кириллическое имя
     fileSize: req.file.size
   });
 });
 
-// Получение списка всех файлов в папке /files
+// Получение списка ТОЛЬКО DOC и DOCX файлов
 router.get("/", requireAuth, (req, res) => {
   const dirPath = path.join(__dirname, "../../files");
 
@@ -85,13 +93,24 @@ router.get("/", requireAuth, (req, res) => {
       return res.status(500).json({ message: "Ошибка при чтении файлов" });
     }
 
-    const fileInfos = files.map((filename) => {
+    // Фильтруем только DOC и DOCX файлы
+    const docFiles = files.filter(filename => {
+      const ext = path.extname(filename).toLowerCase();
+      return ext === '.doc' || ext === '.docx';
+    });
+
+    const fileInfos = docFiles.map((filename) => {
       const fullPath = path.join(dirPath, filename);
       const stats = fs.statSync(fullPath);
 
+      // Восстанавливаем оригинальное имя (без timestamp)
+      const originalName = filename.includes('-') 
+        ? filename.split('-').slice(1).join('-') 
+        : filename;
+
       return {
         name: filename,
-        originalName: filename.includes('-') ? filename.split('-').slice(1).join('-') : filename,
+        originalName: originalName,
         size: stats.size,
         createdAt: stats.birthtime,
         url: `/files/${filename}`,
@@ -102,17 +121,22 @@ router.get("/", requireAuth, (req, res) => {
   });
 });
 
-// Скачивание файла из папки /files
+// Скачивание файла - проверяем тип и возвращаем кириллическое имя
 router.get("/download/:fileName", requireAuth, (req, res) => {
   const { fileName } = req.params;
-
   const filePath = path.join(__dirname, "../../files", fileName);
 
   if (!fs.existsSync(filePath)) {
     return res.status(404).json({ message: "Файл не найден" });
   }
 
-  // Получаем оригинальное имя файла (убираем timestamp)
+  // Проверяем, что файл имеет разрешенное расширение
+  const ext = path.extname(fileName).toLowerCase();
+  if (ext !== '.doc' && ext !== '.docx') {
+    return res.status(403).json({ message: "Доступ разрешен только к файлам DOC и DOCX" });
+  }
+
+  // Восстанавливаем оригинальное кириллическое имя для скачивания
   let originalName = fileName;
   if (fileName.includes('-')) {
     originalName = fileName.split('-').slice(1).join('-');
@@ -129,7 +153,6 @@ router.get("/download/:fileName", requireAuth, (req, res) => {
 // Удаление файла
 router.delete("/:fileName", requireAuth, (req, res) => {
   const { fileName } = req.params;
-
   const filePath = path.join(__dirname, "../../files", fileName);
 
   if (!fs.existsSync(filePath)) {

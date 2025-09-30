@@ -12,14 +12,15 @@ const {
   toggleFeatured,
   editQuestion,
   deleteQuestion,
-  searchQuestions
+  searchQuestions,
+  getAnsweredAndFeaturedQuestions
 } = require('../controllers/questionsControllers');
 const requireAuth = require("../requireAuth")
 
 // Маршруты для вопросов
 
 // GET /api/questions - Получить все вопросы
-router.get('/', getQuestions);
+router.get('/', requireAuth, getQuestions);
 
 // GET /api/questions/featured - Получить избранные вопросы
 router.get('/featured', requireAuth, getFeaturedQuestions);
@@ -27,8 +28,10 @@ router.get('/featured', requireAuth, getFeaturedQuestions);
 // GET /api/questions/unanswered - Получить неотвеченные вопросы
 router.get('/unanswered', requireAuth, getUnansweredQuestions);
 
+router.get('/answered-featured', getAnsweredAndFeaturedQuestions)
+
 // GET /api/questions/answered - Получить отвеченные вопросы
-router.get('/answered', getAnsweredQuestions);
+router.get('/answered', requireAuth, getAnsweredQuestions);
 
 // GET /api/questions/search - Поиск вопросов
 router.get('/search', requireAuth, searchQuestions);

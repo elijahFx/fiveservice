@@ -32,10 +32,7 @@ const Account = () => {
     status: userData.status,
     fullName: userData.fullName,
   });
-  const [avatarPreview, setAvatarPreview] = useState(
-    userData.avatar || "https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg"
-  );
-  const [productImg, setProductImg] = useState("")
+  const [avatarPreview, setAvatarPreview] = useState("https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg");
 
   const fileInputRef = useRef(null);
 
@@ -207,9 +204,6 @@ const Account = () => {
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                 {user.nickname}
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
-                ID: {user.id}
-              </p>
               <p className="text-lg text-gray-800 dark:text-gray-300">
                 <span className="font-medium">ФИО:</span>{" "}
                 {user.fullName || "---"}

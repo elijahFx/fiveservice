@@ -1,13 +1,14 @@
 import Loader from "./components/Loader";
 import NotFound from "./Components/NotFound";
-import MainPage from "./components/MainPage";
 import Login from "./components/Login";
 import SideBar from "../src/components/SideBar";
 import Header from "../src/components/Header"
-import ClaimsOverview from "./components/Claims/ClaimsOverview";
 import Account from "./components/Account";
-import ClaimPage from "./components/Claims/ClaimPage";
-import ArticleCreate from "./components/Article/ArticleCreate";
+import FileOverview from "./components/Files/FileOverview";
+import QuestionOverview from "./components/Questions/QuestionOverview"
+import ArticleOverview from "./components/Articles/ArticleOverview"
+import ClaimsOverview from "./components/Claims/ClaimsOverview"
+import SingleClaim from "./components/Claims/SingleClaim";
 import {
   BrowserRouter,
   Routes,
@@ -17,7 +18,6 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { logout, setCredentials } from "./slices/authSlice";
-
 
 
 function AppWrapper() {
@@ -42,7 +42,7 @@ function AppWrapper() {
     }
   }, [dispatch]);
 
-  const pathsWithoutLayout = ["/", "/contract"];
+  const pathsWithoutLayout = [];
   const isMinimalPage = pathsWithoutLayout.includes(location.pathname);
   
   return (
@@ -54,13 +54,14 @@ function AppWrapper() {
 
           <Routes>
             {/* Публичные маршруты */}
-            <Route path="/" element={isAuthenticated ? <MainPage /> : <Login />} />
+            <Route path="/" element={isAuthenticated ? <ClaimsOverview /> : <Login />} />
 
             {/* Условный доступ к маршрутам */}
-            <Route path="/main" element={isAuthenticated ? <MainPage /> : <Loader />} />
-            <Route path="/claims" element={isAuthenticated ? <ClaimsOverview /> : <Login />} />
-            <Route path="/articles" element={isAuthenticated ? <ArticleCreate type="article"/> : <Login />} />
-            <Route path="/claims/:number" element={isAuthenticated ? <ClaimPage /> : <Login />} />
+             <Route path="/claims/:id" element={isAuthenticated ? <SingleClaim /> : <Loader />} />
+            <Route path="/claims" element={isAuthenticated ? <ClaimsOverview /> : <Loader />} />
+            <Route path="/files" element={isAuthenticated ? <FileOverview /> : <Login />} />
+            <Route path="/questions" element={isAuthenticated ? <QuestionOverview /> : <Login />} />
+            <Route path="/articles" element={isAuthenticated ? <ArticleOverview type="article"/> : <Login />} />
             <Route path="/loader" element={isAuthenticated ? <Loader /> : <Login />} />
             <Route path="/account" element={isAuthenticated ? <Account /> : <Login />} />
 

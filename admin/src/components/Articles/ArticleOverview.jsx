@@ -1,13 +1,13 @@
 import React from "react";
 import TopElement from "../TopElement";
-import ClaimsManager from "./ClaimManager";
+import ArticleManager from "./ArticleManager";
 
 export default function FileOverview() {
 
   return (
     <div className="mt-[11vh] flex-1">
-      <TopElement type="claims"/> 
-      <ClaimsManager />
+      <TopElement type="article"/> 
+      <ArticleManager />
     </div>
   );
 }
