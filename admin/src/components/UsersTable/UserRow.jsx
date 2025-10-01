@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { Trash2 } from "lucide-react";
 import {
   useDeleteUserMutation,
   useEditUserLikeAdminMutation,
 } from "../../apis/userApi";
 
 const statuses = ["user", "admin"];
+const positions = ["Директор", "Зам. директора", "Бухгалтер", "Мастер"];
 
 const UserRow = ({ user, onUpdate, onDelete }) => {
   const [editUser, setEditUser] = useState({
@@ -13,6 +13,9 @@ const UserRow = ({ user, onUpdate, onDelete }) => {
     // Убедимся, что rank имеет значение по умолчанию
     rank: user.rank || "",
   });
+
+  console.log(user);
+  
 
   const [editUserLikeAdmin, { isLoading, error }] =
     useEditUserLikeAdminMutation();
@@ -26,20 +29,13 @@ const UserRow = ({ user, onUpdate, onDelete }) => {
       const updatedUser = { ...editUser, [field]: value };
       setEditUser(updatedUser);
       onUpdate(updatedUser);
-      const result = await editUserLikeAdmin(updatedUser).unwrap();
-    }
-  };
-
-  const handleDelete = async () => {
-    const confirmed = window.confirm("Удалить пользователя?");
-    if (confirmed) {
-      const result = await deleteUser(editUser.id);
+      await editUserLikeAdmin(updatedUser).unwrap();
     }
   };
 
   return (
     <tr>
-      <td className="px-6 py-4 whitespace-nowrap">{editUser.nickname}</td>
+      <td className="px-6 py-4 whitespace-nowrap">{editUser.nickname ? editUser.nickname : "Аноним"}</td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
         {editUser.fullName}
       </td>
@@ -55,10 +51,11 @@ const UserRow = ({ user, onUpdate, onDelete }) => {
               Выберите должность
             </option>
           )}
-        
-
-
-
+          {positions.map((position) => (
+            <option key={position} value={position}>
+              {position}
+            </option>
+          ))}
         </select>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
@@ -74,23 +71,15 @@ const UserRow = ({ user, onUpdate, onDelete }) => {
           ))}
         </select>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap flex justify-center">
+      <td className="px-6 py-4 whitespace-nowrap ">
         <input
           type="checkbox"
-          checked={editUser.isVerified === true || editUser.isVerified === 1}
+          checked={user.isVerified === true || user.isVerified == 1}
           onChange={(e) =>
             handleInputChange("isVerified", e.target.checked ? 1 : 0)
           }
           className="w-5 h-5 accent-blue-600"
         />
-      </td>
-      <td className="px-6 py-4 text-center">
-        <button
-          onClick={handleDelete}
-          className="text-red-600 hover:text-red-800 transition cursor-pointer"
-        >
-          <Trash2 size={18} />
-        </button>
       </td>
     </tr>
   );

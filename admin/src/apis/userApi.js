@@ -22,7 +22,7 @@ export const userApi = createApi({
     // Аутентификация
     login: builder.mutation({
       query: (credentials) => ({
-        url: "/users/login",
+        url: "/api/auth/login",
         method: "POST",
         body: credentials,
       }),
@@ -31,7 +31,7 @@ export const userApi = createApi({
 
     // Получение текущего пользователя
     getCurrentUser: builder.query({
-      query: () => "/users/me",
+      query: () => "/api/auth/me",
       providesTags: ["User"], // Указываем, что запрос связан с тегом 'User'
     }),
 
@@ -42,7 +42,7 @@ export const userApi = createApi({
         formData.append("avatar", file);
 
         return {
-          url: "/users/avatar",
+          url: "/api/auth/avatar",
           method: "POST",
           body: formData,
           // Не нужно headers: {'Content-Type'}, FormData сам установит правильный заголовок
@@ -53,7 +53,7 @@ export const userApi = createApi({
 
     updateUser: builder.mutation({
       query: (userData) => ({
-        url: "/users",
+        url: "/api/auth/",
         method: "PUT",
         body: userData,
       }),
@@ -73,13 +73,13 @@ export const userApi = createApi({
     }),
 
     getAllUsers: builder.query({
-      query: () => "/users",
+      query: () => "/api/auth/all",
       providesTags: ["User"],
     }),
 
     editUserLikeAdmin: builder.mutation({
       query: (userData) => ({
-        url: `/users/adm`,
+        url: `/api/auth/adm`,
         method: "PATCH",
         body: userData,
       }),

@@ -24,7 +24,7 @@ const Contact = () => {
     setSubmitStatus('idle');
 
     try {
-      const response = await fetch('https://testend2.site/api/claims', {
+      const response = await fetch('http://localhost:5000/api/claims', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +33,7 @@ const Contact = () => {
         body: JSON.stringify({
           name: formData.name,
           phone: formData.phone,
-          message: formData.message,
+          content: formData.message,
           type: 'contact_form',
           source: 'contact_page'
         }),

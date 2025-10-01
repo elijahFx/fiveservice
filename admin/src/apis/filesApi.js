@@ -6,7 +6,7 @@ const SUPER_NEW_URL = `https://testend2.site/`
 export const filesApi = createApi({
   reducerPath: "filesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${NEW_URL}`, // Базовый URL без дополнительных путей
+    baseUrl: `${SUPER_NEW_URL}`, // Базовый URL без дополнительных путей
     prepareHeaders: (headers) => {
       const userInfo = localStorage.getItem("userASY");
       if (userInfo) {

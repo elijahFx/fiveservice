@@ -6,6 +6,7 @@ const SingleClaim = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data: claim, isLoading, error, refetch } = useGetClaimByIdQuery(id);
+
   const [updateClaim, { isLoading: isUpdating }] = useUpdateClaimMutation();
   
   const [isEditingStatus, setIsEditingStatus] = useState(false);

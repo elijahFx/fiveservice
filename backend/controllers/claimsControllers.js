@@ -1,5 +1,8 @@
 const { v4: uuidv4 } = require("uuid");
 const createDbConnection = require("../db");
+const TelegramNotifier = require("../telegram/telegramBot");
+
+const telegramNotifier = new TelegramNotifier(process.env.TELEGRAM_BOT_TOKEN);
 
 const addClaim = async (req, res) => {
   let connection;
@@ -14,6 +17,16 @@ const addClaim = async (req, res) => {
       `INSERT INTO claims (id, createdAt, name, phone, content) VALUES (?, ?, ?, ?, ?)`,
       [id, createdAt, name, phone, content || null]
     );
+
+    const orderData = { name, phone, content: content || "проблема не описана", createdAt, id }
+
+    console.log(orderData);
+    
+
+   const result = await telegramNotifier.sendOrderNotification(orderData);
+
+   console.log(result);
+   
 
     res.status(201).json({ id, message: "Заявка создана" });
   } catch (error) {

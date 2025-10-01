@@ -9,7 +9,11 @@ export default function Header() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const userName = useSelector(state => state?.auth?.user)
+  const userName = useSelector(state => state?.auth?.nickname)
+  const user = useSelector((state) => state?.auth?.user)
+  console.log(user);
+  console.log(userName);
+  
   const avatarLink = `https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg`
 
   const handleLogout = () => {
@@ -73,7 +77,7 @@ export default function Header() {
           className="z-50"
           render={({ content }) => (
             <div className="flex content-center justify-center flex-col">
-              <p className="cursor-pointer transition-all duration-400 hover:underline"><Link to="/account">{userName}</Link></p>
+              <p className="cursor-pointer transition-all duration-400 hover:underline"><Link to="/account">{userName || user}</Link></p>
               <button 
                 onClick={handleLogout}
                 className="text-red-500 hover:text-red-700 font-medium mt-1 transition-all duration-400 cursor-pointer"

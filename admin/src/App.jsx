@@ -27,6 +27,10 @@ function AppWrapper() {
 
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("userASY"));
+
+    console.log(savedUser);
+    
+
     if (savedUser) {
       const currentTime = Date.now();
       const FIVE_HOURS = 5 * 60 * 60 * 1000; // 5 hours in milliseconds

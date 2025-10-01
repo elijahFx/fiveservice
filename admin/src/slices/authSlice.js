@@ -14,7 +14,8 @@ const initialState = {
   timestamp: null,
   createdAt: null,
   caseCount: 0,
-  caseStatuses: null
+  caseStatuses: null,
+  nickname: null
 };
 
 const authSlice = createSlice({
@@ -22,9 +23,12 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action) => {
+
+      console.log(action.payload);
+      
       // Если в payload передали поле user, используем его,
       // иначе ожидаем наличие поля nickname
-      const user = action.payload.user || action.payload.nickname;
+      const user = action.payload.nickname;
       state.user = user || state.user;
       state.token = action.payload.token || state.token;
       state.id = action.payload.id || state.id;
@@ -32,6 +36,7 @@ const authSlice = createSlice({
       state.rank = action.payload.rank || state.rank;
       state.status = action.payload.status || state.status;
       state.fullName = action.payload.fullName || state.fullName;
+      state.nickname = action.payload.user?.nickname;
       state.isAuthenticated = true;
       state.timestamp = Date.now()
       state.createdAt = action.payload.createdAt
@@ -53,7 +58,8 @@ const authSlice = createSlice({
           timestamp: Date.now(),
           createdAt: state.createdAt,
           caseCount: state.caseCount,
-          caseStatuses: state.caseStatuses
+          caseStatuses: state.caseStatuses,
+          nickname: state.user
         })
       );
     },
