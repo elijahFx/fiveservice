@@ -59,13 +59,15 @@ class TelegramNotifier {
 
   async sendOrderNotification(orderData) {
     try {
-      const message = this.formatOrderMessage(orderData);
-      const keyboard = this.formatOrderKeyboard(orderData);
+      const isUrgent = this.checkUrgency(orderData.content);
+      const message = this.formatOrderMessage(orderData, isUrgent);
+      const keyboard = this.formatOrderKeyboard(orderData, isUrgent);
       
       for (const chatId of this.adminChatIds) {
         try {
           await this.bot.sendMessage(chatId, message, {
-            reply_markup: keyboard
+            reply_markup: keyboard,
+            parse_mode: 'Markdown'
           });
         } catch (error) {
           console.error(`Failed to send to ${chatId}:`, error.message);
@@ -76,9 +78,16 @@ class TelegramNotifier {
     }
   }
 
-  formatOrderMessage(order) {
-    return `
-🎯 Новая заявка с сайта!
+  checkUrgency(content) {
+    if (!content) return false;
+    const urgentKeywords = ['срочно', 'СРОЧНО'];
+    return urgentKeywords.some(keyword => content.includes(keyword));
+  }
+
+  formatOrderMessage(order, isUrgent = false) {
+    const urgencyPrefix = isUrgent ? '🚨🚨🚨 СРОЧНАЯ ЗАЯВКА! 🚨🚨🚨\n\n' : '';
+    
+    return `${urgencyPrefix}🎯 Новая заявка с сайта!
 
 👤 Клиент: ${order.name}
 📞 Телефон: ${order.phone}
@@ -86,15 +95,17 @@ class TelegramNotifier {
 📅 Дата обращения: ${formatDate(order.createdAt)}
 
 🆔 ID заявки: #${order.id}
-    `;
+${isUrgent ? '\n⚠️ *Требуется срочный ответ!* ⚠️' : ''}`;
   }
 
-  formatOrderKeyboard(order) {
+  formatOrderKeyboard(order, isUrgent = false) {
+    const buttonText = isUrgent ? '🚨 СРОЧНО! Просмотр заявки' : '📋 Просмотр';
+    
     return {
       inline_keyboard: [
         [
           {
-            text: '📋 Просмотр',
+            text: buttonText,
             url: `https://testend.site/admin/claims/${order.id}`
           }
         ]

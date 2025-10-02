@@ -1,15 +1,8 @@
-'use client';
-
-import { useState } from 'react';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowRight, Phone } from 'lucide-react';
+import Link from 'next/link';
 
 const Calculator = () => {
-  const [selectedService, setSelectedService] = useState('');
-  const [estimatedPrice, setEstimatedPrice] = useState<number | null>(null);
 
   return (
     <section className="py-20 bg-navy-50">
@@ -25,10 +18,12 @@ const Calculator = () => {
             <p className="text-lg text-gray-700 mb-6">
               Узнайте в чём может быть проблема и примерную стоимость ремонта за 1 минуту
             </p>
+            <Link href="/calculator">
             <Button className="bg-navy-600 hover:bg-navy-700 px-8 py-3 text-lg">
               <ArrowRight className="w-5 h-5 mr-2" />
               Пройти онлайн-диагностику
             </Button>
+            </Link>
           </div>
         </div>
       </div>
