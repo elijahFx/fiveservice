@@ -1,4 +1,22 @@
 RewriteEngine on
+
+# Правило для /admin (без слеша в конце)
+RewriteRule ^admin$ admin/index.html [L]
+
+# Правило для /admin/ (со слешем в конце)
+RewriteRule ^admin/$ admin/index.html [L]
+
+# Правило для статических файлов в папке admin (css, js, images и т.д.)
+RewriteCond %{REQUEST_URI} ^/admin/assets/ [OR]
+RewriteCond %{REQUEST_URI} ^/admin/static/ [OR]
+RewriteCond %{REQUEST_URI} ^/admin/.+\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$
+RewriteRule ^admin/(.*)$ admin/$1 [L]
+
+# Правило для клиентской маршрутизации React - все остальные запросы в /admin/ на index.html
+RewriteCond %{REQUEST_URI} ^/admin/
+RewriteRule ^admin/ admin/index.html [L]
+
+# Существующие правила для .html файлов (для основного сайта)
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^(.*)$ $1.html
+RewriteRule ^(.*)$ $1.html [L]
