@@ -34,7 +34,7 @@ const Hero = () => {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch('https://testend.site/api/claims', {
+      const res = await fetch('https://testend2.site/api/claims', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const Hero = () => {
         body: JSON.stringify({
           name: form.name,
           phone: form.phone,
-          message: form.note,
+          content: form.note,
           type: 'callback_request'
         }),
       });
