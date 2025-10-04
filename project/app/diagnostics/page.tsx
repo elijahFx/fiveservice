@@ -1,5 +1,5 @@
 // app/page.tsx или app/diagnostics/page.tsx
-import PriceCalculator from "@/components/calculator/PriceCalculator"
+import LaptopDiagnostics from "@/components/diagnostics/LaptopDiagnostics"
 import FAQ from "@/components/common/FAQ";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       </section>
 
       {/* Компонент диагностики */}
-      <PriceCalculator />
+      <LaptopDiagnostics />
 
       <FAQ />
     </main>

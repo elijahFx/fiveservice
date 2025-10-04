@@ -1,0 +1,579 @@
+<!-- ===================== FS CALC v3.7m + POPUP BRIDGE — мобильная адаптация, без изменения логики ===================== -->
+<section id="fs-calc" aria-label="Калькулятор стоимости ремонта ноутбука">
+  <style>
+    #fs-calc, #fs-calc * , #fs-calc *::before, #fs-calc *::after { box-sizing:border-box }
+    #fs-calc{
+      --ink:#0f172a; --muted:#475569; --bg:#f8fafc; --card:#fff;
+      --brand1:#0ea5e9; --brand2:#2563eb; --ok:#16a34a; --err:#ef4444;
+      --orange1:#fb923c; --orange2:#f97316;
+      color:var(--ink); background:var(--bg); font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+      border:1px solid rgba(2,8,23,.06); border-radius:20px; padding:22px; margin:0 0 22px; width:100%;
+      max-width:100%;
+    }
+    .hdr{background:linear-gradient(180deg,rgba(37,99,235,.12),rgba(14,165,233,.07)); border-radius:16px; padding:18px; margin:-2px 0 16px}
+    .hdr h2{margin:0 0 6px; font-size:22px}
+    .hdr p{margin:0; color:var(--muted)}
+    .grid{display:grid; grid-template-columns:1fr; gap:18px}
+    .card{background:var(--card); border:1px solid rgba(2,8,23,.08); border-radius:16px; padding:16px}
+    .card h3{margin:0 0 12px; font-size:18px}
+    .row{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px}
+    @media (max-width:700px){ .row{ grid-template-columns:1fr } }
+    label{display:block; font-weight:600; margin:0 0 6px}
+    input[type="text"], input[type="number"], select{ width:100%; padding:12px; border:1px solid rgba(2,8,23,.15); border-radius:10px; background:#fff; font-size:16px }
+    input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0 }
+
+    /* Чипы */
+    .chips{display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr)); gap:8px}
+    .chip{
+      position:relative; display:flex; align-items:center; justify-content:center;
+      min-height:44px; padding:10px 12px; border-radius:10px;
+      background:#fff; border:1px solid rgba(2,8,23,.14); cursor:pointer; user-select:none; text-align:center;
+      transition:box-shadow .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .chip input{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0; padding:0; margin:-1px }
+    .chip .t{ pointer-events:none }
+    .chip[data-checked="true"], .chip:has(input:checked){ border-color:var(--brand2); box-shadow:0 0 0 3px rgba(37,99,235,.14) }
+
+    /* === зелёная подсветка выбранных чипов и симптомов === */
+    #fs-calc .chip[data-checked="true"],
+    #fs-calc .chip:has(input:checked){
+      background: linear-gradient(91deg,#22c55e,#16a34a);
+      color:#fff; border-color: transparent; box-shadow: 0 0 0 3px rgba(22,163,74,.22);
+    }
+    #fs-calc .chip[data-checked="true"] .t,
+    #fs-calc .chip:has(input:checked) .t{ color:#fff; }
+
+    /* Симптомы */
+    .sympt-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+    @media (max-width:900px){ .sympt-grid{ grid-template-columns:1fr } }
+    .sympt{
+      position:relative; background:#fff; border:1px solid rgba(2,8,23,.12); border-radius:12px;
+      padding:12px; display:flex; align-items:flex-start; gap:10px; cursor:pointer; min-height:64px;
+      transition:box-shadow .15s ease, border-color .15s ease;
+    }
+    .sympt input{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap; border:0; padding:0; margin:-1px }
+    .sympt .wrap{ pointer-events:none }
+    .sympt .title{font-weight:600}
+    .muted{color:var(--muted); font-size:13px}
+    .sympt[data-checked="true"], .sympt:has(input:checked){
+      background: linear-gradient(91deg,#22c55e,#16a34a); border-color: transparent; box-shadow: 0 0 0 3px rgba(22,163,74,.18);
+    }
+    .sympt[data-checked="true"] .title,
+    .sympt[data-checked="true"] .muted,
+    .sympt:has(input:checked) .title,
+    .sympt:has(input:checked) .muted{ color:#fff; opacity:.95; }
+
+    /* фокус-кольцо */
+    #fs-calc .chip:focus-within, #fs-calc .sympt:focus-within{
+      outline: 3px solid rgba(22,163,74,.35); outline-offset: 2px;
+    }
+
+    /* Кнопки-низ */
+    .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:10px 14px; border-radius:10px; border:1px solid rgba(2,8,23,.14); background:#fff; cursor:pointer; font-weight:700; text-decoration:none; }
+    .btn.blue{ background:linear-gradient(91deg,var(--brand1),var(--brand2)); color:#fff; border:0 }
+    .btn.orange{ background:linear-gradient(91deg,var(--orange1),var(--orange2)); color:#fff; border:0 }
+    .actions{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; max-width:980px; margin:0 auto; }
+    .actions .btn{ width:100% }
+    #fs-calc .actions a.btn, #fs-calc a.btn{ display:inline-flex !important; align-items:center !important; justify-content:center !important; text-decoration:none !important; border:0 !important; border-radius:10px !important; padding:10px 14px !important; min-height:44px !important; font-weight:700 !important; }
+    #fs-calc .btn.blue{ background-image:linear-gradient(91deg,var(--brand1),var(--brand2)) !important; color:#fff !important; }
+    #fs-calc .btn.orange{ background-image:linear-gradient(91deg,var(--orange1),var(--orange2)) !important; color:#fff !important; }
+
+    /* Разделитель внутри шага 3 */
+    .divider{ height:1px; background:rgba(2,8,23,.10); margin:14px 0; border-radius:1px }
+
+    /* Блокировка шага 3 при диагностике */
+    #step3.is-disabled{ position:relative; opacity:.6; }
+    #step3.is-disabled .card-content{ pointer-events:none; }
+    #step3 .overlay{ display:none; }
+    #step3.is-disabled .overlay{
+      display:block; position:absolute; inset:0; border-radius:16px; background:repeating-linear-gradient(45deg, rgba(255,255,255,.7), rgba(255,255,255,.7) 8px, rgba(248,250,252,.9) 8px, rgba(248,250,252,.9) 16px);
+      border:1px dashed rgba(2,8,23,.15);
+    }
+
+    /* Итоговый блок снизу */
+    .summary .price{ font-size:28px; font-weight:800; }
+    .summary .box{ background:#fff; border:1px solid rgba(2,8,23,.08); border-radius:16px; padding:14px }
+
+    /* ====== Мобильная адаптация ====== */
+    @media (max-width:640px){
+      #fs-calc{ padding:14px; border-radius:16px; font-size:15px }
+      .hdr{ padding:12px; margin:0 0 12px; border-radius:12px }
+      .hdr h2{ font-size:18px }
+      .grid{ gap:12px }
+      .card{ padding:12px; border-radius:12px }
+      .card h3{ font-size:16px; margin-bottom:10px }
+      .chips{ grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px }
+      .sympt-grid{ grid-template-columns:1fr; gap:8px }
+      .sympt{ min-height:68px; padding:12px }
+      label{ font-size:14px }
+      input[type="text"], input[type="number"], select{ padding:12px; font-size:16px } /* без zoom на iOS */
+      .actions{ grid-template-columns:1fr }
+      /* место под липкую панель */
+      #fs-summary{ margin-bottom:72px }
+    }
+
+    /* Липкая мобильная панель */
+    #fs-calc .mobbar{ display:none }
+    @media (max-width:640px){
+      #fs-calc .mobbar{
+        display:block; position:fixed; left:0; right:0; bottom:0; z-index:9999;
+        padding:8px 12px calc(8px + env(safe-area-inset-bottom)); background:rgba(248,250,252,.8); backdrop-filter: saturate(1.2) blur(6px);
+        border-top:1px solid rgba(2,8,23,.08);
+      }
+      #fs-calc .mobbar .inner{ max-width:1100px; margin:0 auto; display:flex; align-items:center; gap:10px; }
+      #fs-calc .mobbar .price{ font-weight:800; font-size:16px; color:#0f172a; flex:1 1 auto }
+      #fs-calc .mobbar .btn{ flex:0 0 auto; min-height:42px; padding:10px 14px; border-radius:10px }
+    }
+  </style>
+
+  <div class="hdr">
+    <h2>Калькулятор стоимости ремонта ноутбука</h2>
+    <p>Оценка стоимости и сроков за 30 секунд. Итоговая смета после диагностики.</p>
+  </div>
+
+  <div class="grid">
+    <div class="main">
+      <!-- ШАГ 1 -->
+      <div class="card" id="step1">
+        <h3>1) О устройстве</h3>
+        <div class="row">
+          <div>
+            <label for="fs-brand">Бренд</label>
+            <select id="fs-brand">
+              <option value="">— выберите —</option>
+              <option>Apple</option><option>ASUS</option><option>Acer</option>
+              <option>Lenovo</option><option>HP</option><option>Dell</option>
+              <option>MSI</option><option>Huawei</option><option>Samsung</option>
+              <option>Xiaomi</option>
+              <option>Другой</option>
+            </select>
+          </div>
+          <div>
+            <label for="fs-model">Модель (можно пример)</label>
+            <input id="fs-model" type="text" placeholder="например, IdeaPad 5 15ALC05" />
+          </div>
+        </div>
+
+        <div style="height:10px"></div>
+
+        <div class="row">
+          <div>
+            <label>Класс устройства</label>
+            <div class="chips" id="fs-dtype">
+              <label class="chip"><input type="radio" name="dtype" value="office" checked><span class="t">Стандарт</span></label>
+              <label class="chip"><input type="radio" name="dtype" value="ultra"><span class="t">Ультрабук</span></label>
+              <label class="chip"><input type="radio" name="dtype" value="gaming"><span class="t">Игровой/WS</span></label>
+              <label class="chip"><input type="radio" name="dtype" value="2in1"><span class="t">2-в-1</span></label>
+            </div>
+          </div>
+          <div>
+            <label>Возраст устройства <span class="tip" tabindex="0" data-tip="Ориентировочно. Если устройство 0–2 года (или год выпуска ≥ 2020), добавляется 5%.">?</span></label>
+            <div class="chips" id="fs-age">
+              <label class="chip"><input type="radio" name="age" value="0-2" checked><span class="t">0–2 года</span></label>
+              <label class="chip"><input type="radio" name="age" value="3-5"><span class="t">3–5 лет</span></label>
+              <label class="chip"><input type="radio" name="age" value="6+"><span class="t">6+ лет</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div style="height:10px"></div>
+        <div class="row">
+          <div>
+            <label for="fs-year">Год выпуска <span class="tip" tabindex="0" data-tip="Ориентировочно. Если ≥ 2020, +5% к стоимости.">?</span></label>
+            <input id="fs-year" type="number" inputmode="numeric" min="2008" max="2026" placeholder="необязательно" />
+          </div>
+          <div>
+            <label>Срочность</label>
+            <div class="chips" id="fs-urgency">
+              <label class="chip"><input type="radio" name="urg" value="std" checked><span class="t">Обычная</span></label>
+              <label class="chip"><input type="radio" name="urg" value="fast"><span class="t">Экспресс</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ШАГ 2 -->
+      <div class="card" id="step2">
+        <h3>2) Что случилось</h3>
+        <div class="sympt-grid" id="fs-symptoms">
+          <label class="sympt"><input type="radio" name="symptom" value="no-power" checked><div class="wrap"><div class="title">Не включается</div><div class="muted">от 60 до 150 BYN</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="power-no-image"><div class="wrap"><div class="title">Есть питание, но нет изображения</div><div class="muted">от 80 до 200 BYN</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="spill"><div class="wrap"><div class="title">Залитие жидкостью</div><div class="muted">от 120 до 350 BYN</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="overheat"><div class="wrap"><div class="title">Перегрев, шум, троттлинг</div><div class="muted">от 70 до 180 BYN</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="fan"><div class="wrap"><div class="title">Замена вентилятора</div><div class="muted">от 100 до 180 BYN</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="no-charge"><div class="wrap"><div class="title">Не заряжается</div><div class="muted">от 60 до 160 BYN</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="screen"><div class="wrap"><div class="title">Замена экрана</div><div class="muted">по модели</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="kb"><div class="wrap"><div class="title">Замена клавиатуры</div><div class="muted">от 60 до 180 BYN</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="battery"><div class="wrap"><div class="title">Замена аккумулятора</div><div class="muted">по модели</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="ssd"><div class="wrap"><div class="title">SSD/диск: апгрейд или замена</div><div class="muted">от 40 BYN</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="hinge"><div class="wrap"><div class="title">Петли/корпус</div><div class="muted">по дефекту</div></div></label>
+          <label class="sympt"><input type="radio" name="symptom" value="diag"><div class="wrap"><div class="title">Не уверен, нужна диагностика</div><div class="muted">55 BYN</div></div></label>
+        </div>
+        <div class="msg">Выберите один пункт или опишите проблему ниже.</div>
+
+        <div style="height:10px"></div>
+        <label for="fs-desc">Опишите своими словами</label>
+        <input id="fs-desc" type="text" placeholder="Например: шумит кулер, греется и выключается" />
+      </div>
+
+      <!-- ШАГ 3 -->
+      <div class="card" id="step3" aria-disabled="true">
+        <div class="card-content">
+          <h3>3) Детали случая</h3>
+          <div>
+            <label>Запчасти</label>
+            <div class="chips" id="fs-parts">
+              <label class="chip"><input type="radio" name="parts" value="none" checked><span class="t">Не требуются</span></label>
+              <label class="chip"><input type="radio" name="parts" value="compat"><span class="t">Копия</span></label>
+              <label class="chip"><input type="radio" name="parts" value="oem"><span class="t">Оригинал</span></label>
+            </div>
+          </div>
+
+          <div class="divider" role="separator" aria-hidden="true"></div>
+
+          <div>
+            <label>Степень проблемы</label>
+            <div class="chips" id="fs-prob">
+              <label class="chip"><input type="radio" name="prob" value="light" checked><span class="t">Лёгкая</span></label>
+              <label class="chip"><input type="radio" name="prob" value="mid"><span class="t">Средняя</span></label>
+              <label class="chip"><input type="radio" name="prob" value="hard"><span class="t">Сильная</span></label>
+            </div>
+          </div>
+
+          <div style="height:10px"></div>
+        </div>
+        <div class="overlay" aria-hidden="true"></div>
+      </div>
+
+      <!-- Итоговый расчёт -->
+      <div class="card summary" id="fs-summary">
+        <h3>Итоговый расчёт</h3>
+        <div class="summary box">
+          <div class="muted">Ориентировочная стоимость</div>
+          <div class="price" id="fs-price">—</div>
+          <div class="muted" id="fs-term">Срок: —</div>
+        </div>
+        <div style="height:12px"></div>
+        <div class="box" id="fs-sentence">Укажите параметры выше. Пересчет происходит автоматически.</div>
+        <div style="height:16px"></div>
+        <div class="actions">
+          <a class="btn blue" href="/price" id="fs-price-link">Прайс</a>
+          <a class="btn blue" href="/remont-noutbukov" id="fs-about-link">Ремонт ноутбуков</a>
+          <a class="btn orange" href="/zayavka" id="fs-order-link">Оставить заявку</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Липкая мобильная панель -->
+  <div class="mobbar" id="fs-mobbar" aria-hidden="false">
+    <div class="inner">
+      <div class="price" id="fs-price-mini">—</div>
+      <a class="btn orange" href="/zayavka" id="fs-order-link-mini">Заявка</a>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const $  = s => document.querySelector(s);
+      const $$ = s => Array.from(document.querySelectorAll(s));
+
+      // ===== Справочники =====
+      const BASE = { diag:55, clean:75, fan:130, dcin:140, kb:180, screen:220, mb:260, ssd:40, battery:120, hinge:150,
+                     "no-power":120, "power-no-image":150, spill:180, overheat:90, "no-charge":120 };
+      const BRAND = {
+        "Apple":{_all:1.35,"MacBook Air":1.25,"MacBook Pro":1.45},
+        "ASUS":{_all:1.00,"ROG":1.25,"TUF":1.15,"ZenBook":1.10},
+        "Acer":{_all:0.95,"Predator":1.25,"Swift":1.02},
+        "Lenovo":{_all:1.00,"ThinkPad":1.12,"Legion":1.25,"IdeaPad":0.98},
+        "HP":{_all:0.98,"OMEN":1.25,"Spectre":1.10,"Pavilion":0.96},
+        "Dell":{_all:1.02,"XPS":1.15,"Alienware":1.25,"Inspiron":0.98},
+        "MSI":{_all:1.06,"Stealth":1.18,"Titan":1.25},
+        "Huawei":{_all:0.98,"MateBook":1.03},
+        "Samsung":{_all:1.00,"Galaxy Book":1.05},
+        "Xiaomi":{_all:1.00,"Mi Notebook":1.05,"RedmiBook":1.03},
+        "Другой":{_all:1.00}
+      };
+      const DTYPE = { office:1.00, gaming:1.25, ultra:1.10, "2in1":1.05 };
+      const URGENCY = { std:1.00, fast:1.30 };
+      const PARTS = { none:1.00, compat:1.00, oem:1.15 };
+      const PROB  = { light:1.00, mid:1.15, hard:1.30 };   // степень проблемы
+
+      const KEYMAP = {
+        clean:['шум','шумит','громк','кулер','вент','вентилятор','греет','перегрев','жар','троттл'],
+        fan:['замен вент','слом вент','не крут','скрип вент','скреж','fan error','ошибка fan','вентилятор'],
+        dcin:['заряд','питани','разъем','штекер','dc-in','шата','блок питания норм'],
+        battery:['аккум','батаре','держит','вздут','быстро разря'],
+        screen:['экран','матриц','подсвет','битые','трещин','нет изображения'],
+        kb:['клавиат','кнопк','не печата','зали','пролил','liquid'],
+        ssd:['ssd','жестк','hdd','медлен','апгрейд','обновить диск'],
+        hinge:['петл','крышк','корпус','скрип крышки'],
+        mb:['не включ','дым','перезагр','не видит','нет изобр','после залит'],
+        diag:['не знаю','не могу сказать','диагност']
+      };
+
+      function detectFamily(brand, model){
+        const map = BRAND[brand] || { _all:1.00 };
+        const keys = Object.keys(map).filter(k=>k!=="_all");
+        const low = (model||"").toLowerCase();
+        return keys.find(k => low.includes(k.toLowerCase())) || null;
+      }
+      function yearFactor(year, age){ if(age==="0-2") return 1.05; const y=parseInt(year,10); return (y && y>=2020)?1.05:1.00; }
+      function center(raw){ return (raw*0.92 + raw*1.12)/2; }
+      function fmt(n){ return new Intl.NumberFormat('ru-RU',{maximumFractionDigits:0}).format(Math.round(n)); }
+      function plural(n, one, few, many){ n=Math.abs(n)%100; const n1=n%10; if(n>10&&n<20) return many; if(n1>1&&n1<5) return few; if(n1===1) return one; return many; }
+      function bynWords(amount){ const r=Math.floor(amount), k=Math.round((amount-r)*100);
+        const rW=plural(r,'белорусский рубль','белорусских рубля','белорусских рублей');
+        const kW=plural(k,'копейка','копейки','копеек');
+        return `${r} ${rW} ${String(k).padStart(2,'0')} ${kW}`; }
+
+      function getState(){
+        const brand = $("#fs-brand").value || '';
+        const model = $("#fs-model").value || '';
+        const dtype = document.querySelector('#fs-calc input[name="dtype"]:checked')?.value || 'office';
+        const age   = document.querySelector('#fs-calc input[name="age"]:checked')?.value || '0-2';
+        const year  = $("#fs-year").value || '';
+        const urg   = document.querySelector('#fs-calc input[name="urg"] :checked, #fs-calc input[name="urg"]:checked')?.value || 'std';
+        const parts = document.querySelector('#fs-calc input[name="parts"]:checked')?.value || 'none';
+        const prob  = document.querySelector('#fs-calc input[name="prob"]:checked')?.value || 'light';
+        const symptom = document.querySelector('#fs-calc input[name="symptom"]:checked')?.value || 'diag';
+        const liquid = $("#fs-liquid")?.checked || false;
+        return {brand, model, dtype, age, year, urg, parts, prob, symptom, liquid};
+      }
+
+      function factors(st){
+        const bfAll = BRAND[st.brand]?.['_all'] ?? BRAND['Другой']._all;
+        const fam = detectFamily(st.brand, st.model);
+        const bfFam = fam ? (BRAND[st.brand][fam] || 1.00) : 1.00;
+        return {
+          bf: bfAll*bfFam,
+          df: DTYPE[st.dtype] || 1.00,
+          yf: yearFactor(st.year, st.age),
+          uf: URGENCY[st.urg] || 1.00,
+          pf: PARTS[st.parts] || 1.00,
+          rf: PROB[st.prob] || 1.00,
+          lf: st.liquid ? 1.30 : 1.00,   // логика оставлена как в твоей версии
+          family: fam
+        };
+      }
+
+      function calc(code, st, f){
+        if(code==='diag'){ return { key:'diag', mid:55 }; }
+        let key = code;
+        if(code==='overheat') key='clean';
+        if(code==='no-charge') key='dcin';
+        if(code==='no-power') key='mb';
+        if(code==='power-no-image') key='screen';
+        if(code==='spill') key='mb';
+        const base = BASE[key] ?? 0;
+        const raw = base * f.bf * f.df * f.yf * f.uf * f.pf * f.rf * f.lf;
+        return { key, mid:center(raw) };
+      }
+
+      function sentence(st, key, price){
+        const device = [st.brand||'', st.model||''].filter(Boolean).join(' ').trim() || 'ноутбука';
+        const yearStr = st.year ? ` ${st.year} года` : '';
+        const svcMap = {clean:'чистка и профилактика системы охлаждения', fan:'замена вентилятора', dcin:'ремонт разъема питания', kb:'замена клавиатуры', screen:'замена экрана', mb:'ремонт материнской платы', ssd:'замена/установка SSD', battery:'замена аккумулятора', hinge:'ремонт петель/корпуса', diag:'диагностика'};
+        const svc = svcMap[key] || 'ремонт';
+        const urg = st.urg==='fast' && key!=='diag' ? ' с учётом срочности' : '';
+        const liq = st.liquid && key!=='diag' ? ' после залития' : '';
+        const baseSentence = `Ориентировочная стоимость ремонта ноутбука ${device}${yearStr}${liq} — ${svc} составит${urg} — ${bynWords(price)}.`;
+        return key==='diag'
+          ? `${baseSentence} При последующем ремонте стоимость диагностики не взимается. Срок исполнения: 1 час.`
+          : `${baseSentence} Срок исполнения: ${st.urg==='fast' ? 'от 6 часов' : '1 день'}.`;
+      }
+
+      function toggleStep3Disabled(disabled){
+        const box = $("#step3");
+        const inputs = box.querySelectorAll("input, button, select, textarea");
+        inputs.forEach(el => { el.disabled = disabled; });
+        box.classList.toggle("is-disabled", disabled);
+        box.setAttribute("aria-disabled", disabled ? "true" : "false");
+      }
+
+      function syncVisualStates(){
+        $$('#fs-calc .chip').forEach(ch => { const i=ch.querySelector('input'); ch.dataset.checked = i.checked ? 'true' : 'false'; });
+        $$('#fs-calc .sympt').forEach(s => { const i=s.querySelector('input'); s.dataset.checked = i.checked ? 'true' : 'false'; });
+      }
+
+      function recalc(){
+        const st = getState();
+        const f = factors(st);
+        const sc = calc(st.symptom, st, f);
+
+        toggleStep3Disabled(st.symptom === 'diag');
+
+        const priceTxt = `${fmt(sc.mid)} BYN`;
+        $("#fs-price").textContent = priceTxt;
+        const term = st.symptom==='diag' ? 'Срок: 1 час' : (st.urg==='fast' ? 'Срок: от 6 часов' : 'Срок: 1 день');
+        $("#fs-term").textContent = term;
+        $("#fs-sentence").textContent = sentence(st, sc.key, sc.mid);
+
+        const mini = $("#fs-price-mini");
+        if(mini) mini.textContent = priceTxt;
+
+        syncVisualStates();
+      }
+
+      // События
+      const root = document.currentScript.closest('#fs-calc');
+      root.addEventListener('change', (e)=>{ if(e.target.matches('#fs-calc input, #fs-calc select')) { recalc(); } });
+      root.addEventListener('input', (e)=>{ if(e.target.matches('#fs-model, #fs-year, #fs-desc')) { recalc(); } });
+
+      // Инициализация
+      (function restore(){
+        const m = location.hash.match(/calc=([^&]+)/);
+        if(m) {
+          try{
+            const st = JSON.parse(atob(decodeURIComponent(m[1])));
+            $("#fs-brand").value = st.brand||'';
+            $("#fs-model").value = st.model||'';
+            $("#fs-year").value  = st.year||'';
+            const set = (name, val)=>{ const el = document.querySelector(`#fs-calc input[name="${name}"][value="${val}"]`); if(el) el.checked = true; };
+            if(st.dtype) set('dtype', st.dtype);
+            if(st.age)   set('age', st.age);
+            if(st.urg)   set('urg', st.urg);
+            if(st.parts) set('parts', st.parts);
+            if(st.prob)  set('prob',  st.prob);
+            if(st.symptom) { const el = document.querySelector(`#fs-symptoms input[value="${st.symptom}"]`); if(el) el.checked = true; }
+            if(st.liquid) $("#fs-liquid").checked = true;
+          }catch(e){}
+        }
+        recalc();
+      })();
+    })();
+  </script>
+
+  <!-- ===== FS CALC × BUILDER POPUP BRIDGE v1.1 (popup:_lp_block_4405242) ===== -->
+  <script>
+    (() => {
+      const POPUP_ID = '4405242';
+      const POPUP_HREF = `popup:_lp_block_${POPUP_ID}`;
+
+      // Собираем данные из калькулятора
+      function buildCalcPayload(){
+        const $ = s => document.querySelector(s);
+        const pick = (name) => document.querySelector(`#fs-calc input[name="${name}"]:checked`)?.closest('.chip')?.textContent.trim()
+                            || document.querySelector(`#fs-calc input[name="${name}"]:checked`)?.value || '';
+        const brand = $("#fs-brand")?.value?.trim() || '';
+        const model = $("#fs-model")?.value?.trim() || '';
+        const year  = $("#fs-year")?.value?.trim()  || '';
+        const dtype = pick('dtype');
+        const age   = pick('age');
+        const parts = pick('parts');
+        const prob  = pick('prob');
+
+        const symptomLabel = document.querySelector('#fs-symptoms input:checked')?.closest('.sympt')?.querySelector('.title')?.textContent?.trim() || '';
+        const desc = $("#fs-desc")?.value?.trim() || '';
+
+        const price = $("#fs-price")?.textContent?.trim() || '—';
+        const term  = $("#fs-term")?.textContent?.trim() || '—';
+        const sentence = $("#fs-sentence")?.textContent?.trim() || '';
+
+        const comment = [
+          sentence,
+          `Модель: ${[brand, model].filter(Boolean).join(' ') || '—'}${year ? `, ${year} г.` : ''}`,
+          symptomLabel ? `Симптом: ${symptomLabel}` : '',
+          `Класс: ${dtype || '—'}, Возраст: ${age || '—'}`,
+          `Запчасти: ${parts || '—'}, Степень: ${prob || '—'}`,
+          desc ? `Описание клиента: ${desc}` : '',
+          `Итог: ${price}; ${term}`
+        ].filter(Boolean).join('\n');
+
+        return { brand, model, year, dtype, age, parts, prob, symptomLabel, desc, price, term, sentence, comment, page: location.href, ts: Date.now() };
+      }
+
+      // Ждём появления попапа в DOM
+      function isVisible(el){ return !!(el && (el.offsetWidth || el.offsetHeight || el.getClientRects().length)); }
+      function waitForPopup(maxMs = 2000){
+        const start = performance.now();
+        return new Promise(resolve => {
+          (function tick(){
+            const candidates = [
+              `.t-popup.t-popup_show`, `.t-popup_show`, `.popup.opened`, `.popup.active`,
+              `.lp-popup.open`, `.lpc-popup_active`, `[id^="_lp_block_${POPUP_ID}"]`, `#popup_${POPUP_ID}`,
+              `[data-popup-id="${POPUP_ID}"]`
+            ];
+            const el = candidates.map(sel => document.querySelector(sel)).find(Boolean);
+            if (el && isVisible(el)) return resolve(el);
+            if (performance.now() - start > maxMs) return resolve(document.body);
+            requestAnimationFrame(tick);
+          })();
+        });
+      }
+
+      // Ищем поля внутри попапа
+      const FIELD_SELECTORS = {
+        name: ['input[name*="name" i]','input[placeholder*="имя" i]','input[id*="name" i]'],
+        phone: ['input[type="tel"]','input[name*="phone" i]','input[placeholder*="тел" i]','input[id*="phone" i]'],
+        comment: [
+          'textarea[name*="comment" i]','textarea[placeholder*="коммент" i]',
+          'textarea[name*="message" i]','textarea[placeholder*="сообщ" i]',
+          'textarea','input[name*="comment" i]'
+        ]
+      };
+      function findField(scope, selectors){
+        for (const sel of selectors){
+          const f = scope.querySelector(sel);
+          if (f && isVisible(f)) return f;
+        }
+        for (const sel of selectors){
+          const f = Array.from(document.querySelectorAll(sel))
+            .find(n => isVisible(n) && !n.closest('#fs-calc'));
+          if (f) return f;
+        }
+        return null;
+      }
+      function fillField(input, value){
+        if(!input) return;
+        input.focus();
+        input.value = value;
+        input.dispatchEvent(new Event('input', {bubbles:true}));
+        input.dispatchEvent(new Event('change', {bubbles:true}));
+        input.blur();
+      }
+
+      async function openPopupAndFill(payload){
+        try{
+          const a = document.createElement('a');
+          a.href = POPUP_HREF;
+          a.className = 'crm-cta-button';
+          a.setAttribute('data-popup-id', POPUP_ID);
+          a.style.position='absolute'; a.style.left='-9999px'; a.style.top='-9999px';
+          document.body.appendChild(a);
+          a.click();
+
+          const popupScope = await waitForPopup(2200);
+
+          const nameEl = findField(popupScope, FIELD_SELECTORS.name);
+          const phoneEl = findField(popupScope, FIELD_SELECTORS.phone);
+          const commentEl = findField(popupScope, FIELD_SELECTORS.comment);
+
+          fillField(commentEl, payload.comment);
+          if(nameEl && !nameEl.value) fillField(nameEl, '');
+          if(phoneEl && !phoneEl.value) fillField(phoneEl, '');
+
+          const hiddenJson = Array.from(popupScope.querySelectorAll('input[type="hidden"]'))
+            .find(i => /calc|quote|payload/i.test(i.name || '') || /calc|quote|payload/i.test(i.id || ''));
+          if(hiddenJson){ hiddenJson.value = JSON.stringify(payload); hiddenJson.dispatchEvent(new Event('change',{bubbles:true})) }
+        }catch(err){
+          console.error('Popup open/fill error:', err);
+        }
+      }
+
+      function bindCta(selector){
+        const btn = document.querySelector(selector);
+        if(!btn) return;
+        btn.addEventListener('click', (e)=>{
+          e.preventDefault();
+          const payload = buildCalcPayload();
+          openPopupAndFill(payload);
+        }, {passive:false});
+      }
+
+      // Привязываем к обеим кнопкам
+      bindCta('#fs-order-link');       // нижняя кнопка
+      bindCta('#fs-order-link-mini');  // мобильная панель
+    })();
+  </script>
+</section>

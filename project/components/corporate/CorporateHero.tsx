@@ -20,23 +20,48 @@ const CorporateHero = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [notification, setNotification] = useState<{
-    type: 'success' | 'error' | 'info' | null;
+    type: "success" | "error" | "info" | null;
     message: string;
-  }>({ type: null, message: '' });
+  }>({ type: null, message: "" });
 
   // Автоматическое скрытие уведомления через 5 секунд
   useEffect(() => {
     if (notification.type) {
       const timer = setTimeout(() => {
-        setNotification({ type: null, message: '' });
+        setNotification({ type: null, message: "" });
       }, 5000);
 
       return () => clearTimeout(timer);
     }
   }, [notification]);
 
-  const showNotification = (type: 'success' | 'error' | 'info', message: string) => {
+  // Функция для нормализации имени файла перед отправкой
+  const normalizeFileName = (fileName: string) => {
+    // Сохраняем кириллицу, убираем только небезопасные символы
+    return fileName.replace(/[<>:"|?*]/g, "_");
+  };
+
+  const showNotification = (
+    type: "success" | "error" | "info",
+    message: string
+  ) => {
     setNotification({ type, message });
+  };
+
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      const inputEvent = {
+        target: { files: [file] },
+      } as React.ChangeEvent<HTMLInputElement>;
+      handleFileSelect(inputEvent);
+    }
+  };
+
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
   };
 
   const handleDownload = () => {
@@ -59,41 +84,54 @@ const CorporateHero = () => {
         file.name.endsWith(".docx");
 
       if (!isDocFile) {
-        showNotification('error', "Пожалуйста, загрузите только файлы формата DOC или DOCX");
+        showNotification(
+          "error",
+          "Пожалуйста, загрузите только файлы формата DOC или DOCX"
+        );
         return;
       }
 
       if (file.size > 10 * 1024 * 1024) {
-        showNotification('error', "Размер файла не должен превышать 10 МБ");
+        showNotification("error", "Размер файла не должен превышать 10 МБ");
         return;
       }
 
       setSelectedFile(file);
-      showNotification('success', "Файл выбран успешно!");
+      showNotification("success", "Файл выбран успешно!");
     }
   };
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      showNotification('error', "Пожалуйста, выберите файл для загрузки");
+      showNotification("error", "Пожалуйста, выберите файл для загрузки");
       return;
     }
 
     if (!navigator.onLine) {
-      showNotification('error', "Нет подключения к интернету. Проверьте соединение.");
+      showNotification(
+        "error",
+        "Нет подключения к интернету. Проверьте соединение."
+      );
       return;
     }
 
     setIsUploading(true);
-    showNotification('info', "Начинаем загрузку файла...");
+    showNotification("info", "Начинаем загрузку файла...");
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
       const formData = new FormData();
-      formData.append("requisites", selectedFile);
-      
+
+      const normalizedFile = new File(
+        [selectedFile],
+        normalizeFileName(selectedFile.name),
+        { type: selectedFile.type }
+      );
+
+      formData.append("requisites", normalizedFile);
+
       const response = await fetch("https://testend2.site/upload", {
         method: "POST",
         body: formData,
@@ -105,7 +143,10 @@ const CorporateHero = () => {
 
       if (response.ok) {
         const result = await response.json();
-        showNotification('success', "Файл успешно загружен! Мы свяжемся с Вами в ближайшее время.");
+        showNotification(
+          "success",
+          "Файл успешно загружен! Мы свяжемся с Вами в ближайшее время."
+        );
         setIsUploadModalOpen(false);
         setSelectedFile(null);
       } else {
@@ -122,14 +163,24 @@ const CorporateHero = () => {
     } catch (error) {
       console.error("Ошибка загрузки:", error);
       if (error.name === "AbortError") {
-        showNotification('error', "Загрузка превысила время ожидания. Попробуйте еще раз.");
+        showNotification(
+          "error",
+          "Загрузка превысила время ожидания. Попробуйте еще раз."
+        );
       } else if (
         error.name === "TypeError" &&
         error.message.includes("Failed to fetch")
       ) {
-        showNotification('error', "Ошибка соединения с сервером. Проверьте интернет-соединение.");
+        showNotification(
+          "error",
+          "Ошибка соединения с сервером. Проверьте интернет-соединение."
+        );
       } else {
-        showNotification('error', error.message || "Произошла ошибка при загрузке файла. Пожалуйста, попробуйте еще раз.");
+        showNotification(
+          "error",
+          error.message ||
+            "Произошла ошибка при загрузке файла. Пожалуйста, попробуйте еще раз."
+        );
       }
     } finally {
       clearTimeout(timeoutId);
@@ -139,7 +190,7 @@ const CorporateHero = () => {
 
   const removeFile = () => {
     setSelectedFile(null);
-    showNotification('info', "Файл удален");
+    showNotification("info", "Файл удален");
   };
 
   // Компонент уведомления
@@ -149,27 +200,31 @@ const CorporateHero = () => {
     const bgColor = {
       success: "bg-green-50 border-green-200",
       error: "bg-red-50 border-red-200",
-      info: "bg-blue-50 border-blue-200"
+      info: "bg-blue-50 border-blue-200",
     };
 
     const textColor = {
       success: "text-green-800",
       error: "text-red-800",
-      info: "text-blue-800"
+      info: "text-blue-800",
     };
 
     const icons = {
       success: <CheckCircle className="w-5 h-5 text-green-500" />,
       error: <AlertCircle className="w-5 h-5 text-red-500" />,
-      info: <Clock className="w-5 h-5 text-blue-500" />
+      info: <Clock className="w-5 h-5 text-blue-500" />,
     };
 
     return (
-      <div className={`fixed top-4 right-4 z-50 p-4 rounded-lg border ${bgColor[notification.type]} ${textColor} shadow-lg flex items-center space-x-3 min-w-80 max-w-md transition-all duration-300`}>
+      <div
+        className={`fixed top-4 right-4 z-50 p-4 rounded-lg border ${
+          bgColor[notification.type]
+        } ${textColor} shadow-lg flex items-center space-x-3 min-w-80 max-w-md transition-all duration-300`}
+      >
         {icons[notification.type]}
         <p className="text-sm font-medium">{notification.message}</p>
         <button
-          onClick={() => setNotification({ type: null, message: '' })}
+          onClick={() => setNotification({ type: null, message: "" })}
           className="ml-auto text-gray-400 hover:text-gray-600"
         >
           <X className="w-4 h-4" />
@@ -181,8 +236,8 @@ const CorporateHero = () => {
   return (
     <>
       <Notification />
-      
-     <section className="relative py-20 bg-gradient-to-br from-navy-900 to-gray-900 text-white overflow-hidden pt-24 sm:pt-28">
+
+      <section className="relative py-20 bg-gradient-to-br from-navy-900 to-gray-900 text-white overflow-hidden pt-24 sm:pt-28">
         <div className="absolute inset-0">
           <Image
             src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
@@ -278,6 +333,8 @@ const CorporateHero = () => {
                   id="requisites-file"
                   accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                   onChange={handleFileSelect}
+                  onDrop={handleDrop}
+                  onDragOver={handleDragOver}
                   className="hidden"
                 />
 
@@ -328,7 +385,8 @@ const CorporateHero = () => {
               </Button>
 
               <p className="text-xs text-gray-500 text-center">
-                После отправки файлов мы свяжемся с Вами в максимально короткие сроки
+                После отправки файлов мы свяжемся с Вами в максимально короткие
+                сроки
               </p>
             </div>
           </div>

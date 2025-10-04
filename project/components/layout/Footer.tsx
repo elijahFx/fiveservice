@@ -115,6 +115,21 @@ const Footer = () => {
           <p className="text-sm text-gray-400">
             © 2025 FiveService. Все права защищены.
           </p>
+          
+          {/* Добавленная надпись о разработчике */}
+          <div className="pt-4">
+            <p className="text-xs text-gray-500">
+             Сайт разработан командой{' '}
+              <a 
+                href="https://флоу.бел" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-navy-400 transition-colors underline"
+              >
+                флоу.бел
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>

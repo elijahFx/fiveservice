@@ -1,9 +1,8 @@
-import { Button } from '@/components/ui/button';
-import { ArrowRight, Phone } from 'lucide-react';
-import Link from 'next/link';
+import { Button } from "@/components/ui/button";
+import { ArrowRight, Phone } from "lucide-react";
+import Link from "next/link";
 
 const Calculator = () => {
-
   return (
     <section className="py-20 bg-navy-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,13 +15,14 @@ const Calculator = () => {
         <div className="text-center">
           <div className="bg-white rounded-2xl p-8 max-w-2xl mx-auto shadow-sm">
             <p className="text-lg text-gray-700 mb-6">
-              Узнайте в чём может быть проблема и примерную стоимость ремонта за 1 минуту
+              Узнайте в чём может быть проблема и примерную стоимость ремонта за
+              1 минуту
             </p>
-            <Link href="/calculator">
-            <Button className="bg-navy-600 hover:bg-navy-700 px-8 py-3 text-lg">
-              <ArrowRight className="w-5 h-5 mr-2" />
-              Пройти онлайн-диагностику
-            </Button>
+            <Link href="/diagnostics">
+              <Button className="bg-navy-600 hover:bg-navy-700 px-8 py-3 text-lg">
+                <ArrowRight className="w-5 h-5 mr-2" />
+                Пройти онлайн-диагностику
+              </Button>
             </Link>
           </div>
         </div>

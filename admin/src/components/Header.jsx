@@ -5,37 +5,40 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../slices/authSlice";
 
 export default function Header() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-
-  const userName = useSelector(state => state?.auth?.nickname)
-  const user = useSelector((state) => state?.auth?.user)
+  const userName = useSelector((state) => state?.auth?.nickname);
+  const user = useSelector((state) => state?.auth?.user);
   console.log(user);
   console.log(userName);
-  
-  const avatarLink = `https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg`
+
+  const avatarLink = `https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg`;
 
   const handleLogout = () => {
-    dispatch(logout())
-    navigate("/")
+    dispatch(logout());
+    navigate("/");
+  };
+
+  const handleGoToMain = () => {
+    window.location.href = "http://testend.site";
   };
 
   // SVG логотип аналогичный тому, что используется в favicon
   const logoSvg = (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 32 32"
       className="ml-1 h-10 w-10 object-contain cursor-pointer transition-all duration-400 hover:h-14 hover:w-12"
     >
-      <rect width="32" height="32" rx="6" fill="#1e3a8a"/>
-      <text 
-        x="16" 
-        y="20" 
-        textAnchor="middle" 
-        fill="white" 
-        fontFamily="Arial, sans-serif" 
-        fontSize="14" 
+      <rect width="32" height="32" rx="6" fill="#1e3a8a" />
+      <text
+        x="16"
+        y="20"
+        textAnchor="middle"
+        fill="white"
+        fontFamily="Arial, sans-serif"
+        fontSize="14"
         fontWeight="bold"
       >
         FS
@@ -59,34 +62,42 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="h-10 w-10 rounded-full flex items-center justify-center border border-gray-300 overflow-hidden mr-7">
-        <a 
-          data-tooltip-id="my-tooltip"
-          className="h-full w-full"
-          
+      <div className="flex items-center gap-4">
+        {/* Кнопка "На главную" */}
+        <button
+          onClick={handleGoToMain}
+          className="cursor-pointer bg-blue-600 hover:bg-[#1e3a8a] text-white px-4 py-2 rounded-md transition-all duration-300 text-sm font-medium"
         >
-          <img
-            src={avatarLink}
-            alt="Аватар"
-            className="h-full w-full object-cover cursor-pointer"
+          На главную
+        </button>
+
+        <div className="h-10 w-10 rounded-full flex items-center justify-center border border-gray-300 overflow-hidden">
+          <a data-tooltip-id="my-tooltip" className="h-full w-full">
+            <img
+              src={avatarLink}
+              alt="Аватар"
+              className="h-full w-full object-cover cursor-pointer"
+            />
+          </a>
+          <Tooltip
+            id="my-tooltip"
+            clickable
+            className="z-50"
+            render={({ content }) => (
+              <div className="flex content-center justify-center flex-col">
+                <p className="cursor-pointer transition-all duration-400 hover:underline">
+                  <Link to="/account">{userName || user}</Link>
+                </p>
+                <button
+                  onClick={handleLogout}
+                  className="text-red-500 hover:text-red-700 font-medium mt-1 transition-all duration-400 cursor-pointer"
+                >
+                  Выйти
+                </button>
+              </div>
+            )}
           />
-        </a>
-        <Tooltip 
-          id="my-tooltip" 
-          clickable
-          className="z-50"
-          render={({ content }) => (
-            <div className="flex content-center justify-center flex-col">
-              <p className="cursor-pointer transition-all duration-400 hover:underline"><Link to="/account">{userName || user}</Link></p>
-              <button 
-                onClick={handleLogout}
-                className="text-red-500 hover:text-red-700 font-medium mt-1 transition-all duration-400 cursor-pointer"
-              >
-                Выйти
-              </button>
-            </div>
-          )}
-        />
+        </div>
       </div>
     </header>
   );
