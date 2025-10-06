@@ -2,6 +2,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Suspense } from 'react';
 import Navigation from '@/components/layout/Navigation';
 import Footer from '@/components/layout/Footer';
 import ScrollToTop from '@/components/layout/ScrollToTop';
@@ -90,6 +91,11 @@ function AnalyticsScripts() {
   );
 }
 
+// Fallback компонент для Suspense
+function AnalyticsFallback() {
+  return null;
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -128,14 +134,16 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
-        <AnalyticsProvider yandexCounterId={1234567}>
-          <Navigation />
-          <main>
-            {children}
-          </main>
-          <Footer />
-          <ScrollToTop />
-        </AnalyticsProvider>
+        <Suspense fallback={<AnalyticsFallback />}>
+          <AnalyticsProvider yandexCounterId={1234567}>
+            <Navigation />
+            <main>
+              {children}
+            </main>
+            <Footer />
+            <ScrollToTop />
+          </AnalyticsProvider>
+        </Suspense>
       </body>
     </html>
   );

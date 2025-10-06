@@ -2,7 +2,7 @@
 "use client";
 
 import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, ReactNode } from 'react';
+import { useEffect, ReactNode, Suspense } from 'react';
 
 // Объявляем глобальные функции аналитики для TypeScript
 declare global {
@@ -17,34 +17,29 @@ declare global {
   }
 }
 
-// Если используете глобальные переменные без window
-declare const ym: (
-  counterId: number,
-  action: string,
-  value: string,
-  params?: any
-) => void;
-declare const gtag: (command: string, action: string, params?: any) => void;
-
 interface AnalyticsProviderProps {
   children: ReactNode;
-  yandexCounterId?: number; // Можно передавать ID счетчика через пропсы
+  yandexCounterId?: number;
 }
 
-export function AnalyticsProvider({ 
+// Внутренний компонент для использования useSearchParams
+function AnalyticsTracker({ 
   children, 
-  yandexCounterId = 1234567 // Значение по умолчанию
+  yandexCounterId = 1234567 
 }: AnalyticsProviderProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   // Отслеживание просмотров страниц
   useEffect(() => {
-    // Проверяем, что мы в браузере и функции аналитики доступны
     if (typeof window !== 'undefined' && window.ym && window.gtag) {
-      // Меняем URL в метриках при смене маршрута
-      window.ym(yandexCounterId, 'hit', window.location.href);
-      window.gtag('event', 'page_view');
+      const url = `${window.location.origin}${pathname}${searchParams ? `?${searchParams}` : ''}`;
+      
+      window.ym(yandexCounterId, 'hit', url);
+      window.gtag('config', 'GA_MEASUREMENT_ID', {
+        page_path: pathname,
+        page_location: url,
+      });
     }
   }, [pathname, searchParams, yandexCounterId]);
 
@@ -57,7 +52,6 @@ export function AnalyticsProvider({
         const eventName = target.getAttribute('data-track-event');
         
         if (eventName) {
-          // Отправляем событие в метрики
           if (window.ym) {
             window.ym(yandexCounterId, 'reachGoal', eventName);
           }
@@ -73,4 +67,13 @@ export function AnalyticsProvider({
   }, [yandexCounterId]);
 
   return <>{children}</>;
+}
+
+// Основной компонент с Suspense
+export function AnalyticsProvider(props: AnalyticsProviderProps) {
+  return (
+    <Suspense fallback={props.children}>
+      <AnalyticsTracker {...props} />
+    </Suspense>
+  );
 }
