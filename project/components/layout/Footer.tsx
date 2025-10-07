@@ -20,7 +20,7 @@ const Footer = () => {
             </p>
             <div className="space-y-2 text-sm text-gray-400">
               <p>УНП 193013342</p>
-              <p>ООО {`«Наши инновации»`}</p>
+              <p>ООО {`"Наши инновации"`}</p>
             </div>
           </div>
 
@@ -72,6 +72,7 @@ const Footer = () => {
               <div className="flex items-center space-x-2">
                 <Clock className="w-4 h-4 text-navy-400" />
                 <span className="text-sm">пн.-пт. 9:00-19:00</span>
+                <span className="text-sm">сб.-вс. 10:00-16:00</span>
               </div>
             </div>
           </div>
@@ -80,6 +81,9 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4">Быстрые ссылки</h3>
             <div className="space-y-2">
+              <Link href="/about" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+                О нас
+              </Link>
               <Link href="/services" className="block text-sm text-gray-400 hover:text-white">
                 Все услуги
               </Link>
@@ -95,6 +99,12 @@ const Footer = () => {
               <Link href="/reviews" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
                 Отзывы клиентов
               </Link>
+                <Link href="/privacy-policy" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+                Политика обработки персональных данных
+              </Link>
+               <Link href="/service-rules" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+                Правила оказания услуг и ремонта <br /> ООО «Наши инновации»
+              </Link>
             </div>
           </div>
 
@@ -102,11 +112,21 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4">Услуги</h3>
             <div className="space-y-2">
-              <p className="text-sm text-gray-300">Замена экранов</p>
-              <p className="text-sm text-gray-300">Чистка от пыли</p>
-              <p className="text-sm text-gray-300">Ремонт материнских плат</p>
-              <p className="text-sm text-gray-300">Замена клавиатур</p>
-              <p className="text-sm text-gray-300">Восстановление данных</p>
+              <Link href="/services#diagnostics" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+                Диагностика
+              </Link>
+              <Link href="/services#cleaning" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+                Чистка
+              </Link>
+              <Link href="/services#component-repair" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+                Ремонт компонентов
+              </Link>
+              <Link href="/services#component-replacement" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+                Замена компонентов
+              </Link>
+              <Link href="/services#software-services" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+                Программные услуги
+              </Link>
             </div>
           </div>
         </div>
@@ -115,9 +135,8 @@ const Footer = () => {
           <p className="text-sm text-gray-400">
             © 2025 FiveService. Все права защищены.
           </p>
-          
-          {/* Добавленная надпись о разработчике */}
-          <div className="pt-4">
+
+           <div className="pt-4">
             <p className="text-xs text-gray-500">
              Сайт разработан командой{' '}
               <a 
@@ -137,3 +156,14 @@ const Footer = () => {
 };
 
 export default Footer;
+
+
+
+
+
+{/* Добавленная надпись о разработчике 
+         
+
+
+
+*/}

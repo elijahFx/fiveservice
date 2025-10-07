@@ -26,7 +26,6 @@ export default async function ArticlesPage() {
         </div>
        {/* @ts-ignore */}
         <ArticlesList articles={articles} />
-        <FAQ />
       </div>
     </div>
   );

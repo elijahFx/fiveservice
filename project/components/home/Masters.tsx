@@ -1,7 +1,7 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const Masters = () => {
   const masters = [
@@ -9,19 +9,22 @@ const Masters = () => {
       name: 'Антон',
       position: 'Инженер по ноутбукам',
       experience: '10 лет опыта. Материнские платы и разъёмы',
-      initials: 'А'
+      initials: 'А',
+      src: "/fgs1_1_1.webp"
     },
     {
       name: 'Павел',
       position: 'Главный инженер',
       experience: '13 лет опыта. Сложная пайка, BGA',
-      initials: 'П'
+      initials: 'П',
+      src: "/fgs1_1_1_1.webp"
     },
     {
       name: 'Александр',
       position: 'Техник',
       experience: 'Приём, тестирование и выдача техники',
-      initials: 'А'
+      initials: 'А',
+      src: "/site_sasha_l2.webp"
     }
   ];
 
@@ -40,9 +43,14 @@ const Masters = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {masters.map((master, index) => (
             <Card key={index} className="p-6 text-center hover:shadow-lg transition-shadow duration-300 bg-white">
-              {/* Avatar Placeholder */}
+              {/* Avatar with Image */}
               <div className="flex justify-center mb-6">
                 <Avatar className="w-24 h-24 border-4 border-navy-100">
+                  <AvatarImage 
+                    src={master.src} 
+                    alt={master.name}
+                    className="object-cover"
+                  />
                   <AvatarFallback className="bg-navy-600 text-white text-xl font-bold">
                     {master.initials}
                   </AvatarFallback>

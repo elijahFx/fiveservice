@@ -8,61 +8,15 @@ import {
   Upload,
   FileText,
   X,
-  CheckCircle,
-  AlertCircle,
-  Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import CallbackModal from "../modal/CallbackModal";
 
 const CorporateHero = () => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
-  const [notification, setNotification] = useState<{
-    type: "success" | "error" | "info" | null;
-    message: string;
-  }>({ type: null, message: "" });
-
-  // Автоматическое скрытие уведомления через 5 секунд
-  useEffect(() => {
-    if (notification.type) {
-      const timer = setTimeout(() => {
-        setNotification({ type: null, message: "" });
-      }, 5000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
-
-  // Функция для нормализации имени файла перед отправкой
-  const normalizeFileName = (fileName: string) => {
-    // Сохраняем кириллицу, убираем только небезопасные символы
-    return fileName.replace(/[<>:"|?*]/g, "_");
-  };
-
-  const showNotification = (
-    type: "success" | "error" | "info",
-    message: string
-  ) => {
-    setNotification({ type, message });
-  };
-
-  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const files = event.dataTransfer.files;
-    if (files.length > 0) {
-      const file = files[0];
-      const inputEvent = {
-        target: { files: [file] },
-      } as React.ChangeEvent<HTMLInputElement>;
-      handleFileSelect(inputEvent);
-    }
-  };
-
-  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-  };
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -76,167 +30,82 @@ const CorporateHero = () => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Улучшенная проверка типа файла
-      const isDocFile =
-        file.type.includes("msword") ||
-        file.type.includes("openxmlformats") ||
-        file.name.endsWith(".doc") ||
-        file.name.endsWith(".docx");
-
-      if (!isDocFile) {
-        showNotification(
-          "error",
-          "Пожалуйста, загрузите только файлы формата DOC или DOCX"
-        );
+      // Проверяем тип файла
+      if (
+        !file.type.includes("word") &&
+        !file.name.endsWith(".doc") &&
+        !file.name.endsWith(".docx")
+      ) {
+        alert("Пожалуйста, загрузите только файлы формата DOC или DOCX");
         return;
       }
 
+      // Проверяем размер файла
       if (file.size > 10 * 1024 * 1024) {
-        showNotification("error", "Размер файла не должен превышать 10 МБ");
+        alert("Размер файла не должен превышать 10 МБ");
         return;
       }
 
       setSelectedFile(file);
-      showNotification("success", "Файл выбран успешно!");
     }
   };
 
   const handleUpload = async () => {
     if (!selectedFile) {
-      showNotification("error", "Пожалуйста, выберите файл для загрузки");
-      return;
-    }
-
-    if (!navigator.onLine) {
-      showNotification(
-        "error",
-        "Нет подключения к интернету. Проверьте соединение."
-      );
+      alert("Пожалуйста, выберите файл для загрузки");
       return;
     }
 
     setIsUploading(true);
-    showNotification("info", "Начинаем загрузку файла...");
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000);
 
     try {
       const formData = new FormData();
+      formData.append("requisites", selectedFile);
 
-      const normalizedFile = new File(
-        [selectedFile],
-        normalizeFileName(selectedFile.name),
-        { type: selectedFile.type }
-      );
-
-      formData.append("requisites", normalizedFile);
-
+      // Отправка файла на указанный адрес с заголовками
       const response = await fetch("https://testend2.site/upload", {
         method: "POST",
         body: formData,
         headers: {
           Accept: "application/json",
         },
-        signal: controller.signal,
+        mode: "cors", // Явно указываем режим CORS
+        credentials: "omit", // или 'include' если нужны куки
       });
 
       if (response.ok) {
         const result = await response.json();
-        showNotification(
-          "success",
-          "Файл успешно загружен! Мы свяжемся с Вами в ближайшее время."
-        );
+        alert("Файл успешно загружен! Мы свяжемся с Вами в ближайшее время.");
         setIsUploadModalOpen(false);
         setSelectedFile(null);
       } else {
-        try {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.error || `Ошибка сервера: ${response.status}`
-          );
-        } catch (parseError) {
-          const errorText = await response.text();
-          throw new Error(`Ошибка загрузки: ${response.status}`);
-        }
+        const errorText = await response.text();
+        console.error("Server error:", response.status, errorText);
+        throw new Error(`Ошибка загрузки файла: ${response.status}`);
       }
     } catch (error) {
       console.error("Ошибка загрузки:", error);
-      if (error.name === "AbortError") {
-        showNotification(
-          "error",
-          "Загрузка превысила время ожидания. Попробуйте еще раз."
-        );
-      } else if (
+      if (
         error.name === "TypeError" &&
         error.message.includes("Failed to fetch")
       ) {
-        showNotification(
-          "error",
-          "Ошибка соединения с сервером. Проверьте интернет-соединение."
-        );
+        alert("Ошибка соединения с сервером. Проверьте интернет-соединение.");
       } else {
-        showNotification(
-          "error",
-          error.message ||
-            "Произошла ошибка при загрузке файла. Пожалуйста, попробуйте еще раз."
+        alert(
+          "Произошла ошибка при загрузке файла. Пожалуйста, попробуйте еще раз."
         );
       }
     } finally {
-      clearTimeout(timeoutId);
       setIsUploading(false);
     }
   };
 
   const removeFile = () => {
     setSelectedFile(null);
-    showNotification("info", "Файл удален");
-  };
-
-  // Компонент уведомления
-  const Notification = () => {
-    if (!notification.type) return null;
-
-    const bgColor = {
-      success: "bg-green-50 border-green-200",
-      error: "bg-red-50 border-red-200",
-      info: "bg-blue-50 border-blue-200",
-    };
-
-    const textColor = {
-      success: "text-green-800",
-      error: "text-red-800",
-      info: "text-blue-800",
-    };
-
-    const icons = {
-      success: <CheckCircle className="w-5 h-5 text-green-500" />,
-      error: <AlertCircle className="w-5 h-5 text-red-500" />,
-      info: <Clock className="w-5 h-5 text-blue-500" />,
-    };
-
-    return (
-      <div
-        className={`fixed top-4 right-4 z-50 p-4 rounded-lg border ${
-          bgColor[notification.type]
-        } ${textColor} shadow-lg flex items-center space-x-3 min-w-80 max-w-md transition-all duration-300`}
-      >
-        {icons[notification.type]}
-        <p className="text-sm font-medium">{notification.message}</p>
-        <button
-          onClick={() => setNotification({ type: null, message: "" })}
-          className="ml-auto text-gray-400 hover:text-gray-600"
-        >
-          <X className="w-4 h-4" />
-        </button>
-      </div>
-    );
   };
 
   return (
     <>
-      <Notification />
-
       <section className="relative py-20 bg-gradient-to-br from-navy-900 to-gray-900 text-white overflow-hidden pt-24 sm:pt-28">
         <div className="absolute inset-0">
           <Image
@@ -250,9 +119,8 @@ const CorporateHero = () => {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              Корпоративное
-              <span className="block text-blue-400">обслуживание</span>
-              техники
+              Ремонт компьютерной техники для юридических лиц от компании{" "}
+              <span className="text-navy-400">Five Service</span> в Минске
             </h1>
 
             <p className="text-xl text-gray-200 mb-8 leading-relaxed">
@@ -277,6 +145,7 @@ const CorporateHero = () => {
               </Button>
             </div>
 
+            {/* Новая кнопка для загрузки реквизитов */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Button
                 size="lg"
@@ -333,8 +202,6 @@ const CorporateHero = () => {
                   id="requisites-file"
                   accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                   onChange={handleFileSelect}
-                  onDrop={handleDrop}
-                  onDragOver={handleDragOver}
                   className="hidden"
                 />
 
@@ -355,7 +222,7 @@ const CorporateHero = () => {
                   <div className="flex items-center justify-between bg-green-50 p-3 rounded-lg">
                     <div className="flex items-center space-x-2">
                       <FileText className="w-5 h-5 text-green-600" />
-                      <span className="text-sm font-medium text-green-800 truncate max-w-xs">
+                      <span className="text-sm font-medium text-green-800">
                         {selectedFile.name}
                       </span>
                     </div>
@@ -372,16 +239,9 @@ const CorporateHero = () => {
               <Button
                 onClick={handleUpload}
                 disabled={!selectedFile || isUploading}
-                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
-                {isUploading ? (
-                  <div className="flex items-center">
-                    <Clock className="w-4 h-4 mr-2 animate-pulse" />
-                    Загрузка...
-                  </div>
-                ) : (
-                  "Отправить реквизиты"
-                )}
+                {isUploading ? "Загрузка..." : "Отправить реквизиты"}
               </Button>
 
               <p className="text-xs text-gray-500 text-center">

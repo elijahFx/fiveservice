@@ -336,7 +336,7 @@ export default function LaptopDiagnostics() {
   const currentResult = results.find(result => result.id === currentStep);
 
   return (
-    <section className="min-h-screen bg-gray-50 pt-28 px-4 sm:px-6 lg:px-8">
+    <section className="bg-gray-50 pt-28 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-navy-800 mb-4">

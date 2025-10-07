@@ -1,26 +1,15 @@
 'use client';
 
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Building, Truck, Users, FileText, Headphones, Calendar, Phone, MessageCircle } from 'lucide-react';
+import { Phone, MessageCircle, CircleCheck as CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 
 const CorporateServices = () => {
-  const services = [
-    {
-      icon: Building,
-      title: 'Абонентское обслуживание',
-      description: 'Комплексное техническое обслуживание IT-парка по договору',
-      features: ['Плановые профилактики', 'Приоритетная поддержка', 'Скидки на запчасти'],
-      price: 'Индивидуально'
-    },
-  ];
-
   const scrollToContact = () => {
     const contactSection = document.getElementById('contact-section');
     if (contactSection) {
       contactSection.scrollIntoView({ behavior: 'smooth' });
     } else {
-      // Если мы не на главной странице, переходим на главную с якорем
       window.location.href = '/#contact-section';
     }
   };
@@ -37,41 +26,73 @@ const CorporateServices = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <Card key={index} className="p-6 hover:shadow-xl transition-all duration-300 group h-full">
-              <div className="flex items-center justify-center w-16 h-16 bg-navy-100 rounded-xl mb-4 group-hover:bg-navy-600 group-hover:scale-110 transition-all duration-300">
-                <service.icon className="w-8 h-8 text-navy-600 group-hover:text-white transition-colors duration-300" />
+        <div className="bg-white rounded-2xl p-8 md:p-12 shadow-lg mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="w-6 h-6 text-navy-600 flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-gray-800 leading-relaxed">
+                  Бесплатная диагностика оборудования <span className="text-sm text-gray-600">(только для организаций и ИП)</span>
+                </p>
               </div>
-              
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                {service.title}
-              </h3>
-              
-              <p className="text-gray-600 mb-4 leading-relaxed">
-                {service.description}
-              </p>
-
-              <ul className="space-y-2 mb-6">
-                {service.features.map((feature, featureIndex) => (
-                  <li key={featureIndex} className="flex items-center">
-                    <div className="w-2 h-2 bg-navy-600 rounded-full mr-3"></div>
-                    <span className="text-sm text-gray-700">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="flex justify-between items-center pt-4 border-t border-gray-100 mt-auto">
-                <div>
-                  <p className="text-sm text-gray-500">Стоимость</p>
-                  <p className="font-bold text-navy-600">{service.price}</p>
-                </div>
-                <Button size="sm" className="bg-navy-600 hover:bg-navy-700">
-                  Узнать больше
-                </Button>
+            </div>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="w-6 h-6 text-navy-600 flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-gray-800 leading-relaxed">
+                  Срочный ремонт электронной техники
+                </p>
               </div>
-            </Card>
-          ))}
+            </div>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="w-6 h-6 text-navy-600 flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-gray-800 leading-relaxed">
+                  Комплексная чистка компьютера и ноутбука (чистка от пыли, замена термопасты, замена термопрокладок, чистка и смазка кулера)
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="w-6 h-6 text-navy-600 flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-gray-800 leading-relaxed">
+                  Ремонт отдельных деталей устройства на компонентном уровне
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="w-6 h-6 text-navy-600 flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-gray-800 leading-relaxed">
+                  Замена деталей устройства на оригинальные (от производителя)
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="w-6 h-6 text-navy-600 flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-gray-800 leading-relaxed">
+                  Тестирование работоспособности оборудования посредством спец. техники
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="w-6 h-6 text-navy-600 flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-gray-800 leading-relaxed">
+                  Предоставление расширенных гарантий на выполненные работы
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start space-x-3">
+              <CheckCircle className="w-6 h-6 text-navy-600 flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-gray-800 leading-relaxed">
+                  Бесплатная доставка техники в сервисный центр и обратно
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Bonus Program Section */}
@@ -82,14 +103,16 @@ const CorporateServices = () => {
             </h2>
             
             <p className="text-xl md:text-2xl text-gray-800 font-medium leading-relaxed mb-8">
-              Даём вашим сотрудникам скидку 
+              Даём вашим сотрудникам скидку
               <span className="text-navy-600 font-bold"> 30% </span>
               на ремонт ноутбуков
             </p>
-            
-            <Button className="bg-navy-600 hover:bg-navy-700 text-white px-8 py-3">
-              Узнать подробнее
-            </Button>
+
+            <Link href="/bonus-program">
+              <Button className="bg-navy-600 hover:bg-navy-700 text-white px-8 py-3">
+                Узнать подробнее
+              </Button>
+            </Link>
           </div>
         </div>
 

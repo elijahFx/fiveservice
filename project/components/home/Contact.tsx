@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { ClickableAddress } from '@/components/ui/clickable-address';
 import { Phone, Mail, MapPin, Clock, Send, Loader2, Navigation } from 'lucide-react';
+import Link from "next/link"
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -15,11 +17,19 @@ const Contact = () => {
     phone: '',
     message: ''
   });
+  const [isAgreed, setIsAgreed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!isAgreed) {
+      setSubmitStatus('error');
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitStatus('idle');
 
@@ -44,6 +54,7 @@ const Contact = () => {
         console.log('Form submitted successfully:', result);
         setSubmitStatus('success');
         setFormData({ name: '', phone: '', message: '' });
+        setIsAgreed(false);
         
         setTimeout(() => {
           setSubmitStatus('idle');
@@ -96,26 +107,28 @@ const Contact = () => {
                 <div className="flex items-center justify-center w-12 h-12 bg-navy-600 rounded-lg">
                   <MapPin className="w-6 h-6 text-white" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <h4 className="font-semibold text-lg text-gray-900">Адрес</h4>
                   <ClickableAddress 
                     address="г. Минск, ул. Восточная, 129"
                     className="text-gray-600"
                     showIcon={false}
                   />
-                  <Button
-                    onClick={openYandexMaps}
-                    variant="outline"
-                    size="sm"
-                    className="mt-2 bg-white border-navy-600 text-navy-600 hover:bg-navy-50"
-                  >
-                    <Navigation className="w-4 h-4 mr-2" />
-                    Построить маршрут
-                  </Button>
+                  
+                  {/* Яндекс Карта */}
+                  <div className="mt-3 rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+                    <iframe 
+                      src="https://yandex.ru/map-widget/v1/?um=constructor%3Aeae9dc037665c292726dd0ce09b66ed04342ebe1f57a6230392d0f3d05c08454&amp;source=constructor"
+                      width="200" 
+                      height="100"
+                      frameBorder="0"
+                      className="w-full"
+                      style={{ border: 'none' }}
+                      loading='lazy'
+                    />
+                  </div>
                 </div>
               </div>
-
-              
 
               <div className="flex items-start space-x-4">
                 <div className="flex items-center justify-center w-12 h-12 bg-navy-600 rounded-lg">
@@ -174,7 +187,10 @@ const Contact = () => {
             {submitStatus === 'error' && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-red-800 font-medium">
-                  ❌ Ошибка при отправке заявки. Пожалуйста, попробуйте еще раз или позвоните нам.
+                  {!isAgreed 
+                    ? '❌ Для отправки заявки необходимо согласие на обработку персональных данных'
+                    : '❌ Ошибка при отправке заявки. Пожалуйста, попробуйте еще раз или позвоните нам.'
+                  }
                 </p>
               </div>
             )}
@@ -230,10 +246,25 @@ const Contact = () => {
                 />
               </div>
 
+              <div className="flex items-start space-x-3">
+                <Checkbox
+                  id="agreement"
+                  checked={isAgreed}
+                  onCheckedChange={(checked) => setIsAgreed(checked as boolean)}
+                  disabled={isSubmitting}
+                />
+                <Label htmlFor="agreement" className="text-sm text-gray-600 leading-tight cursor-pointer">
+                  Согласен на обработку моих персональных данных в соответствии с{' '}
+                  <Link href="/privacy-policy" className="text-navy-600 hover:text-navy-700 underline">
+                    политикой конфиденциальности
+                  </Link>
+                </Label>
+              </div>
+
               <Button 
                 type="submit" 
                 className="w-full bg-navy-600 hover:bg-navy-700 py-3"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !isAgreed}
               >
                 {isSubmitting ? (
                   <>
@@ -247,10 +278,6 @@ const Contact = () => {
                   </>
                 )}
               </Button>
-
-              <p className="text-sm text-gray-600 text-center">
-                Нажимая кнопку, вы соглашаетесь с обработкой персональных данных
-              </p>
             </form>
           </Card>
         </div>

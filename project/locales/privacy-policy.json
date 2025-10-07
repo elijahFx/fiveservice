@@ -1,0 +1,392 @@
+{
+  "ru": {
+    "title": "Положение о политике в отношении обработки персональных данных",
+    "description": "Оператор: <strong>ООО «Наши инновации»</strong>. Документ описывает, какие персональные данные мы обрабатываем, для чего, на каких правовых основаниях, как долго храним, какими правами вы обладаете и как с нами связаться.",
+    "lastUpdate": "Последнее обновление:",
+    "updateDate": "30.09.2025",
+    "tocTitle": "Содержание",
+    "tocItems": [
+      "1. Общие положения",
+      "2. Правовые основания",
+      "3. Категории субъектов, цели, данные, основания",
+      "4. Сроки хранения",
+      "5. Права субъектов",
+      "6. Согласие и отзыв",
+      "7. Контакты оператора",
+      "8. Изменения политики"
+    ],
+    "sections": {
+      "section1": {
+        "title": "1. Общие положения",
+        "content": [
+          "Настоящее Положение определяет порядок обработки персональных данных Обществом с ограниченной ответственностью «Наши инновации» в целях защиты прав и свобод физических лиц при обработке их персональных данных.",
+          "Положение распространяется на обработку данных пользователей сайта fiveservice.by и клиентов сервисного центра по адресу: 220013, Республика Беларусь, г. Минск, ул. Восточная, д. 129, оф. 2‑21."
+        ]
+      },
+      "section2": {
+        "title": "2. Правовые основания",
+        "items": [
+          "Закон Республики Беларусь от 07.05.2021 № 99‑З «О защите персональных данных».",
+          "Указ Президента Республики Беларусь от 28.10.2021 № 422.",
+          "Закон Республики Беларусь от 10.11.2008 № 455‑З «Об информации, информатизации и защите информации».",
+          "Иные нормативные правовые акты Республики Беларусь."
+        ]
+      },
+      "section3": {
+        "title": "3. Категории субъектов, цели обработки, состав данных и правовые основания",
+        "tableNote": "Поля «по желанию» заполняются добровольно. Биометрические и иные специальные категории не обрабатываются. Трансграничная передача не осуществляется.",
+        "tableHeaders": ["Субъект", "Цели обработки", "Персональные данные", "Правовое основание"],
+        "tableData": [
+          {
+            "subject": "Клиент при оформлении заказ‑наряда",
+            "purpose": "Заключение, исполнение, изменение, расторжение договора на ремонт и диагностику",
+            "data": "ФИО, телефон, e‑mail по желанию, адрес, модель и серийный номер техники, описание неисправности, история обращений",
+            "basis": "п. 15 абз. ст. 6 Закона № 99‑З (исполнение договора)"
+          },
+          {
+            "subject": "Пользователь сайта, заявка",
+            "purpose": "Консультация, заявка, организация курьерской доставки",
+            "data": "Имя, телефон, адрес доставки при необходимости",
+            "basis": "п. 15 абз. ст. 6, п. 20 абз. ст. 6 Закона № 99‑З"
+          },
+          {
+            "subject": "Личный кабинет",
+            "purpose": "Создание и использование учетной записи",
+            "data": "Адрес электронной почты",
+            "basis": "Согласие субъекта данных (ст. 5 Закона № 99‑З)"
+          },
+          {
+            "subject": "Уведомления о статусе",
+            "purpose": "Информирование о статусе работ и доставки по SMS/Viber/e‑mail",
+            "data": "Имя по желанию, телефон и/или e‑mail",
+            "basis": "Согласие субъекта данных (ст. 5 Закона № 99‑З)"
+          },
+          {
+            "subject": "Технические данные пользователя",
+            "purpose": "Работоспособность сайта, аналитика посещаемости, предотвращение мошенничества",
+            "data": "IP‑адрес, данные о браузере и ОС, cookie, история посещений",
+            "basis": "п. 20 абз. ст. 6 Закона № 99‑З"
+          }
+        ]
+      },
+      "section4": {
+        "title": "4. Сроки хранения",
+        "tableHeaders": ["Категория данных", "Срок хранения"],
+        "tableData": [
+          {
+            "category": "Данные по договору (заказ‑наряд)",
+            "period": "3 года после окончания договора при проведении проверки, 10 лет если проверок не было. Основание: Постановление Минюста РБ № 140 от 24.05.2012"
+          },
+          {
+            "category": "Данные на согласии или договоре (кабинет, уведомления)",
+            "period": "1 год с момента последнего взаимодействия, но не менее срока гарантий; прекращение сразу после отзыва согласия"
+          },
+          {
+            "category": "Технические журналы и cookie",
+            "period": "До 3 месяцев, если не требуется дольше для расследования инцидентов или исполнения обязанностей"
+          }
+        ]
+      },
+      "section5": {
+        "title": "5. Права субъектов персональных данных",
+        "items": [
+          "Получить подтверждение факта обработки и доступ к данным.",
+          "Требовать исправления или уточнения неточных данных.",
+          "Требовать удаления или ограничения обработки.",
+          "Отозвать согласие.",
+          "Обжаловать действия оператора в уполномоченном государственном органе."
+        ],
+        "note": "Срок ответа: 5 рабочих дней по запросам об информации, 15 календарных дней в иных случаях."
+      },
+      "section6": {
+        "title": "6. Порядок получения и отзыва согласия",
+        "items": [
+          "В онлайн‑формах сайта путем активного действия (галочка).",
+          "Устно или письменно при обращении в сервисный центр.",
+          "Отказ от маркетингового согласия не влияет на получение основной услуги.",
+          "Отзыв возможен в любой момент. После получения заявления обработка прекращается в течение 15 дней."
+        ]
+      },
+      "section7": {
+        "title": "7. Контакты оператора",
+        "company": {
+          "name": "ООО «Наши инновации»",
+          "address": "Юридический адрес: 220013, Республика Беларусь, г. Минск, ул. Восточная, д. 129, оф. 2‑21",
+          "unp": "УНП: 193013342",
+          "email": "E‑mail: sovers375@gmail.com",
+          "phone": "Телефон: +375 25 784 97 31"
+        },
+        "requests": {
+          "title": "Для запросов по данным",
+          "subject": "Тема: Запрос по персональным данным",
+          "instruction": "К письму приложите ФИО и контакт для ответа."
+        }
+      },
+      "section8": {
+        "title": "8. Изменения политики",
+        "content": "Новая редакция вступает в силу с момента публикации на сайте."
+      }
+    },
+    "footer": "ООО «Наши инновации» • 2025 год • г. Минск"
+  },
+  "be": {
+    "title": "Палажэнне аб палітыцы ў дачыненні да апрацоўкі персанальных дадзеных",
+    "description": "Аператар: <strong>ТАА «Нашы інавацыі»</strong>. Дакумент тлумачыць, якія персанальныя дадзеныя мы апрацоўваем, з якой мэтай, на якіх прававых падставах, як доўга захоўваем, якія правы вы маеце і як з намі звязацца.",
+    "lastUpdate": "Апошняе абнаўленне:",
+    "updateDate": "30.09.2025",
+    "tocTitle": "Змест",
+    "tocItems": [
+      "1. Агульныя палажэнні",
+      "2. Прававыя падставы",
+      "3. Катэгорыі суб'ектаў, мэты, дадзеныя, падставы",
+      "4. Тэрміны захоўвання",
+      "5. Правы суб'ектаў",
+      "6. Згода і яе адкліканне",
+      "7. Кантакты аператара",
+      "8. Змены палітыкі"
+    ],
+    "sections": {
+      "section1": {
+        "title": "1. Агульныя палажэнні",
+        "content": [
+          "Палажэнне вызначае парадак апрацоўкі персанальных дадзеных ТАА «Нашы інавацыі» з мэтай абароны правоў і свабод фізічных асоб пры апрацоўцы іх персанальных дадзеных.",
+          "Дакумент распаўсюджваецца на апрацоўку дадзеных карыстальнікаў сайта fiveservice.by і кліентаў сервіснага цэнтра па адрасе: 220013, Рэспубліка Беларусь, г. Мінск, вул. Усходняя, 129, оф. 2‑21."
+        ]
+      },
+      "section2": {
+        "title": "2. Прававыя падставы",
+        "items": [
+          "Закон Рэспублікі Беларусь ад 07.05.2021 № 99‑З «Аб абароне персанальных дадзеных».",
+          "Указ Прэзідэнта Рэспублікі Беларусь ад 28.10.2021 № 422.",
+          "Закон Рэспублікі Беларусь ад 10.11.2008 № 455‑З «Аб інфармацыі, інфарматызацыі і абароне інфармацыі».",
+          "Іншыя нарматыўныя прававыя акты Рэспублікі Беларусь."
+        ]
+      },
+      "section3": {
+        "title": "3. Катэгорыі суб'ектаў, мэты апрацоўкі, склад дадзеных і прававыя падставы",
+        "tableNote": "Палі «па жаданні» запаўняюцца добраахвотна. Біяметрычныя і іншыя спецыяльныя катэгорыі не апрацоўваюцца. Трансгранічная перадача не ажыццяўляецца.",
+        "tableHeaders": ["Суб'ект", "Мэты апрацоўкі", "Персанальныя дадзеныя", "Прававая падстава"],
+        "tableData": [
+          {
+            "subject": "Кліент пры афармленні заказ‑нараду",
+            "purpose": "Заключэнне, выкананне, змяненне, скасаванне дагавора на рамонт і дыягностыку",
+            "data": "Прозвішча, імя, тэлефон, e‑mail па жаданні, адрас, мадэль і серыйны нумар прылады, апісанне няспраўнасці, гісторыя зваротаў",
+            "basis": "п. 15 абз. арт. 6 Закона № 99‑З (выкананне дагавора)"
+          },
+          {
+            "subject": "Карыстальнік сайта, заяўка",
+            "purpose": "Кансультацыя, афармленне заяўкі, арганізацыя кур'ерскай дастаўкі",
+            "data": "Імя, тэлефон, адрас дастаўкі пры неабходнасці",
+            "basis": "п. 15 абз. арт. 6, п. 20 абз. арт. 6 Закона № 99‑З"
+          },
+          {
+            "subject": "Асабісты кабінет",
+            "purpose": "Стварэнне і выкарыстанне ўліковага запісу",
+            "data": "E‑mail",
+            "basis": "Згода суб'екта дадзеных (арт. 5 Закона № 99‑З)"
+          },
+          {
+            "subject": "Апавяшчэнні аб статусе",
+            "purpose": "Інфармаванне аб статусе работ і дастаўкі праз SMS/Viber/e‑mail",
+            "data": "Імя па жаданні, тэлефон і/або e‑mail",
+            "basis": "Згода суб'екта дадзеных (арт. 5 Закона № 99‑З)"
+          },
+          {
+            "subject": "Тэхнічныя дадзеныя карыстальніка",
+            "purpose": "Працоўная здольнасць сайта, аналітыка наведвальнасці, прадухіленне махлярства",
+            "data": "IP‑адрас, дадзеныя пра браўзер і АС, cookie, гісторыя наведванняў",
+            "basis": "п. 20 абз. арт. 6 Закона № 99‑З"
+          }
+        ]
+      },
+      "section4": {
+        "title": "4. Тэрміны захоўвання",
+        "tableHeaders": ["Катэгорыя дадзеных", "Тэрмін захоўвання"],
+        "tableData": [
+          {
+            "category": "Дадзеныя па дагаворы (заказ‑нарад)",
+            "period": "3 гады пасля заканчэння дагавора пры праверцы, 10 гадоў калі праверак не было. Падстава: Пастанова Мінюста РБ № 140 ад 24.05.2012"
+          },
+          {
+            "category": "Дадзеныя на згодзе або дагаворы (кабінет, апавяшчэнні)",
+            "period": "1 год з моманту апошняга ўзаемадзеяння, але не меней за тэрмін гарантый; спыненне адразу пасля адклікання згоды"
+          },
+          {
+            "category": "Тэхнічныя журналы і cookie",
+            "period": "Да 3 месяцаў, калі не патрабуецца даўжэй для расследавання інцыдэнтаў або выканання абавязкаў"
+          }
+        ]
+      },
+      "section5": {
+        "title": "5. Правы суб'ектаў персанальных дадзеных",
+        "items": [
+          "Доступ і пацвярджэнне факта апрацоўкі.",
+          "Выпраўленне або ўдакладненне недакладных дадзеных.",
+          "Выдаленне або абмежаванне апрацоўкі.",
+          "Адкліканне згоды.",
+          "Абскарджанне дзеянняў аператара ў ўпаўнаважаным органе."
+        ],
+        "note": "Тэрмін адказу: 5 рабочых дзён па запытах аб інфармацыі, 15 каляндарных дзён у іншых выпадках."
+      },
+      "section6": {
+        "title": "6. Парадак атрымання і адклікання згоды",
+        "items": [
+          "У анлайн‑формах сайта праз актыўнае дзеянне (птушка).",
+          "Вусна або пісьмова ў сервісным цэнтры.",
+          "Адмова ад маркетынгавай згоды не ўплывае на асноўную паслугу.",
+          "Згоду можна адклікаць у любы момант, апрацоўка спыняецца на працягу 15 дзён."
+        ]
+      },
+      "section7": {
+        "title": "7. Кантакты аператара",
+        "company": {
+          "name": "ТАА «Нашы інавацыі»",
+          "address": "Юрыдычны адрас: 220013, Рэспубліка Беларусь, г. Мінск, вул. Усходняя, 129, оф. 2‑21",
+          "unp": "УНП: 193013342",
+          "email": "E‑mail: sovers375@gmail.com",
+          "phone": "Тэлефон: +375 25 784 97 31"
+        },
+        "requests": {
+          "title": "Для зваротаў па дадзеных",
+          "subject": "Тэма: Запыт па персанальных дадзеных",
+          "instruction": "Дадайце ПІБ і кантакт для адказу."
+        }
+      },
+      "section8": {
+        "title": "8. Змены палітыкі",
+        "content": "Новая рэдакцыя дзейнічае з моманту публікацыі на сайце."
+      }
+    },
+    "footer": "ТАА «Нашы інавацыі» • 2025 год • г. Мінск"
+  },
+  "en": {
+    "title": "Privacy Policy on the Processing of Personal Data",
+    "description": "Operator: <strong>LLC «Nashi Innovatsii»</strong>. This document explains what personal data we process, for what purposes, on which legal grounds, how long we retain it, what rights you have, and how to contact us.",
+    "lastUpdate": "Last updated:",
+    "updateDate": "30.09.2025",
+    "tocTitle": "Contents",
+    "tocItems": [
+      "1. General provisions",
+      "2. Legal grounds",
+      "3. Data subjects, purposes, data, grounds",
+      "4. Retention periods",
+      "5. Data subject rights",
+      "6. Consent and withdrawal",
+      "7. Operator contacts",
+      "8. Changes to the policy"
+    ],
+    "sections": {
+      "section1": {
+        "title": "1. General provisions",
+        "content": [
+          "This Policy sets out the procedure for processing personal data by LLC «Nashi Innovatsii» in order to protect the rights and freedoms of individuals when their personal data is processed.",
+          "The Policy applies to data of users of the website fiveservice.by and clients of the service center at: 220013, Republic of Belarus, Minsk, 129 Vostochnaya St., office 2‑21."
+        ]
+      },
+      "section2": {
+        "title": "2. Legal grounds",
+        "items": [
+          "Law of the Republic of Belarus No. 99‑Z of 07.05.2021 «On Personal Data Protection».",
+          "Decree of the President of the Republic of Belarus No. 422 of 28.10.2021.",
+          "Law of the Republic of Belarus No. 455‑Z of 10.11.2008 «On Information, Informatization and Data Protection».",
+          "Other legal acts of the Republic of Belarus."
+        ]
+      },
+      "section3": {
+        "title": "3. Data subjects, purposes of processing, data categories and legal grounds",
+        "tableNote": "Fields marked «optional» are provided voluntarily. We do not process biometric or other special categories of data. Cross‑border transfer is not performed.",
+        "tableHeaders": ["Data subject", "Purposes", "Personal data", "Legal ground"],
+        "tableData": [
+          {
+            "subject": "Client when creating a work order",
+            "purpose": "Conclusion, performance, amendment and termination of a repair/diagnostics contract",
+            "data": "Full name, phone number, e‑mail optionally, address, device model and serial number, fault description, history of requests",
+            "basis": "Art. 6(15) of Law No. 99‑Z (performance of a contract)"
+          },
+          {
+            "subject": "Website user, request",
+            "purpose": "Consultation, request processing, courier delivery arrangement",
+            "data": "Name, phone number, delivery address if needed",
+            "basis": "Art. 6(15) and Art. 6(20) of Law No. 99‑Z"
+          },
+          {
+            "subject": "Personal account",
+            "purpose": "Account creation and use",
+            "data": "E‑mail address",
+            "basis": "Data subject consent (Art. 5 of Law No. 99‑Z)"
+          },
+          {
+            "subject": "Status notifications",
+            "purpose": "Status updates on works and deliveries via SMS/Viber/e‑mail",
+            "data": "Name optionally, phone and/or e‑mail",
+            "basis": "Data subject consent (Art. 5 of Law No. 99‑Z)"
+          },
+          {
+            "subject": "Technical data",
+            "purpose": "Website operability, analytics, fraud prevention",
+            "data": "IP address, browser/OS data, cookies, browsing history",
+            "basis": "Art. 6(20) of Law No. 99‑Z"
+          }
+        ]
+      },
+      "section4": {
+        "title": "4. Retention periods",
+        "tableHeaders": ["Data category", "Period"],
+        "tableData": [
+          {
+            "category": "Contract data (work order)",
+            "period": "3 years after contract end if an audit was conducted, 10 years if not. Basis: MoJ RB Resolution No. 140 of 24.05.2012"
+          },
+          {
+            "category": "Data processed on consent or contract (account, notifications)",
+            "period": "1 year from last interaction, at least the warranty term; processing stops immediately after consent withdrawal"
+          },
+          {
+            "category": "Technical logs and cookies",
+            "period": "Up to 3 months unless a longer period is required to investigate incidents or fulfil obligations"
+          }
+        ]
+      },
+      "section5": {
+        "title": "5. Data subject rights",
+        "items": [
+          "Access and confirmation of processing.",
+          "Rectification or clarification of inaccurate data.",
+          "Deletion or restriction of processing.",
+          "Withdrawal of consent.",
+          "Complaint to the competent authority."
+        ],
+        "note": "Response time: 5 working days for information requests, 15 calendar days in other cases."
+      },
+      "section6": {
+        "title": "6. Consent and withdrawal",
+        "items": [
+          "In online forms by an explicit action (checkbox).",
+          "Orally or in writing at the service center.",
+          "Refusal of marketing consent does not affect provision of the core service.",
+          "Consent can be withdrawn at any time; processing stops within 15 days after receipt."
+        ]
+      },
+      "section7": {
+        "title": "7. Operator contacts",
+        "company": {
+          "name": "LLC «Nashi Innovatsii»",
+          "address": "Legal address: 220013, Republic of Belarus, Minsk, 129 Vostochnaya St., office 2‑21",
+          "unp": "Tax ID (UNP): 193013342",
+          "email": "E‑mail: sovers375@gmail.com",
+          "phone": "Phone: +375 25 784 97 31"
+        },
+        "requests": {
+          "title": "For data requests",
+          "subject": "Subject line: Personal Data Request",
+          "instruction": "Please provide your full name and a return contact."
+        }
+      },
+      "section8": {
+        "title": "8. Changes to the policy",
+        "content": "The updated version is effective upon publication on the website."
+      }
+    },
+    "footer": "LLC «Nashi Innovatsii» • 2025 • Minsk"
+  }
+}

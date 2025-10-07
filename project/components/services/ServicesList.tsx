@@ -1,47 +1,151 @@
 'use client';
 
-import { Monitor, HardDrive, Keyboard, Zap, Shield, Wrench, Cpu, Battery, Speaker, Wifi, Phone } from 'lucide-react';
+import { Search, Sparkles, Wrench, Package, Code } from 'lucide-react';
 import { MessageCircle } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import Link from "next/link"
 
 const ServicesList = () => {
   const serviceCategories = [
     {
-      id: 'screen-replacement',
-      title: 'Замена экранов',
-      shortTitle: 'Экраны',
-      icon: Monitor,
+      id: 'diagnostics',
+      title: 'Диагностика',
+      shortTitle: 'Диагностика',
+      icon: Search,
       services: [
-        { name: 'Замена матрицы 15.6"', price: 'от 80 BYN', time: '1-2 дня' },
+        { name: 'Комплексная диагностика оборудования', price: '55,00 руб.' },
+        { name: 'Срочная диагностика оборудования', price: '110,00 руб.' }
       ]
     },
     {
-      id: 'cleaning-maintenance',
-      title: 'Чистка и профилактика',
+      id: 'cleaning',
+      title: 'Чистка',
       shortTitle: 'Чистка',
-      icon: HardDrive,
+      icon: Sparkles,
       services: [
-        { name: 'Полная чистка от пыли', price: 'от 35 BYN', time: '2-4 часа' },
+        {
+          name: 'Чистка ноутбуков',
+          price: 'Стандарт: 75,00 руб. | Gaming: 125,00 руб. | Extreme Pro: 195,00 руб.',
+          variants: [
+            { name: 'Стандарт', price: '75,00 руб.' },
+            { name: 'Gaming', price: '125,00 руб.' },
+            { name: 'Extreme Pro', price: '195,00 руб.' }
+          ]
+        },
+        {
+          name: 'Чистка другой техники',
+          price: 'от 125,00 руб.',
+          variants: [
+            { name: 'Компьютер "Стандарт"', price: '125,00 руб.' },
+            { name: 'Компьютер "Gaming"', price: '165,00 руб.' },
+            { name: 'Игровая консоль', price: '125,00 руб.' }
+          ]
+        }
       ]
     },
     {
-      id: 'keyboard-replacement',
-      title: 'Замена клавиатур и тачпадов',
-      shortTitle: 'Клавиатуры',
-      icon: Keyboard,
+      id: 'component-repair',
+      title: 'Ремонт компонентов',
+      shortTitle: 'Ремонт компонентов',
+      icon: Wrench,
       services: [
-        { name: 'Замена клавиатуры', price: 'от 45 BYN', time: '1 день' },
+        {
+          name: 'Ремонт разъемов',
+          price: 'от 60,00 руб.',
+          variants: [
+            { name: 'USB', price: '110,00 руб.' },
+            { name: 'HDMI', price: '110,00 руб.' },
+            { name: 'Аудио', price: '95,00 руб.' },
+            { name: 'DC разъём', price: '110,00 руб.' },
+            { name: 'Восстановление DC', price: '60,00 руб.' },
+            { name: 'Клавиатура', price: '110,00 руб.' },
+            { name: 'Тачпад', price: '110,00 руб.' },
+            { name: 'Оперативная память', price: '215,00 руб.' },
+            { name: 'SATA', price: '110,00 руб.' }
+          ]
+        },
+        {
+          name: 'Ремонт материнских плат',
+          price: 'от 110,00 руб.',
+          variants: [
+            { name: 'Система питания', price: '250,00 руб.' },
+            { name: 'Мультиконтроллер', price: '130,00 руб.' },
+            { name: 'Аудиокодек', price: '110,00 руб.' },
+            { name: 'Восстановление после залития', price: '250,00 руб.' },
+            { name: 'Перепрошивка BIOS', price: '110,00 руб.' }
+          ]
+        },
+        {
+          name: 'Другие компоненты',
+          price: 'от 45,00 руб.',
+          variants: [
+            { name: 'Кнопка включения', price: '85,00 руб.' },
+            { name: 'Зарядное устройство', price: '65,00 руб.' },
+            { name: 'DC шнур', price: '45,00 руб.' }
+          ]
+        }
       ]
     },
     {
-      id: 'power-repair',
-      title: 'Ремонт систем питания',
-      shortTitle: 'Питание',
-      icon: Zap,
+      id: 'component-replacement',
+      title: 'Замена компонентов',
+      shortTitle: 'Замена компонентов',
+      icon: Package,
       services: [
-        { name: 'Замена разъема питания', price: 'от 25 BYN', time: '1-2 дня' },
+        {
+          name: 'Замена комплектующих',
+          price: 'от 20,00 руб.',
+          note: 'Цены указаны только за работу без учёта деталей! За исключением выделенных позиций.',
+          variants: [
+            { name: 'Матрица ноутбука', price: '130,00 руб.' },
+            { name: 'Матрица с проклейкой', price: '160,00 руб.' },
+            { name: 'Wi-Fi модуль', price: '135,00 руб.', highlight: true },
+            { name: 'Кулер', price: '75,00 руб.' },
+            { name: 'Клавиатура с перепайкой', price: '80,00 руб.' },
+            { name: 'Накладная клавиатура', price: '45,00 руб.' },
+            { name: 'Динамики', price: '60,00 руб.' },
+            { name: 'Тачпад', price: '60,00 руб.' },
+            { name: 'Петли/восстановление', price: '130,00 руб.' },
+            { name: 'Нижняя часть корпуса', price: '75,00 руб.' },
+            { name: 'Рамка матрицы', price: '90,00 руб.' },
+            { name: 'Шлейф матрицы', price: '145,00 руб.', highlight: true },
+            { name: 'Процессор', price: '350,00 руб.' },
+            { name: 'Видеокарта', price: '350,00 руб.' },
+            { name: 'ОЗУ', price: '20,00 руб.' },
+            { name: 'HDD→SSD', price: '20,00 руб.' }
+          ]
+        },
+        {
+          name: 'Восстановление корпуса',
+          price: 'от 25,00 руб.',
+          variants: [
+            { name: 'Корпусные элементы (за ед., до 3 шт.)', price: '30,00 руб.' },
+            { name: 'Корпусные элементы (за ед., более 3 шт.)', price: '25,00 руб.' },
+            { name: 'Ремонт крышки экрана с переклейкой матрицы', price: '160,00 руб.' },
+            { name: 'Ремонт крышки без переклейки матрицы', price: '110,00 руб.' },
+            { name: 'Ремонт нижней части корпуса ноутбука', price: '110,00 руб.' }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'software-services',
+      title: 'Программные услуги',
+      shortTitle: 'Программные услуги',
+      icon: Code,
+      services: [
+        {
+          name: 'Программное обеспечение',
+          price: 'от 35,00 руб.',
+          variants: [
+            { name: 'Установка ОС', price: '60,00 руб.' },
+            { name: 'Чистка от вирусов', price: '60,00 руб.' },
+            { name: 'Копирование информации', price: '35,00 руб.' },
+            { name: 'Клонирование ОС', price: '75,00 руб.' }
+          ]
+        }
       ]
     }
   ];
@@ -74,41 +178,19 @@ const ServicesList = () => {
         {/* Call to Action Block */}
         <div className="mb-16">
           <div className="bg-navy-600 rounded-2xl p-8 text-center text-white">
-            <h2 className="text-3xl font-bold mb-4">Не знаете, что вам нужно?</h2>
+            <h2 className="text-3xl font-bold mb-4">Нужен точный ориентир по цене ремонта?</h2>
             <p className="text-xl mb-6 text-gray-200 max-w-2xl mx-auto">
-              Получите консультацию по телефону.
+              Воспользуйтесь калькулятором — получите предварительную стоимость, сроки и варианты по запчастям. Без звонков и ожидания.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="tel:+375297349077"
-                className="inline-flex items-center px-8 py-4 bg-white text-navy-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
-              >
-                <Phone className="w-5 h-5 mr-2" />
-                +375 29 734 90 77
-              </a>
-              <a 
-                href="https://t.me/fiveservice_by"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-8 py-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-lg"
-              >
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Telegram
-              </a>
-              <a 
-                href="viber://add?number=375447534796"
-                className="inline-flex items-center px-8 py-4 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors shadow-lg"
-              >
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Viber
-              </a>
-              <button 
-                onClick={scrollToContact}
-                className="inline-flex items-center px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-navy-600 transition-colors"
-              >
-                Оставить заявку
-              </button>
-            </div>
+            <Link href="/calculator">
+            
+            <button
+             
+              className="inline-flex items-center px-8 py-4 bg-white text-navy-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
+            >
+              Рассчитать стоимость
+            </button>
+            </Link>
           </div>
         </div>
 
@@ -140,70 +222,86 @@ const ServicesList = () => {
                 <h2 className="text-3xl font-bold text-gray-900">{category.title}</h2>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {category.services.map((service, serviceIndex) => (
-                  <Card key={serviceIndex} className="p-6 hover:shadow-lg transition-all duration-300 group">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-navy-600 transition-colors">
-                      {service.name}
-                    </h3>
-                    
-                    <div className="flex justify-between items-center mb-4">
-                      <div>
-                        <p className="text-sm text-gray-500">Цена</p>
-                        <p className="font-bold text-navy-600 text-lg">{service.price}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Срок</p>
-                        <p className="font-bold text-gray-900">{service.time}</p>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
+              {category.id === 'diagnostics' && (
+                <div className="mb-6 p-4 bg-blue-50 border-l-4 border-blue-500 rounded-r-lg">
+                  <p className="text-blue-900 font-medium">
+                    При выполнении ремонта стоимость диагностики не взимается
+                  </p>
+                </div>
+              )}
+
+              {category.services.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {category.services.map((service, serviceIndex) => (
+                    <Card key={serviceIndex} className="p-6 hover:shadow-lg transition-all duration-300 group">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-3 group-hover:text-navy-600 transition-colors">
+                        {service.name}
+                      </h3>
+
+                      {service?.note && (
+                        <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                          <p className="text-xs text-gray-600 italic">{service?.note}</p>
+                        </div>
+                      )}
+
+                      {service?.variants && service?.variants.length > 0 ? (
+                        <div className="space-y-3">
+                          {service?.variants.map((variant, variantIndex) => (
+                            <div
+                              key={variantIndex}
+                              className={`flex justify-between items-center py-2 border-b border-gray-100 last:border-0 ${
+                                variant.highlight ? 'bg-navy-50 -mx-3 px-3 rounded' : ''
+                              }`}
+                            >
+                              <span className={`text-sm ${variant.highlight ? 'text-navy-700 font-medium' : 'text-gray-700'}`}>
+                                {variant.name}
+                              </span>
+                              <span className={`font-semibold ${variant.highlight ? 'text-navy-600' : 'text-navy-600'}`}>
+                                {variant.price}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex justify-between items-center mb-4">
+                          <div>
+                            <p className="text-sm text-gray-500">Цена</p>
+                            <p className="font-bold text-navy-600 text-lg">{service.price}</p>
+                          </div>
+                          {service?.time && (
+                            <div>
+                              <p className="text-sm text-gray-500">Срок</p>
+                              <p className="font-bold text-gray-900">{service?.time}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 text-center py-8">Услуги в этой категории скоро появятся</p>
+              )}
             </div>
           ))}
         </div>
 
-        {/* Call to Action */}
-        <div className="text-center mt-16">
+        {/* Laptop Buying Section */}
+        <div className="mt-20">
           <div className="bg-navy-600 rounded-2xl p-8 text-center text-white">
-            <h3 className="text-2xl font-bold mb-4">Нашли нужную услугу?</h3>
-            <p className="text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
-              Свяжитесь с нами!
+            <h2 className="text-3xl font-bold mb-4">Мы покупаем ноутбуки</h2>
+            <p className="text-xl mb-8 text-green-100 max-w-2xl mx-auto">
+              Продайте нерабочую или устаревшую технику быстро, безопасно, официально
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
-                href="tel:+375297349077"
-                className="inline-flex items-center px-8 py-4 bg-white text-navy-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
-              >
-                <Phone className="w-5 h-5 mr-2" />
-                +375 29 734 90 77
-              </a>
-              <a 
-                href="https://t.me/fiveservice_by"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center px-8 py-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors shadow-lg"
-              >
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Telegram
-              </a>
-              <a 
-                href="viber://add?number=375447534796"
-                className="inline-flex items-center px-8 py-4 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors shadow-lg"
-              >
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Viber
-              </a>
-              <button 
-                onClick={scrollToContact}
-                className="inline-flex items-center px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-navy-600 transition-colors"
-              >
-                Оставить заявку
-              </button>
-            </div>
+            <Button
+              asChild
+              className="bg-white text-navy-600 hover:bg-gray-100 px-8 py-3 font-semibold shadow-lg"
+            >
+              <a href="/buyback">Узнать подробнее</a>
+            </Button>
           </div>
         </div>
+
       </div>
     </section>
   );

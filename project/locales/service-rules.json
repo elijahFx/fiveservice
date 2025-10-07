@@ -1,0 +1,414 @@
+{
+  "ru": {
+    "title": "Правила оказания услуг и ремонта оконечных абонентских устройств в ООО «Наши инновации»",
+    "lastUpdate": "Последнее обновление:",
+    "updateDate": "30 сентября 2025 года",
+    "tocTitle": "Содержание",
+    "tocItems": [
+      "I. Общие положения",
+      "II. Сроки выполнения работ",
+      "III. Порядок расчётов",
+      "IV. Гарантия и ответственность",
+      "V. Выдача и хранение оборудования",
+      "Контакты"
+    ],
+    "sections": {
+      "section1": {
+        "title": "I. Общие положения",
+        "content": [
+          "1.1. Настоящие Правила разработаны в соответствии с Законом Республики Беларусь «О защите прав потребителей», Постановлением Совета Министров Республики Беларусь от 14.12.2004 № 1590 «Об утверждении Правил бытового обслуживания населения», Гражданским кодексом Республики Беларусь и иными актами законодательства."
+        ],
+        "terms": {
+          "title": "Термины",
+          "items": [
+            {
+              "term": "Оборудование",
+              "definition": "— оконечные абонентские устройства: смартфоны, планшеты, ноутбуки, стационарные компьютеры и иные электронные устройства, принимаемые для ремонта или обслуживания."
+            },
+            {
+              "term": "Ремонт",
+              "definition": "— комплекс операций по восстановлению работоспособности Оборудования."
+            },
+            {
+              "term": "Услуги",
+              "definition": "— сервисные операции, не связанные с устранением неисправностей: обновление или восстановление программного обеспечения, дефектация, выдача заключения о состоянии и иные аналогичные операции."
+            },
+            {
+              "term": "Заказ‑наряд",
+              "definition": "— документ, подтверждающий заказ на выполнение работ (ремонта и/или услуг) в письменной форме."
+            },
+            {
+              "term": "Заказчик",
+              "definition": "— физическое или юридическое лицо, заключившее с Исполнителем договор на выполнение работ."
+            },
+            {
+              "term": "Исполнитель",
+              "definition": "— Общество с ограниченной ответственностью «Наши инновации», адрес: 220013, Республика Беларусь, г. Минск, ул. Восточная, д. 129, оф. 2‑21."
+            }
+          ]
+        },
+        "contract": {
+          "title": "Порядок заключения договора",
+          "items": [
+            "1.2. Договор заключается в письменной форме путём оформления Заказ‑наряда (лист 1) и является публичным договором. Настоящие Правила являются неотъемлемой частью договора.",
+            "1.3. Договор с физическим лицом считается заключённым с момента (а) подписания Заказ‑наряда Заказчиком и представителем Исполнителя либо (б) совершения Заказчиком действий по подтверждению работ по телефону, через сообщения или иным способом связи с последующим оформлением Заказ‑наряда в письменной форме.",
+            "1.4. Договор может быть заключён: с лицами от 18 лет; с лицами 14–18 лет при наличии письменного согласия законных представителей.",
+            "1.5. Договор с юридическим лицом заключается по форме, утверждённой ООО «Наши инновации»."
+          ]
+        },
+        "acceptance": {
+          "title": "Приём оборудования",
+          "items": [
+            "1.6. Принимается Оборудование в собранном виде, при наличии — с АКБ, блоком и/или кабелем питания. Комплектность фиксируется в Заказ‑наряде (лист 1). По моделям со снятием с производства или истёкшим сроком службы решение о приёме принимает представитель Исполнителя.",
+            "1.7. Если неисправность связана с аксессуаром, Оборудование передаётся вместе с соответствующим аксессуаром. Принятое Оборудование изначально считается неработоспособным.",
+            "1.8. При приёме проводится визуальный осмотр и, при необходимости, разборка легко съёмных элементов. Результаты фиксируются в Заказ‑наряде (лист 1) и фото/видео приёмки.",
+            "1.9. Если Оборудование защищено кодом/паролем или привязано к учётной записи, Заказчик обязан сообщить код/пароль либо отвязать устройство до сдачи. При отсутствии доступа Оборудование не принимается. По согласованию возможна платная услуга восстановления ПО при технической реализуемости."
+          ]
+        },
+        "note": "Специальные категории персональных данных, включая медицинские, Исполнителем не обрабатываются в рамках оказания услуг по ремонту."
+      },
+      "section2": {
+        "title": "II. Сроки выполнения работ",
+        "items": [
+          "2.1. Срок считается со дня оформления Заказ‑наряда (лист 1) и завершается днём выдачи Оборудования с оформлением Заказ‑наряда (лист 2).",
+          "2.2. Исполнитель выполняет работы в срок, указанный в Заказ‑наряде.",
+          "2.3. Время согласования изменений стоимости или объёма работ в срок выполнения не включается.",
+          "2.4. При отказе Заказчика согласовать изменения Исполнитель прекращает работы и возвращает Оборудование в исходном состоянии, если это технически возможно. Договор считается расторгнутым в момент возврата Оборудования.",
+          "2.5. Требования о просрочке получения не предъявляются, если работы завершены в срок, а Заказчик не забрал Оборудование в течение 7 календарных дней."
+        ]
+      },
+      "section3": {
+        "title": "III. Порядок расчётов",
+        "items": [
+          "3.1. Оплата производится по прейскуранту, действующему на дату оформления Заказ‑наряда.",
+          "3.2. Оплата работ производится до выдачи Оборудования. По согласованию допускается частичная предоплата или аванс.",
+          "3.3. Выдача Оборудование до полной оплаты не производится, если иное не указано в Заказ‑наряде.",
+          "3.4. Стоимость материалов и запасных частей оплачивается в полном объёме при оформлении заказа либо при выдаче — по соглашению сторон.",
+          "3.5. Услуга «Разборка/сборка, предварительный осмотр» оплачивается отдельно и засчитывается в стоимость ремонта при продолжении работ."
+        ]
+      },
+      "section4": {
+        "title": "IV. Гарантийные обязательства и ответственность",
+        "items": [
+          "4.1. Гарантия на выполненные работы действует в срок, указанный в Заказ‑наряде (лист 2), но не менее 14 календарных дней с момента выдачи.",
+          "4.2. Гарантия не распространяется, если дефекты вызваны: нарушением правил эксплуатации; механическими, термическими и иными повреждениями; воздействием влаги, пыли, посторонних предметов; неблагоприятной средой; вмешательством третьих лиц или Заказчика, включая изменение ПО после работ; несоответствием Оборудования требованиям РБ.",
+          "4.3. Работы вне гарантии (например, обновление ПО, замена корпуса) выполняются только при письменном согласии Заказчика, зафиксированном в Заказ‑наряде.",
+          "4.4. Исполнитель не отвечает за неисправности, не заявленные при приёме; периодические дефекты, не проявившиеся на диагностике; сохранность данных Заказчика; действия производителя; упущенную выгоду и косвенный ущерб.",
+          "4.5. Заключения о техническом состоянии носят информационный характер, не являются экспертизой для целей оценки материальных ценностей и предоставляются на платной основе по прейскуранту."
+        ]
+      },
+      "section5": {
+        "title": "V. Выдача и хранение оборудования",
+        "items": [
+          "5.1. Выдача производится при предъявлении Заказ‑наряда (лист 1).",
+          "5.2. При утрате Заказ‑наряда выдача возможна Заказчику, указанному в документе, на основании письменного заявления и документа, удостоверяющего личность (с изготовлением копии).",
+          "5.3. Исполнитель не несёт ответственности за выдачу иному лицу, предъявившему Заказ‑наряд, если уведомление об утрате не поступало до момента выдачи.",
+          "5.4. Оборудование, не востребованное в течение 30 календарных дней после окончания ремонта, подлежит хранению, утилизации или реализации в порядке, установленном законодательством Республики Беларусь."
+        ]
+      },
+      "contacts": {
+        "title": "Контакты",
+        "tableData": [
+          {
+            "label": "Исполнитель",
+            "value": "ООО «Наши инновации»"
+          },
+          {
+            "label": "Адрес",
+            "value": "220013, Республика Беларусь, г. Минск, ул. Восточная, д. 129, оф. 2‑21"
+          },
+          {
+            "label": "УНП",
+            "value": "193013342"
+          },
+          {
+            "label": "E‑mail",
+            "value": "sovers375@gmail.com",
+            "isLink": true
+          },
+          {
+            "label": "Телефон",
+            "value": "+375 25 784 97 31",
+            "isLink": true
+          }
+        ]
+      }
+    },
+    "footerNote": "Настоящие Правила не ограничивают права потребителей, предусмотренные законодательством Республики Беларусь. В случае противоречий применяются нормы законодательства.",
+    "formNote": "Примечание: формуляры «лист 1» и «лист 2» означают экземпляры заказ‑наряда при приёме и выдаче. Формы можно скачать на сайте или получить у администратора."
+  },
+  "be": {
+    "title": "Правілы аказання паслуг і рамонту канчатковых абаненцкіх прылад у ТАА «Нашы інавацыі»",
+    "lastUpdate": "Апошняе абнаўленне:",
+    "updateDate": "30 верасня 2025 года",
+    "tocTitle": "Змест",
+    "tocItems": [
+      "I. Агульныя палажэнні",
+      "II. Тэрміны выканання работ",
+      "III. Парадак разлікаў",
+      "IV. Гарантыя і адказнасць",
+      "V. Выдача і захоўванне прылад",
+      "Кантакты"
+    ],
+    "sections": {
+      "section1": {
+        "title": "I. Агульныя палажэнні",
+        "content": [
+          "1.1. Гэтыя Правілы распрацаваны ў адпаведнасці з Законам Рэспублікі Беларусь «Аб абароне правоў спажыўцоў», Пастановай Савета Міністраў Рэспублікі Беларусь ад 14.12.2004 № 1590, Грамадзянскім кодэксам і іншымі актамі заканадаўства."
+        ],
+        "terms": {
+          "title": "Тэрміны",
+          "items": [
+            {
+              "term": "Абсталяванне",
+              "definition": "— смартфоны, планшэты, ноўтбукі, стацыянарныя камп'ютары і іншыя электронныя прылады, прынятыя для рамонту або абслугоўвання."
+            },
+            {
+              "term": "Рамонт",
+              "definition": "— комплекс аперацый па аднаўленні працаздольнасці Абсталявання."
+            },
+            {
+              "term": "Паслугі",
+              "definition": "— аперацыі, не звязаныя з ухіленнем няспраўнасцей: абнаўленне/аднаўленне ПЗ, дэфектацыя, заключэнне аб стане і інш."
+            },
+            {
+              "term": "Заказ‑нарад",
+              "definition": "— пісьмовы дакумент, які пацвярджае заказ на выкананне работ."
+            },
+            {
+              "term": "Заказчык",
+              "definition": "— фізічная або юрыдычная асоба, што заключыла дамову з Выканаўцам."
+            },
+            {
+              "term": "Выканаўца",
+              "definition": "— ТАА «Нашы інавацыі», адрас: 220013, Рэспубліка Беларусь, г. Мінск, вул. Усходняя, 129, оф. 2‑21."
+            }
+          ]
+        },
+        "contract": {
+          "title": "Парадак заключэння дамовы",
+          "items": [
+            "1.2. Дамова заключаецца праз афармленне Заказ‑нараду (ліст 1) і з'яўляецца публічнай. Гэтыя Правілы з'яўляюцца неад'емнай часткай дамовы.",
+            "1.3. Для фізічных асоб дамова лічыцца заключанай з моманту подпісу Заказ‑нараду або пацвярджэння работ з наступным пісьмовым афармленнем. Асобы 14–18 гадоў — з пісьмовай згоды законных прадстаўнікоў.",
+            "1.4. Для юрыдычных асоб дамова заключаецца па форме ТАА «Нашы інавацыі»."
+          ]
+        },
+        "acceptance": {
+          "title": "Прыём абсталявання",
+          "items": [
+            "1.5. Абсталяванне прымаецца ў сабраным выглядзе, пры наяўнасці — з АКБ і/або кабелем/блокам харчавання. Камплектнасць фіксуецца ў Заказ‑нарадзе. Па мадэлях са скончаным тэрмінам службы рашэнне прымаецца індывідуальна.",
+            "1.6. Пры няспраўнасцях, звязаных з аксэсуарамі, яны перадаюцца разам з прыладай. Прынятая прылада першапачаткова лічыцца непрацоўнай.",
+            "1.7. Пры прыёме выконваецца агляд і, пры неабходнасці, разбор лёгказдымных элементаў з фіксацыяй вынікаў.",
+            "1.8. Пры наяўнасці пароля/прывязкі да ўліковага запісу Заказчык паведамляе код або адвязвае прыладу. За адсутнасці доступу прылада не прымаецца. Магчыма платнае аднаўленне ПЗ пры тэхнічнай магчымасці."
+          ]
+        },
+        "note": "Спецыяльныя катэгорыі персанальных дадзеных, у тым ліку медыцынскія, у межах гэтых работ не апрацоўваюцца."
+      },
+      "section2": {
+        "title": "II. Тэрміны выканання работ",
+        "items": [
+          "2.1. Тэрмін адлічваецца ад даты афармлення Заказ‑нараду і заканчваецца днём выдачы прылады (ліст 2).",
+          "2.2. Работы выконваюцца ў тэрмін, указаны ў Заказ‑нарадзе.",
+          "2.3. Час узгаднення змяненняў кошту або аб'ёму ў тэрмін не ўключаецца.",
+          "2.4. Пры адмове Заказчыка ад змяненняў работы спыняюцца, прылада вяртаецца ў першапачатковым стане, калі гэта магчыма.",
+          "2.5. Патрабаванні аб пратэрміноўцы атрымання не прад'яўляюцца, калі работы завершаны ў тэрмін, а прылада не забрана на працягу 7 дзён."
+        ]
+      },
+      "section3": {
+        "title": "III. Парадак разлікаў",
+        "items": [
+          "3.1. Аплата — паводле прайс‑ліста на дату афармлення Заказ‑нараду.",
+          "3.2. Аплата ажыццяўляецца да выдачы прылады. Магчымы аванс/частковая аплата па ўзгадненні.",
+          "3.3. Выдача да поўнай аплаты не праводзіцца, калі іншае не пазначана ў дакументах.",
+          "3.4. Матэрыялы і запасныя часткі аплачваюцца цалкам пры афармленні або пры выдачы — па дамоўленасці.",
+          "3.5. «Разбор/збор, папярэдні агляд» аплачваецца асобна і залічваецца ў кошт рамонту пры яго працягненні."
+        ]
+      },
+      "section4": {
+        "title": "IV. Гарантыя і адказнасць",
+        "items": [
+          "4.1. Гарантыя на работы — у межах тэрміну ў дакументах, але не менш за 14 дзён з моманту выдачы.",
+          "4.2. Не распаўсюджваецца пры парушэнні правілаў эксплуатацыі, механічных/тэрмічных пашкоджаннях, уздзеянні вільгаці або пылу, умяшанні трэціх асоб, змяненні ПЗ пасля работ і інш.",
+          "4.3. Пазагарантыйныя работы выконваюцца толькі пры пісьмовай згодзе Заказчыка.",
+          "4.4. Выканаўца не адказвае за незаяўленыя няспраўнасці, перыядычныя дэфекты, захаванасць даных, дзеянні вытворцы, ускосныя страты.",
+          "4.5. Заключэнні аб тэхнічным стане носяць інфармацыйны характар і не з'яўляюцца экспертызай для ацэнкі маёмасці."
+        ]
+      },
+      "section5": {
+        "title": "V. Выдача і захоўванне прылад",
+        "items": [
+          "5.1. Выдача — пры прад'яўленні Заказ‑нараду.",
+          "5.2. Пры страце дакумента выдача магчымая па заяве і дакуменце, што пацвярджае асобу.",
+          "5.3. Выканаўца не нясе адказнасці за выдачу іншай асобе пры прад'яўленні Заказ‑нараду, калі паведамлення аб страце не было.",
+          "5.4. Незапатрабаваныя 30 дзён прылады захоўваюцца, утылізуюцца або рэалізуюцца паводле заканадаўства."
+        ]
+      },
+      "contacts": {
+        "title": "Кантакты",
+        "tableData": [
+          {
+            "label": "Выканаўца",
+            "value": "ТАА «Нашы інавацыі»"
+          },
+          {
+            "label": "Адрас",
+            "value": "220013, Рэспубліка Беларусь, г. Мінск, вул. Усходняя, 129, оф. 2‑21"
+          },
+          {
+            "label": "УНП",
+            "value": "193013342"
+          },
+          {
+            "label": "E‑mail",
+            "value": "sovers375@gmail.com",
+            "isLink": true
+          },
+          {
+            "label": "Тэлефон",
+            "value": "+375 25 784 97 31",
+            "isLink": true
+          }
+        ]
+      }
+    },
+    "footerNote": "Гэтыя Правілы не абмяжоўваюць правы спажыўцоў. Пры супярэчнасцях дзейнічаюць нормы заканадаўства РБ.",
+    "formNote": "Заўвага: формулы «ліст 1» і «ліст 2» азначаюць асобнікі заказ‑нараду пры прыёме і выдачы. Формы можна спампаваць на сайце або атрымаць у адміністратара."
+  },
+  "en": {
+    "title": "Rules for Providing Services and Repair of Terminal Subscriber Devices at LLC «Nashi Innovatsii»",
+    "lastUpdate": "Last updated:",
+    "updateDate": "30 September 2025",
+    "tocTitle": "Contents",
+    "tocItems": [
+      "I. General provisions",
+      "II. Timeframes",
+      "III. Payments",
+      "IV. Warranty and liability",
+      "V. Handover and storage",
+      "Contacts"
+    ],
+    "sections": {
+      "section1": {
+        "title": "I. General provisions",
+        "content": [
+          "1.1. These Rules are developed pursuant to the Law of the Republic of Belarus «On Consumer Protection», Resolution of the Council of Ministers of 14.12.2004 No. 1590 «On Approval of the Rules for Consumer Services», the Civil Code and other legal acts."
+        ],
+        "terms": {
+          "title": "Definitions",
+          "items": [
+            {
+              "term": "Equipment",
+              "definition": "— smartphones, tablets, laptops, desktop computers and other electronic devices accepted for repair or maintenance."
+            },
+            {
+              "term": "Repair",
+              "definition": "— a set of operations to restore operability of the Equipment."
+            },
+            {
+              "term": "Services",
+              "definition": "— service operations not aimed at fixing faults: software update/recovery, inspection, issuing a condition report and similar operations."
+            },
+            {
+              "term": "Work order",
+              "definition": "— a written document confirming the order for works (repair and/or services)."
+            },
+            {
+              "term": "Customer",
+              "definition": "— an individual or legal entity that concluded a contract with the Contractor."
+            },
+            {
+              "term": "Contractor",
+              "definition": "— LLC «Nashi Innovatsii», address: 220013, Republic of Belarus, Minsk, 129 Vostochnaya St., office 2‑21."
+            }
+          ]
+        },
+        "contract": {
+          "title": "Contract formation",
+          "items": [
+            "1.2. The contract is concluded in writing by issuing a work order (sheet 1) and is a public contract. These Rules form an integral part of the contract.",
+            "1.3. For individuals the contract is deemed concluded upon (a) signing the work order by the Customer and the Contractor's representative, or (b) the Customer's confirmation of the works by phone or messaging followed by written issuance of the work order. Persons aged 14–18 require written consent of legal representatives.",
+            "1.4. For legal entities the contract is concluded using the form approved by LLC «Nashi Innovatsii»."
+          ]
+        },
+        "acceptance": {
+          "title": "Acceptance of equipment",
+          "items": [
+            "1.5. Equipment is accepted assembled, and where available with battery and/or power supply. Completeness is recorded in the work order. For obsolete models the decision to accept is made individually.",
+            "1.6. If a fault relates to an accessory, the Equipment is provided together with that accessory. Accepted Equipment is initially considered inoperable.",
+            "1.7. Upon acceptance a visual inspection is performed and, if required, disassembly of easily removable parts with results recorded.",
+            "1.8. If the Equipment is protected by a passcode or linked to an account, the Customer must provide the code or unlink the device. Without access the Equipment is not accepted. Paid software recovery may be offered if technically feasible."
+          ]
+        },
+        "note": "Special categories of personal data, including medical data, are not processed within these services."
+      },
+      "section2": {
+        "title": "II. Timeframes",
+        "items": [
+          "2.1. The period starts on the date of issuing the work order (sheet 1) and ends on the date the Equipment is handed over to the Customer with the work order (sheet 2).",
+          "2.2. The Contractor performs the works within the timeframe specified in the work order.",
+          "2.3. Time spent on agreeing changes to price or scope is not included in the timeframe.",
+          "2.4. If the Customer refuses to agree the changes, the Contractor stops the works and returns the Equipment in its initial condition where technically possible. The contract is terminated upon return.",
+          "2.5. No claims for delay in pickup are accepted if the works were completed on time and the Customer failed to collect the Equipment within 7 calendar days."
+        ]
+      },
+      "section3": {
+        "title": "III. Payments",
+        "items": [
+          "3.1. Prices are according to the price list in effect on the date of the work order.",
+          "3.2. Payment is due before handover of the Equipment. Prepayment or advance may be agreed.",
+          "3.3. Handover before full payment is not performed unless otherwise specified in the work order.",
+          "3.4. Materials and spare parts are paid in full upon ordering or upon handover as agreed.",
+          "3.5. «Disassembly/assembly, preliminary inspection» is paid separately and credited towards the repair cost if continued."
+        ]
+      },
+      "section4": {
+        "title": "IV. Warranty and liability",
+        "items": [
+          "4.1. Warranty for the works is as specified in the work order (sheet 2) but at least 14 calendar days from handover.",
+          "4.2. The warranty does not apply where defects are caused by misuse, mechanical/thermal damage, moisture or dust ingress, environmental impact, third‑party or Customer interference including software changes after the works, or non‑compliance of the Equipment with RB requirements.",
+          "4.3. Non‑warranty works (e.g., software update, housing replacement) are performed only with the Customer's written consent recorded in the work order.",
+          "4.4. The Contractor is not liable for faults not reported at acceptance, intermittent issues not reproduced during diagnostics, data loss, actions of the manufacturer, loss of profit or indirect damage.",
+          "4.5. Technical condition reports are informational and are not an expert valuation; they are provided per the price list."
+        ]
+      },
+      "section5": {
+        "title": "V. Handover and storage",
+        "items": [
+          "5.1. Handover is made upon presentation of the work order (sheet 1).",
+          "5.2. If the work order is lost, handover is possible to the Customer named in the document upon a written statement and an identity document (copy taken).",
+          "5.3. The Contractor is not liable for handover to another person presenting the work order if no prior loss notice was received.",
+          "5.4. Equipment unclaimed for 30 calendar days after completion may be stored, disposed of or sold as provided by Belarusian law."
+        ]
+      },
+      "contacts": {
+        "title": "Contacts",
+        "tableData": [
+          {
+            "label": "Contractor",
+            "value": "LLC «Nashi Innovatsii»"
+          },
+          {
+            "label": "Address",
+            "value": "220013, Republic of Belarus, Minsk, 129 Vostochnaya St., office 2‑21"
+          },
+          {
+            "label": "UNP (Tax ID)",
+            "value": "193013342"
+          },
+          {
+            "label": "E‑mail",
+            "value": "sovers375@gmail.com",
+            "isLink": true
+          },
+          {
+            "label": "Phone",
+            "value": "+375 25 784 97 31",
+            "isLink": true
+          }
+        ]
+      }
+    },
+    "footerNote": "These Rules do not limit consumer rights provided by Belarusian law. In case of conflict, legal norms prevail.",
+    "formNote": "Note: forms «sheet 1» and «sheet 2» refer to copies of the work order at acceptance and handover. Forms can be downloaded from the website or obtained from the administrator."
+  }
+}
