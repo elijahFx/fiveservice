@@ -6,22 +6,23 @@ import Link from "next/link";
 import { Calendar, Clock, User, ArrowLeft, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Article } from "@/lib/api/articles";
 import { formatDateToDDMMYYYY } from "@/lib/utils/dates";
 import ErrorBoundary from "@/components/articles/ErrorBoundary";
 import { getArticleBySlug } from "@/lib/api/articles";
 
 interface ArticlePageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   try {
-    let article = await getArticleBySlug(params.slug);
+    // Await the params object first
+    const { slug } = await params;
+    let article = await getArticleBySlug(slug);
 
     console.log(article);
 
@@ -53,7 +54,9 @@ export async function generateMetadata({
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
   try {
-    let article = await getArticleBySlug(params.slug);
+    // Also await params in the page component for consistency
+    const { slug } = await params;
+    let article = await getArticleBySlug(slug);
 
     if (!article) {
       notFound();

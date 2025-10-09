@@ -14,6 +14,7 @@ const ServicesList = () => {
       title: 'Диагностика',
       shortTitle: 'Диагностика',
       icon: Search,
+      link: '/services/diagnostics',
       services: [
         { name: 'Комплексная диагностика оборудования', price: '55,00 руб.' },
         { name: 'Срочная диагностика оборудования', price: '110,00 руб.' }
@@ -24,6 +25,7 @@ const ServicesList = () => {
       title: 'Чистка',
       shortTitle: 'Чистка',
       icon: Sparkles,
+      link: '/services/cleaning',
       services: [
         {
           name: 'Чистка ноутбуков',
@@ -50,6 +52,7 @@ const ServicesList = () => {
       title: 'Ремонт компонентов',
       shortTitle: 'Ремонт компонентов',
       icon: Wrench,
+      link: '/services/component-repair',
       services: [
         {
           name: 'Ремонт разъемов',
@@ -93,6 +96,7 @@ const ServicesList = () => {
       title: 'Замена компонентов',
       shortTitle: 'Замена компонентов',
       icon: Package,
+      link: '/services/component-replacement',
       services: [
         {
           name: 'Замена комплектующих',
@@ -135,6 +139,7 @@ const ServicesList = () => {
       title: 'Программные услуги',
       shortTitle: 'Программные услуги',
       icon: Code,
+      link: '/services/software',
       services: [
         {
           name: 'Программное обеспечение',
@@ -183,19 +188,15 @@ const ServicesList = () => {
               Воспользуйтесь калькулятором — получите предварительную стоимость, сроки и варианты по запчастям. Без звонков и ожидания.
             </p>
             <Link href="/calculator">
-            
-            <button
-             
-              className="inline-flex items-center px-8 py-4 bg-white text-navy-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
-            >
-              Рассчитать стоимость
-            </button>
+              <button className="inline-flex items-center px-8 py-4 bg-white text-navy-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg">
+                Рассчитать стоимость
+              </button>
             </Link>
           </div>
         </div>
 
         {/* Navigation Tags */}
-        <div className="mb-16">
+          <div className="mb-16">
           <div className="text-center mb-8">
             <h3 className="text-xl font-semibold text-gray-900 mb-4">Быстрый поиск</h3>
             <div className="flex flex-wrap justify-center gap-3">
@@ -212,14 +213,22 @@ const ServicesList = () => {
             </div>
           </div>
         </div>
+
         <div className="space-y-16">
           {serviceCategories.map((category, index) => (
             <div key={index} id={category.id}>
-              <div className="flex items-center mb-8">
-                <div className="flex items-center justify-center w-16 h-16 bg-navy-600 rounded-xl mr-4">
-                  <category.icon className="w-8 h-8 text-white" />
+              <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center">
+                  <div className="flex items-center justify-center w-16 h-16 bg-navy-600 rounded-xl mr-4">
+                    <category.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-900">{category.title}</h2>
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900">{category.title}</h2>
+                <Link href={category.link}>
+                  <Button variant="outline" className="border-navy-600 text-navy-600 hover:bg-navy-600 hover:text-white">
+                    Подробнее
+                  </Button>
+                </Link>
               </div>
 
               {category.id === 'diagnostics' && (
@@ -276,6 +285,14 @@ const ServicesList = () => {
                           )}
                         </div>
                       )}
+                      
+                      <div className="mt-4 pt-4 border-t border-gray-100">
+                        <Link href={category.link}>
+                          <Button variant="ghost" className="w-full text-navy-600 hover:bg-navy-50 hover:text-navy-700">
+                            Узнать подробности
+                          </Button>
+                        </Link>
+                      </div>
                     </Card>
                   ))}
                 </div>
@@ -297,11 +314,10 @@ const ServicesList = () => {
               asChild
               className="bg-white text-navy-600 hover:bg-gray-100 px-8 py-3 font-semibold shadow-lg"
             >
-              <a href="/buyback">Узнать подробнее</a>
+              <Link href="/buyback">Узнать подробнее</Link>
             </Button>
           </div>
         </div>
-
       </div>
     </section>
   );

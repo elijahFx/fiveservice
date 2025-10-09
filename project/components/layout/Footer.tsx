@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import { ClickableAddress } from '@/components/ui/clickable-address';
-import { Phone, Mail, MapPin, Clock } from 'lucide-react';
+import Link from "next/link";
+import { ClickableAddress } from "@/components/ui/clickable-address";
+import { Phone, Mail, MapPin, Clock } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -22,6 +22,18 @@ const Footer = () => {
               <p>УНП 193013342</p>
               <p>ООО {`"Наши инновации"`}</p>
             </div>
+             <Link
+                href="/privacy-policy"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors mt-4"
+              >
+                Политика обработки персональных данных
+              </Link>
+              <Link
+                href="/service-rules"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors mt-2"
+              >
+                Правила оказания услуг и ремонта <br /> ООО «Наши инновации»
+              </Link>
           </div>
 
           {/* Contact Info */}
@@ -30,42 +42,60 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-2">
                 <MapPin className="w-4 h-4 text-navy-400" />
-                <ClickableAddress 
+                <ClickableAddress
                   address="г. Минск, ул. Восточная, 129"
                   className="text-sm"
                   showIcon={false}
                 />
               </div>
-              <a href="" className="text-sm text-gray-400 hover:text-blue-200 transition-colors ml-6">
+              <a
+                href=""
+                className="text-sm text-gray-400 hover:text-blue-200 transition-colors ml-6"
+              >
                 Как к нам пройти
               </a>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 text-navy-400" />
-                <a href="tel:+375297349077" className="text-sm hover:text-navy-400">
+                <a
+                  href="tel:+375297349077"
+                  className="text-sm hover:text-navy-400"
+                >
                   +375 29 734 90 77
                 </a>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 text-navy-400" />
-                <a href="tel:+375447534796" className="text-sm hover:text-navy-400">
+                <a
+                  href="tel:+375447534796"
+                  className="text-sm hover:text-navy-400"
+                >
                   +375 44 753 47 96
                 </a>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 text-navy-400" />
-                <a href="tel:+375257849731" className="text-sm hover:text-navy-400">
+                <a
+                  href="tel:+375257849731"
+                  className="text-sm hover:text-navy-400"
+                >
                   +375 25 784 97 31
                 </a>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4 text-navy-400" />
-                <a href="tel:+375172424111" className="text-sm hover:text-navy-400">
+                <a
+                  href="tel:+375172424111"
+                  className="text-sm hover:text-navy-400"
+                >
                   +375 17 24 24 111
                 </a>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-navy-400" />
-                <a href="mailto:friends.service129@gmail.com" className="text-sm hover:text-navy-400">
+                <a
+                  href="mailto:friends.service129@gmail.com"
+                  className="text-sm hover:text-navy-400"
+                >
                   friends.service129@gmail.com
                 </a>
               </div>
@@ -81,29 +111,41 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4">Быстрые ссылки</h3>
             <div className="space-y-2">
-              <Link href="/about" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/about"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 О нас
               </Link>
-              <Link href="/services" className="block text-sm text-gray-400 hover:text-white">
+              <Link
+                href="/services"
+                className="block text-sm text-gray-400 hover:text-white"
+              >
                 Все услуги
               </Link>
-              <Link href="/articles" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/articles"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 Полезные статьи
               </Link>
-              <Link href="/corporate" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/corporate"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 Для юр. лиц
               </Link>
-              <Link href="/questions" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/questions"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 Вопросы
               </Link>
-              <Link href="/reviews" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/reviews"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 Отзывы клиентов
-              </Link>
-                <Link href="/privacy-policy" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
-                Политика обработки персональных данных
-              </Link>
-               <Link href="/service-rules" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
-                Правила оказания услуг и ремонта <br /> ООО «Наши инновации»
               </Link>
             </div>
           </div>
@@ -112,19 +154,34 @@ const Footer = () => {
           <div>
             <h3 className="font-semibold text-lg mb-4">Услуги</h3>
             <div className="space-y-2">
-              <Link href="/services#diagnostics" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/services#diagnostics"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 Диагностика
               </Link>
-              <Link href="/services#cleaning" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/services#cleaning"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 Чистка
               </Link>
-              <Link href="/services#component-repair" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/services#component-repair"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 Ремонт компонентов
               </Link>
-              <Link href="/services#component-replacement" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/services#component-replacement"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 Замена компонентов
               </Link>
-              <Link href="/services#software-services" className="block text-sm text-gray-400 hover:text-blue-200 transition-colors">
+              <Link
+                href="/services#software-services"
+                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors"
+              >
                 Программные услуги
               </Link>
             </div>
@@ -136,12 +193,12 @@ const Footer = () => {
             © 2025 FiveService. Все права защищены.
           </p>
 
-           <div className="pt-4">
+          <div className="pt-4">
             <p className="text-xs text-gray-500">
-             Сайт разработан командой{' '}
-              <a 
-                href="https://флоу.бел" 
-                target="_blank" 
+              Сайт разработан командой{" "}
+              <a
+                href="https://флоу.бел"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-400 hover:text-navy-400 transition-colors underline"
               >
@@ -157,13 +214,11 @@ const Footer = () => {
 
 export default Footer;
 
-
-
-
-
-{/* Добавленная надпись о разработчике 
+{
+  /* Добавленная надпись о разработчике 
          
 
 
 
-*/}
+*/
+}

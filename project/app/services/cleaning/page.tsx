@@ -1,4 +1,4 @@
-import CleaningPage from "@/components/Cleaning";
+import CleaningPage from "@/components/maxesComponents/Cleaning";
 
 export default function CleaningPageOut() {
   return <CleaningPage />;

@@ -3,21 +3,34 @@
 import { 
   CheckCircle, 
   AlertTriangle, 
-  Clock, 
   Shield, 
   Thermometer,
   Volume2,
-  Cpu,
   Zap,
-  Star,
-  Users,
   Heart
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import CallbackModal from '../modal/CallbackModal';
+import { useState } from 'react';
 
 const CleaningPage = () => {
+
+   const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
+
+  const handlePhoneClick = () => {
+    window.location.href = 'tel:+375297349077';
+  };
+
+  const handleOpenCallbackModal = () => {
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleCloseCallbackModal = () => {
+    setIsCallbackModalOpen(false);
+  };
+
   const benefits = [
     {
       icon: Thermometer,
@@ -145,6 +158,8 @@ const CleaningPage = () => {
     'Качественные расходные материалы'
   ];
 
+
+
   return (
     <div className="min-h-screen bg-white mt-20">
       {/* Hero Section */}
@@ -163,10 +178,10 @@ const CleaningPage = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 px-8 py-4 text-lg">
+              <Button onClick={handleOpenCallbackModal} size="lg" className="bg-blue-600 hover:bg-blue-700 px-8 py-4 text-lg">
                 Записаться на чистку
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-navy-900 px-8 py-4 text-lg">
+              <Button onClick={handlePhoneClick} size="lg" variant="outline" className="border-white text-navy-900 hover:bg-white hover:text-navy-900 px-8 py-4 text-lg">
                 Бесплатная консультация
               </Button>
             </div>
@@ -506,51 +521,16 @@ const CleaningPage = () => {
             Запишитесь на профессиональную чистку прямо сейчас!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg">
+            <Button onClick={handleOpenCallbackModal} size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg">
               Записаться на чистку
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg">
+            <Button onClick={handlePhoneClick} size="lg" variant="outline" className="border-white text-blue-600 hover:bg-white hover:text-blue-600 px-8 py-4 text-lg">
               Получить консультацию
             </Button>
           </div>
         </div>
       </section>
-
-      {/* Schema.org Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Service",
-            "name": "Профессиональная чистка ноутбуков в Минске",
-            "description": "Продлите жизнь своей технике! Регулярное обслуживание предотвращает перегрев и сохраняет производительность",
-            "provider": {
-              "@type": "LocalBusiness",
-              "name": "Сервисный центр",
-              "address": {
-                "@type": "PostalAddress",
-                "addressLocality": "Минск"
-              }
-            },
-            "areaServed": "Минск",
-            "hasOfferCatalog": {
-              "@type": "OfferCatalog",
-              "name": "Услуги чистки ноутбуков",
-              "itemListElement": pricing.map((item, index) => ({
-                "@type": "Offer",
-                "itemOffered": {
-                  "@type": "Service",
-                  "name": `Чистка ноутбука "${item.name}"`,
-                  "description": item.description
-                },
-                "price": item.price.replace(' руб.', ''),
-                "priceCurrency": "BYN"
-              }))
-            }
-          })
-        }}
-      />
+      <CallbackModal isOpen={isCallbackModalOpen} onClose={handleCloseCallbackModal} />
     </div>
   );
 };
