@@ -9,6 +9,7 @@ import QuestionOverview from "./components/Questions/QuestionOverview"
 import ArticleOverview from "./components/Articles/ArticleOverview"
 import ClaimsOverview from "./components/Claims/ClaimsOverview"
 import SingleClaim from "./components/Claims/SingleClaim";
+import AdminPanel from "./components/AdminPanel/AdminPanel";
 import {
   BrowserRouter,
   Routes,
@@ -18,6 +19,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { logout, setCredentials } from "./slices/authSlice";
+
 
 
 function AppWrapper() {
@@ -68,6 +70,7 @@ function AppWrapper() {
             <Route path="/articles" element={isAuthenticated ? <ArticleOverview type="article"/> : <Login />} />
             <Route path="/loader" element={isAuthenticated ? <Loader /> : <Login />} />
             <Route path="/account" element={isAuthenticated ? <Account /> : <Login />} />
+             <Route path="/code" element={isAuthenticated ? <AdminPanel /> : <Login />} />
 
             {/* 404 */}
             <Route path="/*" element={<NotFound />} />

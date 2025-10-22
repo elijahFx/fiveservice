@@ -5,7 +5,9 @@ import { claimsApi } from "./apis/claimsApi";
 import { articlesApi } from "./apis/articlesApi";
 import { filesApi } from "./apis/filesApi";
 import { questionsApi } from "./apis/questionsApi";
+import { adminApi } from "./apis/adminsApi";
 import authReducer from "./slices/authSlice";
+
 
 
 export const store = configureStore({
@@ -15,6 +17,7 @@ export const store = configureStore({
     [articlesApi.reducerPath]: articlesApi.reducer,
     [filesApi.reducerPath]: filesApi.reducer,
     [questionsApi.reducerPath]: questionsApi.reducer,
+    [adminApi.reducerPath]: adminApi.reducer,
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -24,6 +27,7 @@ export const store = configureStore({
       .concat(articlesApi.middleware)
       .concat(filesApi.middleware)
       .concat(questionsApi.middleware)
+      .concat(adminApi.middleware)
 });
 
 setupListeners(store.dispatch);

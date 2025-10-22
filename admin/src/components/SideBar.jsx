@@ -5,7 +5,8 @@ import {
   ChevronRight,
   ChevronLeft,
   FileQuestion,
-  File
+  File,
+  Code
 } from "lucide-react";
 import { Link } from "react-router";
 import { useSelector } from "react-redux";
@@ -36,6 +37,11 @@ const SideBar = () => {
       label: "Обращения юр. лиц",
       icon: <File color="#0C1B60" />,
       link: "/files",
+    },
+     {
+      label: "Код",
+      icon: <Code color="#0C1B60" />,
+      link: "/code",
     },
   ];
 

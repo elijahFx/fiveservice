@@ -15,12 +15,14 @@ const articlesRoutes = require("./routes/articles")
 const uploads = require("./routes/upload")
 const questions = require("./routes/questions")
 const claims = require("./routes/claims")
+const adminRoutes = require("./routes/admin")
 
 app.use("/api/auth", userRoutes)
 app.use("/upload", uploads)
 app.use("/api/articles", articlesRoutes)
 app.use("/api/questions", questions)
 app.use("/api/claims", claims)
+app.use("/api/admin", adminRoutes)
 app.use("/api/files", express.static(path.join(__dirname, "../files")));
 
 
