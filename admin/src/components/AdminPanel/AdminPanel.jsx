@@ -3,6 +3,7 @@ import { useGetFilesQuery, useHealthCheckQuery } from '../../apis/adminsApi';
 import FileExplorer from './FileExplorer';
 import FileEditor from './FileEditor';
 import BuildControls from './BuildControls';
+import RedirectManager from './RedirectManager';
 
 const AdminPanel = () => {
   const [currentFolder, setCurrentFolder] = useState('/app');
@@ -59,7 +60,7 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="h-screen bg-gray-900 text-white flex flex-col mt-[11vh] w-screen">
+    <div className="h-fit bg-gray-900 text-white flex flex-col mt-[11vh] w-screen">
       {/* Header */}
       <header className="bg-gray-800 border-b border-gray-700 px-6 py-4">
         <div className="flex justify-between items-center">
@@ -135,6 +136,21 @@ const AdminPanel = () => {
             >
               ⚙️ Сборка
             </button>
+
+            <button
+  className={`w-full text-left px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+    activeTab === 'redirects' 
+      ? 'bg-gray-700 text-white border-l-2 border-blue-500' 
+      : 'text-gray-400 hover:bg-gray-700 hover:text-white'
+  }`}
+  onClick={() => setActiveTab('redirects')}
+>
+  🔄 Редиректы
+</button>
+
+{activeTab === 'redirects' && (
+  <RedirectManager />
+)}
           </nav>
 
           {/* Breadcrumbs */}

@@ -410,7 +410,7 @@ export default function LaptopDiagnostics() {
                 <h3 className="text-lg font-semibold text-navy-800 mb-2">
                   Вероятная причина:
                 </h3>
-                <p className="text-navy-700 text-lg mb-4">
+                <p className="text-red-700 text-lg mb-4 font-bold">
                   {currentResult.title}
                 </p>
                 <p className="text-navy-600 mb-6">

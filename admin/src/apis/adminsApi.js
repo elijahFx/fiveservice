@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { URL } from "../../config";
 
 const BASE_URL = `http://localhost:5000/api/admin`;
 
@@ -140,6 +141,44 @@ export const adminApi = createApi({
     healthCheck: builder.query({
       query: () => "/health",
     }),
+
+     getHtaccess: builder.query({
+      query: () => '/htaccess',
+      providesTags: ["Htaccess"],
+    }),
+
+    saveHtaccess: builder.mutation({
+      query: (content) => ({
+        url: '/htaccess/save',
+        method: 'POST',
+        body: { content },
+      }),
+      invalidatesTags: ["Htaccess"],
+    }),
+
+    // Redirects endpoints
+    getRedirects: builder.query({
+      query: () => '/redirects',
+      providesTags: ["Redirects"],
+    }),
+
+    addRedirect: builder.mutation({
+      query: ({ from, to, type = '301' }) => ({
+        url: '/redirects/add',
+        method: 'POST',
+        body: { from, to, type },
+      }),
+      invalidatesTags: ["Redirects", "Htaccess"],
+    }),
+
+    deleteRedirect: builder.mutation({
+      query: (index) => ({
+        url: '/redirects/delete',
+        method: 'POST',
+        body: { index },
+      }),
+      invalidatesTags: ["Redirects", "Htaccess"],
+    }),
   }),
 });
 
@@ -156,4 +195,9 @@ export const {
   useInstallPackageMutation,
   useUninstallPackageMutation,
   useHealthCheckQuery,
+  useGetHtaccessQuery,
+  useDeleteRedirectMutation,
+  useAddRedirectMutation,
+  useSaveHtaccessMutation,
+  useGetRedirectsQuery
 } = adminApi;

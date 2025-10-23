@@ -224,11 +224,6 @@ const ServicesList = () => {
                   </div>
                   <h2 className="text-3xl font-bold text-gray-900">{category.title}</h2>
                 </div>
-                <Link href={category.link}>
-                  <Button variant="outline" className="border-navy-600 text-navy-600 hover:bg-navy-600 hover:text-white">
-                    Подробнее
-                  </Button>
-                </Link>
               </div>
 
               {category.id === 'diagnostics' && (

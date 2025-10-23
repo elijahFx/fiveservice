@@ -16,6 +16,13 @@ interface CalculatorState {
   liquid: boolean;
 }
 
+interface ModalData {
+  name: string;
+  phone: string;
+  note: string;
+  agree: boolean;
+}
+
 const BASE_PRICES = {
   diag: 55,
   clean: 75,
@@ -77,7 +84,7 @@ const SYMPTOMS = [
 ];
 
 export default function PriceCalculator() {
-  const [state, setState] = useState<CalculatorState>({
+   const [state, setState] = useState<CalculatorState>({
     brand: "",
     model: "",
     dtype: "office",
@@ -96,6 +103,46 @@ export default function PriceCalculator() {
     "Укажите параметры выше. Пересчет происходит автоматически."
   );
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [modalData, setModalData] = useState<ModalData>({
+    name: '',
+    phone: '',
+    note: '',
+    agree: false
+  });
+
+
+  const prepareModalData = useCallback(() => {
+    const deviceInfo = [
+      state.brand && `Бренд: ${state.brand}`,
+      state.model && `Модель: ${state.model}`,
+      state.dtype && `Тип: ${state.dtype}`,
+      state.year && `Год: ${state.year}`,
+      state.age && `Возраст: ${state.age} лет`,
+      state.urg && `Срочность: ${state.urg === 'fast' ? 'Экспресс' : 'Обычная'}`,
+      state.symptom && `Проблема: ${SYMPTOMS.find(s => s.value === state.symptom)?.title || state.symptom}`,
+      state.liquid && 'Залитие жидкостью: Да',
+      price && `Ориентировочная стоимость: ${Math.round(price)} BYN`
+    ].filter(Boolean).join('\n');
+
+    return {
+      name: '',
+      phone: '',
+      note: `Данные из калькулятора:\n${deviceInfo}`,
+      agree: false
+    };
+  }, [state, price]);
+
+  // Обновляем данные модального окна при изменении состояния калькулятора
+  useEffect(() => {
+    if (isModalOpen) {
+      setModalData(prepareModalData());
+    }
+  }, [isModalOpen, prepareModalData]);
+
+  const handleOpenModal = () => {
+    setModalData(prepareModalData());
+    setIsModalOpen(true);
+  };
 
   const detectFamily = useCallback(
     (brand: string, model: string): string | null => {
@@ -628,7 +675,7 @@ export default function PriceCalculator() {
               Ремонт ноутбуков
             </a>
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={handleOpenModal} // Изменено здесь
               className="bg-gradient-to-r from-orange-500 to-amber-600 text-white py-3 px-4 rounded-lg font-semibold text-center hover:shadow-lg transition-all text-sm sm:text-base"
             >
               Оставить заявку
@@ -647,7 +694,7 @@ export default function PriceCalculator() {
             </div>
           </div>
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={handleOpenModal} // Изменено здесь
             className="bg-gradient-to-r from-orange-500 to-amber-600 text-white py-2.5 px-5 rounded-xl font-semibold hover:shadow-lg transition-all text-sm whitespace-nowrap"
           >
             Оставить заявку
@@ -655,13 +702,11 @@ export default function PriceCalculator() {
         </div>
       </div>
 
-      {/* Bottom padding for mobile sticky bar */}
-      <div className="h-20 sm:h-0"></div>
-
-      {/* Modal */}
+      {/* Модальное окно с передачей данных */}
       <CallbackModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        initialData={modalData}
       />
     </section>
   );

@@ -13,15 +13,15 @@ const Calculator = () => {
         </div>
 
         <div className="text-center">
-          <div className="bg-white rounded-2xl p-8 max-w-2xl mx-auto shadow-sm">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 max-w-2xl mx-auto shadow-sm">
             <p className="text-lg text-gray-700 mb-6">
               Узнайте в чём может быть проблема и примерную стоимость ремонта за
               1 минуту
             </p>
             <Link href="/diagnostics">
-              <Button className="bg-navy-600 hover:bg-navy-700 px-8 py-3 text-lg">
-                <ArrowRight className="w-5 h-5 mr-2" />
-                Пройти онлайн-диагностику
+              <Button className="bg-navy-600 hover:bg-navy-700 px-4 sm:px-6 md:px-8 py-3 text-lg w-full sm:w-auto whitespace-normal sm:whitespace-nowrap text-center">
+                <ArrowRight className="w-5 h-5 mr-2 flex-shrink-0" />
+                <span className="text-center">Пройти онлайн-диагностику</span>
               </Button>
             </Link>
           </div>

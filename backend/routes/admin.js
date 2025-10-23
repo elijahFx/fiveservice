@@ -14,9 +14,13 @@ const {
   installDependencies,
   installPackage,
   uninstallPackage,
-  healthCheck
+  healthCheck,
+  getHtaccess,
+  saveHtaccess,
+  addRedirect,
+  getRedirects,
+  deleteRedirect
 } = require('../controllers/adminControllers');
-const requireAuth = require("../requireAuth")
 
 // Маршруты для работы с файлами
 router.get('/files', getFiles);
@@ -34,6 +38,13 @@ router.get('/build/status', getBuildStatus);
 router.post('/dependencies/install', installDependencies);
 router.post('/dependencies/install-package', installPackage);
 router.post('/dependencies/uninstall-package', uninstallPackage);
+
+// Маршруты для .htaccess и редиректов
+router.get('/htaccess', getHtaccess);
+router.post('/htaccess/save', saveHtaccess);
+router.post('/redirects/add', addRedirect);
+router.get('/redirects', getRedirects);
+router.post('/redirects/delete', deleteRedirect);
 
 // Health check
 router.get('/health', healthCheck);

@@ -3,7 +3,10 @@ const path = require('path');
 const { exec } = require('child_process');
 
 // Укажите абсолютный путь к папке проекта
+// ДЛЯ ПРОДА ИСПОЛЬЗОВАТЬ ЭТУ СТРОЧКУ, НО ВМЕСТО testend.site правильный адрес сайта -
+//  const PROJECT_ROOT = "/var/www/vhosts/vh172.by3020.ihb.by/testend.site/project/project"; 
 const PROJECT_ROOT = path.join(__dirname, '..', '..', 'project');
+
 
 console.log(PROJECT_ROOT);
 
@@ -470,6 +473,392 @@ const healthCheck = async (req, res) => {
   }
 };
 
+// Получение содержимого .htaccess
+const getHtaccess = async (req, res) => {
+  try {
+    const htaccessPath = path.join(PROJECT_ROOT, '.htaccess');
+    
+    console.log('Reading .htaccess from:', htaccessPath);
+    
+    try {
+      await fs.access(htaccessPath);
+    } catch (error) {
+      // Если файл не существует, создаем с базовой структурой
+      const defaultContent = `RewriteEngine on
+
+# Правило для /admin (без слеша в конце)
+RewriteRule ^admin$ admin/index.html [L]
+
+# Правило для /admin/ (со слешем в конце)
+RewriteRule ^admin/$ admin/index.html [L]
+
+# Правило для статических файлов в папке admin (css, js, images и т.д.)
+RewriteCond %{REQUEST_URI} ^/admin/assets/ [OR]
+RewriteCond %{REQUEST_URI} ^/admin/static/ [OR]
+RewriteCond %{REQUEST_URI} ^/admin/.+\\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$
+RewriteRule ^admin/(.*)$ admin/$1 [L]
+
+# Правило для клиентской маршрутизации React - все остальные запросы в /admin/ на index.html
+RewriteCond %{REQUEST_URI} ^/admin/
+RewriteRule ^admin/ admin/index.html [L]
+
+# Существующие правила для .html файлов (для основного сайта)
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# === УПРАВЛЯЕМЫЕ РЕДИРЕКТЫ ===
+# Добавляйте редиректы ниже этой линии
+`;
+      await fs.writeFile(htaccessPath, defaultContent, 'utf8');
+    }
+
+    const content = await fs.readFile(htaccessPath, 'utf8');
+    
+    res.json({
+      success: true,
+      content
+    });
+  } catch (error) {
+    console.error('Ошибка при чтении .htaccess:', error);
+    res.status(500).json({
+      error: 'Ошибка сервера при чтении .htaccess'
+    });
+  }
+};
+
+const addRedirect = async (req, res) => {
+  try {
+    const { from, to, type = '301' } = req.body;
+
+    if (!from || !to) {
+      return res.status(400).json({
+        error: 'Укажите адреса from и to'
+      });
+    }
+
+    const htaccessPath = path.join(PROJECT_ROOT, '.htaccess');
+    
+    let currentContent = '';
+    try {
+      currentContent = await fs.readFile(htaccessPath, 'utf8');
+    } catch (error) {
+      return res.status(404).json({
+        error: 'Файл .htaccess не найден'
+      });
+    }
+
+    // Извлекаем только пути из URL (если переданы полные URL)
+    const fromPath = extractPathFromUrl(from).replace(/^\//, ''); // Убираем ведущий слеш
+    const toPath = extractPathFromUrl(to);
+    
+    // Проверяем, является ли редирект внешним (на другой домен)
+    const isExternalRedirect = isExternalUrl(to);
+    
+    let redirectRule;
+    if (isExternalRedirect) {
+      // Для внешних редиректов используем RewriteRule с R флагом
+      redirectRule = `RewriteRule ^${fromPath}$ ${to} [R=${type},L]`;
+    } else {
+      // Для внутренних редиректов используем RewriteRule без R флага
+      redirectRule = `RewriteRule ^${fromPath}$ ${toPath} [L]`;
+    }
+
+    const comment = `# Redirect: ${from} -> ${to} (${type})`;
+    
+    // Находим правильное место для вставки редиректов
+    const newContent = insertRedirectIntoHtaccess(currentContent, comment, redirectRule);
+    
+    await fs.writeFile(htaccessPath, newContent, 'utf8');
+    
+    res.json({
+      success: true,
+      message: 'Редирект успешно добавлен',
+      rule: redirectRule,
+      isExternal: isExternalRedirect
+    });
+  } catch (error) {
+    console.error('Ошибка при добавлении редиректа:', error);
+    res.status(500).json({
+      error: 'Ошибка сервера при добавлении редиректа'
+    });
+  }
+};
+
+// Получение всех редиректов из .htaccess (ИСПРАВЛЕННАЯ версия)
+const getRedirects = async (req, res) => {
+  try {
+    const htaccessPath = path.join(PROJECT_ROOT, '.htaccess');
+    
+    let currentContent = '';
+    try {
+      currentContent = await fs.readFile(htaccessPath, 'utf8');
+      console.log('Current .htaccess content:', currentContent);
+      
+    } catch (error) {
+      // Если файл не существует, возвращаем пустой массив
+      return res.json({
+        success: true,
+        redirects: []
+      });
+    }
+
+    // Парсим редиректы из содержимого
+    const redirects = parseRedirectsFromHtaccess(currentContent);
+    console.log('Parsed redirects:', redirects);
+    
+    res.json({
+      success: true,
+      redirects
+    });
+  } catch (error) {
+    console.error('Ошибка при получении редиректов:', error);
+    res.status(500).json({
+      error: 'Ошибка сервера при получении редиректов'
+    });
+  }
+};
+
+// Удаление редиректа (обновленная версия)
+const deleteRedirect = async (req, res) => {
+  try {
+    const { index } = req.body;
+
+    if (index === undefined) {
+      return res.status(400).json({
+        error: 'Укажите индекс редиректа для удаления'
+      });
+    }
+
+    const htaccessPath = path.join(PROJECT_ROOT, '.htaccess');
+    
+    let currentContent = '';
+    try {
+      currentContent = await fs.readFile(htaccessPath, 'utf8');
+    } catch (error) {
+      return res.status(404).json({
+        error: 'Файл .htaccess не найден'
+      });
+    }
+
+    // Парсим и удаляем редирект по индексу
+    const { content: newContent, removedRedirect } = removeRedirectFromHtaccess(currentContent, index);
+    
+    if (!removedRedirect) {
+      return res.status(404).json({
+        error: 'Редирект не найден'
+      });
+    }
+
+    await fs.writeFile(htaccessPath, newContent, 'utf8');
+    
+    res.json({
+      success: true,
+      message: 'Редирект успешно удален',
+      removedRedirect
+    });
+  } catch (error) {
+    console.error('Ошибка при удалении редиректа:', error);
+    res.status(500).json({
+      error: 'Ошибка сервера при удалении редиректа'
+    });
+  }
+};
+
+// ИСПРАВЛЕННАЯ функция парсинга редиректов
+const parseRedirectsFromHtaccess = (content) => {
+  const lines = content.split('\n');
+  const redirects = [];
+  let currentComment = '';
+  let redirectIndex = 0;
+
+  console.log('Parsing .htaccess for redirects...');
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    
+    if (line.startsWith('#') && line.includes('Redirect:')) {
+      // Это комментарий к редиректу
+      currentComment = line.replace(/^#\s*Redirect:\s*/, '');
+      console.log('Found redirect comment:', currentComment);
+    } else if (line.startsWith('RewriteRule') && (line.includes('[R=') || line.includes('[L]'))) {
+      // Это RewriteRule редирект
+      console.log('Found RewriteRule:', line);
+      
+      // Парсим RewriteRule
+      const match = line.match(/RewriteRule\s+\^?(.*?)\$?\s+(.*?)\s+\[(.*?)\]/);
+      if (match) {
+        const [, from, to, flags] = match;
+        
+        // Определяем тип редиректа из флагов
+        let type = '301';
+        if (flags.includes('R=302')) type = '302';
+        else if (flags.includes('R=303')) type = '303';
+        else if (flags.includes('R=307')) type = '307';
+        else if (flags.includes('R=')) {
+          const rMatch = flags.match(/R=(\d+)/);
+          if (rMatch) type = rMatch[1];
+        }
+        
+        const isExternal = flags.includes('R=');
+        
+        redirects.push({
+          index: redirectIndex++,
+          type: type,
+          from: '/' + from.replace(/\\/g, ''), // Добавляем слеш для отображения
+          to: to,
+          comment: currentComment,
+          lineNumber: i + 1,
+          rawLine: line,
+          isExternal: isExternal
+        });
+        
+        console.log('Added redirect:', {
+          from: '/' + from,
+          to: to,
+          type: type,
+          isExternal: isExternal
+        });
+      }
+      currentComment = '';
+    } else if (line.startsWith('Redirect') && !line.startsWith('RewriteRule')) {
+      // Старый формат Redirect (для обратной совместимости)
+      console.log('Found old Redirect format:', line);
+      const parts = line.split(/\s+/);
+      if (parts.length >= 3) {
+        redirects.push({
+          index: redirectIndex++,
+          type: parts[1] || '301',
+          from: parts[2],
+          to: parts.slice(3).join(' '),
+          comment: currentComment,
+          lineNumber: i + 1,
+          rawLine: line,
+          isExternal: true
+        });
+      }
+      currentComment = '';
+    } else if (!line.startsWith('#') || line.includes('===')) {
+      currentComment = '';
+    }
+  }
+
+  console.log(`Total redirects found: ${redirects.length}`);
+  return redirects;
+};
+
+const removeRedirectFromHtaccess = (content, index) => {
+  const lines = content.split('\n');
+  const redirects = parseRedirectsFromHtaccess(content);
+  
+  if (index < 0 || index >= redirects.length) {
+    return { content, removedRedirect: null };
+  }
+
+  const redirectToRemove = redirects[index];
+  const newLines = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const shouldSkip = 
+      // Пропускаем строку с редиректом
+      (i + 1 === redirectToRemove.lineNumber) ||
+      // Пропускаем комментарий к редиректу (предыдущая строка)
+      (i > 0 && lines[i-1] && lines[i-1].includes(`Redirect: ${redirectToRemove.from}`));
+    
+    if (!shouldSkip) {
+      newLines.push(lines[i]);
+    }
+  }
+
+  return {
+    content: newLines.join('\n'),
+    removedRedirect: redirectToRemove
+  };
+};
+
+// Функция для прямого редактирования .htaccess
+const saveHtaccess = async (req, res) => {
+  try {
+    const { content } = req.body;
+
+    if (content === undefined) {
+      return res.status(400).json({
+        error: 'Укажите содержимое файла'
+      });
+    }
+
+    const htaccessPath = path.join(PROJECT_ROOT, '.htaccess');
+
+    console.log('Saving .htaccess to:', htaccessPath);
+
+    await fs.writeFile(htaccessPath, content, 'utf8');
+    
+    res.json({
+      success: true,
+      message: '.htaccess успешно сохранен'
+    });
+  } catch (error) {
+    console.error('Ошибка при сохранении .htaccess:', error);
+    res.status(500).json({
+      error: 'Ошибка сервера при сохранении .htaccess'
+    });
+  }
+};
+
+const extractPathFromUrl = (url) => {
+  // Если это уже путь (начинается с /), возвращаем как есть
+  if (url.startsWith('/')) {
+    return url;
+  }
+  
+  // Если это полный URL, извлекаем путь
+  try {
+    const urlObj = new URL(url);
+    return urlObj.pathname;
+  } catch (error) {
+    // Если не валидный URL, возвращаем как есть
+    return url;
+  }
+};
+
+const isExternalUrl = (url) => {
+  // Проверяем, содержит ли URL протокол (http://, https://)
+  return url.includes('://');
+};
+
+const insertRedirectIntoHtaccess = (content, comment, redirectRule) => {
+  const lines = content.split('\n');
+  
+  // Ищем место после маркера управляемых редиректов
+  let managedRedirectsIndex = -1;
+  
+  for (let i = 0; i < lines.length; i++) {
+    if (lines[i].includes('=== УПРАВЛЯЕМЫЕ РЕДИРЕКТЫ ===')) {
+      managedRedirectsIndex = i;
+      break;
+    }
+  }
+  
+  let insertPosition;
+  if (managedRedirectsIndex !== -1) {
+    // Находим первую пустую строку после маркера для вставки
+    insertPosition = managedRedirectsIndex + 1;
+    while (insertPosition < lines.length && lines[insertPosition].trim() !== '') {
+      insertPosition++;
+    }
+  } else {
+    // Если маркер не найден, добавляем в конец
+    insertPosition = lines.length;
+  }
+  
+  // Вставляем новый редирект
+  lines.splice(insertPosition, 0, '');
+  lines.splice(insertPosition, 0, redirectRule);
+  lines.splice(insertPosition, 0, comment);
+  
+  return lines.join('\n');
+};
+
 module.exports = {
   getFiles,
   getFileContent,
@@ -482,5 +871,10 @@ module.exports = {
   installDependencies,
   installPackage,
   uninstallPackage,
-  healthCheck
+  healthCheck,
+  getHtaccess,
+  saveHtaccess,
+  addRedirect,
+  getRedirects,
+  deleteRedirect
 };

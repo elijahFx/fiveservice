@@ -41,7 +41,7 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -58,7 +58,7 @@ const Navigation = () => {
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center px-4 py-2.5 text-sm font-semibold text-navy-600 bg-white border-b-2 border-navy-600 hover:bg-navy-50 hover:border-navy-700 active:bg-navy-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-500"
@@ -76,7 +76,7 @@ const Navigation = () => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center px-4 py-3 text-base font-semibold text-navy-700 bg-white border-b-2 border-navy-600 hover:bg-navy-50 hover:border-navy-700 active:bg-navy-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-500 mb-2"
+                  className="flex items-center px-2 py-3 text-base font-semibold text-navy-700 bg-white border-b-2 border-navy-600 hover:bg-navy-50 hover:border-navy-700 active:bg-navy-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-500 mb-2"
                   onClick={() => setIsOpen(false)}
                 >
                   {item.label}

@@ -75,7 +75,7 @@ const Hero = () => {
           {/* Additional Phones */}
           <div className="mt-6 text-center">
             <p className="text-gray-300 text-sm mb-2">Дополнительные номера:</p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm">
+            <div className="flex flex-wrap justify-center gap-4 text-sm mb-2">
               <a href="tel:+375447534796" className="text-blue-400 hover:text-blue-300">+375 44 753 47 96</a>
               <a href="tel:+375257849731" className="text-blue-400 hover:text-blue-300">+375 25 784 97 31</a>
               <a href="tel:+375172424111" className="text-blue-400 hover:text-blue-300">+375 17 24 24 111</a>
