@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { formatDateToDDMMYYYY } from "@/lib/utils/dates";
 import ErrorBoundary from "@/components/articles/ErrorBoundary";
 import { getArticleBySlug } from "@/lib/api/articles";
+import formatContent from "@/lib/formatArticle";
 
 interface ArticlePageProps {
   params: Promise<{
@@ -68,12 +69,15 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       slug: article?.slug || "unknown",
       title: article?.title || "Заголовок не найден",
       annotation: article?.annotation || "Аннотация не найдена",
-      content: article?.content || "<p>Содержание статьи временно недоступно.</p>",
+      content: article?.content || "Содержание статьи временно недоступно.",
       preview: article?.preview || "/opengraph.webp",
       createdAt: article?.createdAt || new Date().toISOString(),
       readTime: article?.readTime || "5",
       author: article?.author || "Эксперты FiveService",
     };
+
+    // Format the content using our formatContent function
+    const formattedContent = formatContent(safeArticle.content);
 
     const relatedArticles = [
       {
@@ -154,12 +158,10 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                   {safeArticle.annotation}
                 </div>
 
-                <div
-                  className="article-content"
-                  dangerouslySetInnerHTML={{
-                    __html: safeArticle.content.replace(/\n/g, "<br />"),
-                  }}
-                />
+                {/* Formatted content using formatContent function */}
+                <div className="article-content">
+                  {formattedContent}
+                </div>
               </div>
             </div>
 

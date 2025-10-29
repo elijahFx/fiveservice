@@ -109,7 +109,7 @@ const CorporateHero = () => {
       <section className="relative py-20 bg-gradient-to-br from-navy-900 to-gray-900 text-white overflow-hidden pt-24 sm:pt-28">
         <div className="absolute inset-0">
           <Image
-            src="https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
+            src="/commerce.webp"
             alt="Корпоративное обслуживание"
             fill
             className="object-cover opacity-20"

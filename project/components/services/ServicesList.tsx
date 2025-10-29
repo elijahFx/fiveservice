@@ -78,7 +78,8 @@ const ServicesList = () => {
             { name: 'Аудиокодек', price: '110,00 руб.' },
             { name: 'Восстановление после залития', price: '250,00 руб.' },
             { name: 'Перепрошивка BIOS', price: '110,00 руб.' }
-          ]
+          ],
+          link: "/services/motherboard-repair"
         },
         {
           name: 'Другие компоненты',

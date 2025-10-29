@@ -20,7 +20,7 @@ const Hero = () => {
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="https://images.pexels.com/photos/5081929/pexels-photo-5081929.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
+          src="/main.webp"
           alt="Ремонт ноутбуков"
           fill
           className="object-cover"

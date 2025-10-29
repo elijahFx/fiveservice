@@ -80,6 +80,52 @@ const MotherboardRepairPage = () => {
     }
   ];
 
+  const failureCauses = [
+    {
+      cause: 'Залитие и коррозия',
+      description: 'Влага с примесями образует паразитные токопроводящие пути и вызывает коррозию под микросхемами. Без полной очистки последствия могут проявиться через недели или месяцы.',
+      warning: 'Поэтому «рисом» такие вещи не лечатся.'
+    },
+    {
+      cause: 'Перегрев и термоциклирование',
+      description: 'Постоянные нагрев-охлаждение приводят к усталостным трещинам в паяных соединениях, особенно под BGA-корпусами.',
+      warning: 'Правильный ремонт предполагает именно перепайку/реболл, а не временный прогрев.'
+    },
+    {
+      cause: 'Скачки напряжения и износ',
+      description: 'Перепады сети, удар по разъёму питания, падение — типичные предыстории ремонта.',
+      warning: 'Механические нагрузки требуют профессиональной диагностики.'
+    }
+  ];
+
+  const repairProcess = [
+    {
+      step: '1',
+      title: 'Экспресс-диагностика',
+      description: 'Считываем ошибки/индикаторы, снимаем осциллограммы ключевых линий питания, проверяем короткие.'
+    },
+    {
+      step: '2',
+      title: 'Полная диагностика',
+      description: 'Термокамера, лабораторный БП, микроскоп. Формируем смету с вариантами ремонта.'
+    },
+    {
+      step: '3',
+      title: 'Профессиональные работы',
+      description: 'Микропайка, реболл BGA, восстановление дорожек, прошивка BIOS/EC.'
+    },
+    {
+      step: '4',
+      title: 'Тестирование',
+      description: 'Длительная нагрузка, проверка портов, заряд/разряд.'
+    },
+    {
+      step: '5',
+      title: 'Выдача',
+      description: 'Акт, рекомендации по температурному режиму и эксплуатации.'
+    }
+  ];
+
   const emergencySteps = [
     {
       step: '1',
@@ -193,7 +239,7 @@ const MotherboardRepairPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white pt-20">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-purple-900 to-indigo-900 text-white py-20">
         <div className="absolute inset-0 bg-black/40" />
@@ -214,7 +260,7 @@ const MotherboardRepairPage = () => {
                 <Phone className="w-5 h-5 mr-2" />
                 Срочная диагностика
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-purple-900 hover:bg-white hover:text-purple-900 px-8 py-4 text-lg">
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-900 px-8 py-4 text-lg">
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Бесплатная консультация
               </Button>
@@ -462,7 +508,7 @@ const MotherboardRepairPage = () => {
               <Phone className="w-5 h-5 mr-2" />
               Записаться на диагностику
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-purple-600 hover:bg-white hover:text-purple-600 px-8 py-4 text-lg">
+            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-4 text-lg">
               Вызвать курьера
             </Button>
           </div>

@@ -8,8 +8,59 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ClickableAddress } from '@/components/ui/clickable-address';
-import { Phone, Mail, MapPin, Clock, Send, Loader2, Navigation } from 'lucide-react';
+import { Phone, Mail, MapPin, Clock, Send, Loader2, Navigation, X } from 'lucide-react';
 import Link from "next/link"
+
+// Компонент для отображения изображений входа
+const LocationImages = ({ onClose }: { onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center p-6 border-b">
+          <h3 className="text-2xl font-semibold text-gray-900">Как к нам попасть?</h3>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="hover:bg-gray-100"
+          >
+            <X className="w-6 h-6" />
+          </Button>
+        </div>
+        
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <div className="rounded-lg overflow-hidden border border-gray-200">
+                <img
+                  src="/vxod2.webp"
+                  alt="Вход в сервисный центр - вариант 1"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <div className="rounded-lg overflow-hidden border border-gray-200">
+                <img
+                  src="/vxod1.webp"
+                  alt="Вход в сервисный центр - вариант 2"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="flex justify-end p-6 border-t">
+          <Button onClick={onClose} className="bg-navy-600 hover:bg-navy-700">
+            Закрыть
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +71,7 @@ const Contact = () => {
   const [isAgreed, setIsAgreed] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [showLocationImages, setShowLocationImages] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,6 +137,10 @@ const Contact = () => {
     window.open('https://yandex.by/maps/?rtext=~53.939402,27.597530', '_blank');
   };
 
+  const handleFindUsClick = () => {
+    setShowLocationImages(true);
+  };
+
   return (
     <section id="contact-section" className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -126,6 +182,26 @@ const Contact = () => {
                       style={{ border: 'none' }}
                       loading='lazy'
                     />
+                  </div>
+
+                  {/* Кнопка "Найти нас" */}
+                  <div className="mt-4 flex flex-col sm:flex-row gap-3">
+                    <Button
+                      onClick={openYandexMaps}
+                      className="bg-navy-600 hover:bg-navy-700 flex items-center gap-2"
+                    >
+                      <Navigation className="w-4 h-4" />
+                      Построить маршрут
+                    </Button>
+                    
+                    <Button
+                      onClick={handleFindUsClick}
+                      variant="outline"
+                      className="border-navy-600 text-navy-600 hover:bg-navy-50 flex items-center gap-2"
+                    >
+                      <MapPin className="w-4 h-4" />
+                      Найти нас
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -282,6 +358,11 @@ const Contact = () => {
           </Card>
         </div>
       </div>
+
+      {/* Модальное окно с изображениями входа */}
+      {showLocationImages && (
+        <LocationImages onClose={() => setShowLocationImages(false)} />
+      )}
     </section>
   );
 };
