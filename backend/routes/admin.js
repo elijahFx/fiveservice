@@ -19,7 +19,10 @@ const {
   saveHtaccess,
   addRedirect,
   getRedirects,
-  deleteRedirect
+  deleteRedirect,
+  getSeoInfo,
+  saveSeoInfo,
+  deleteSeoInfo
 } = require('../controllers/adminControllers');
 
 // Маршруты для работы с файлами
@@ -45,6 +48,11 @@ router.post('/htaccess/save', saveHtaccess);
 router.post('/redirects/add', addRedirect);
 router.get('/redirects', getRedirects);
 router.post('/redirects/delete', deleteRedirect);
+
+// Маршруты для SEO - исправленные пути
+router.get('/seo/info', getSeoInfo);
+router.post('/seo/save', saveSeoInfo);
+router.post('/seo/delete', deleteSeoInfo);
 
 // Health check
 router.get('/health', healthCheck);

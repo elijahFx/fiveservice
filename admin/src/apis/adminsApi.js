@@ -23,25 +23,13 @@ export const adminApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Files", "Build"],
+  tagTypes: ["Files", "Build", "Htaccess", "Redirects", "SEO"],
   endpoints: (builder) => ({
     // Получение списка файлов
     getFiles: builder.query({
-  query: (folder) => `/files?folder=${folder}`,
-  providesTags: ["Files"],
-  // Добавляем transformResponse для обработки обоих форматов
-  transformResponse: (response) => {
-    // Если response уже содержит items, используем его
-    if (response.items) {
-      return response;
-    }
-    // Иначе создаем items из files для обратной совместимости
-    return {
-      ...response,
-      items: response.files || []
-    };
-  }
-}),
+      query: (folder = '') => `/files?folder=${encodeURIComponent(folder)}`,
+      providesTags: ["Files"],
+    }),
 
     // Получение содержимого файла
     getFileContent: builder.query({
@@ -71,6 +59,26 @@ export const adminApi = createApi({
         url: "/file/create",
         method: "POST",
         body: { filepath, content },
+      }),
+      invalidatesTags: ["Files"],
+    }),
+
+    // Создание новой папки
+    createFolder: builder.mutation({
+      query: (folderpath) => ({
+        url: "/folder/create",
+        method: "POST",
+        body: { folderpath },
+      }),
+      invalidatesTags: ["Files"],
+    }),
+
+    // Удаление файла или папки
+    deleteItem: builder.mutation({
+      query: ({ itempath, type }) => ({
+        url: "/item/delete",
+        method: "POST",
+        body: { itempath, type },
       }),
       invalidatesTags: ["Files"],
     }),
@@ -142,7 +150,8 @@ export const adminApi = createApi({
       query: () => "/health",
     }),
 
-     getHtaccess: builder.query({
+    // .htaccess
+    getHtaccess: builder.query({
       query: () => '/htaccess',
       providesTags: ["Htaccess"],
     }),
@@ -156,7 +165,7 @@ export const adminApi = createApi({
       invalidatesTags: ["Htaccess"],
     }),
 
-    // Redirects endpoints
+    // Redirects
     getRedirects: builder.query({
       query: () => '/redirects',
       providesTags: ["Redirects"],
@@ -179,6 +188,36 @@ export const adminApi = createApi({
       }),
       invalidatesTags: ["Redirects", "Htaccess"],
     }),
+
+    // SEO endpoints - исправленные пути
+    getSeoInfo: builder.query({
+      query: (folder) => `/seo/info?folder=${encodeURIComponent(folder)}`,
+      providesTags: (result, error, folder) => [
+        { type: "SEO", id: folder }
+      ],
+    }),
+
+    saveSeoInfo: builder.mutation({
+      query: ({ folder, seo }) => ({
+        url: '/seo/save',
+        method: 'POST',
+        body: { folder, seo },
+      }),
+      invalidatesTags: (result, error, { folder }) => [
+        { type: "SEO", id: folder }
+      ],
+    }),
+
+    deleteSeoInfo: builder.mutation({
+      query: (folder) => ({
+        url: '/seo/delete',
+        method: 'POST',
+        body: { folder },
+      }),
+      invalidatesTags: (result, error, folder) => [
+        { type: "SEO", id: folder }
+      ],
+    }),
   }),
 });
 
@@ -187,6 +226,8 @@ export const {
   useGetFileContentQuery,
   useSaveFileMutation,
   useCreateFileMutation,
+  useCreateFolderMutation,
+  useDeleteItemMutation,
   useBuildProjectMutation,
   useStartServerMutation,
   useBuildAndStartMutation,
@@ -199,5 +240,8 @@ export const {
   useDeleteRedirectMutation,
   useAddRedirectMutation,
   useSaveHtaccessMutation,
-  useGetRedirectsQuery
+  useGetRedirectsQuery,
+  useGetSeoInfoQuery,
+  useSaveSeoInfoMutation,
+  useDeleteSeoInfoMutation
 } = adminApi;

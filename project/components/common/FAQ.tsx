@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import Link from 'next/link';
 
-const FAQ = () => {
+const FAQ = ({ special_questions = [] }) => {
   const [openItems, setOpenItems] = useState<number[]>([]);
 
   const toggleItem = (index: number) => {
@@ -16,7 +16,7 @@ const FAQ = () => {
     );
   };
 
-  const faqItems = [
+  const defaultFaqItems = [
     {
       question: "Сколько стоит ремонт ноутбука?",
       answer: (
@@ -41,13 +41,19 @@ const FAQ = () => {
     },
     {
       question: "Залили ноутбук. Что делать прямо сейчас?",
-      answer: "Срочно: отключите питание, не сушите феном, не пытайтесь включать. Несите на профессиональную мойку и восстановление — так повышаются шансы и снижается стоимость."
+      answer: "Срочно: отключите питание, не сушите феном, не пытайтесь включать. Несите на профессиональную мойку и восстановление — так повышаются шансы и снижается стоимость.",
+      href: "/services/liquiddamage"
     },
     {
       question: "Как быстро почините клавиатуру?",
       answer: "В большинстве случаев заменим день в день."
-    },
+    }
   ];
+
+  // Используем special_questions если они есть, иначе defaultFaqItems
+  const faqItems = special_questions && special_questions.length > 0 
+    ? special_questions 
+    : defaultFaqItems;
 
   return (
     <section className="py-16 bg-gray-50">
@@ -92,9 +98,14 @@ const FAQ = () => {
                 aria-hidden={!openItems.includes(index)}
               >
                 <div className="px-6 pb-5 border-t border-gray-100">
-                  <p className="text-gray-700 leading-relaxed pt-4">
+                  <div className="text-gray-700 leading-relaxed pt-4">
                     {item.answer}
-                  </p>
+                  </div>
+                  {item.href && (
+                    <Link href={item.href}>
+                      <p className='text-blue-400 mt-2 hover:text-blue-500'>Узнать больше</p>
+                    </Link>
+                  )}
                 </div>
               </div>
             </Card>
