@@ -1,5 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 const pages = [
   {
@@ -54,19 +58,19 @@ const pages = [
     href: "/services/cleaning",
     title: "Чистка ноутбуков",
   },
-    {
+  {
     href: "/services/caserepair",
     title: "Ремонт корпуса",
   },
-    {
+  {
     href: "/services/batteryreplacement",
     title: "Замена батареи",
   },
-    {
+  {
     href: "/services/diagnostics",
     title: "Услуга диагностики",
   },
-    {
+  {
     href: "/services/liquiddamage",
     title: "Заливание ноутбука",
   },
@@ -74,7 +78,7 @@ const pages = [
     href: "/services/powerconnection",
     title: "Разъём питания ноутбука",
   },
-{
+  {
     href: "/services/keyboardreplacement",
     title: "Замена клавиатуры",
   },
@@ -101,6 +105,13 @@ const pages = [
 ];
 
 const SiteMap = () => {
+  const pathname = usePathname();
+
+  // Фильтруем страницы, исключая текущую
+  const filteredPages = pages.filter((page) => page.href !== pathname);
+  const [isUp, setIsUp] = useState(false);
+
+
   return (
     <div className="bg-gray-900 text-white border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -112,14 +123,20 @@ const SiteMap = () => {
           >
             <span className="font-semibold text-lg">Карта сайта</span>
             <div className="flex items-center">
-              <ChevronDown className="w-5 h-5 peer-checked:hidden" />
-              <ChevronUp className="w-5 h-5 hidden peer-checked:block" />
+              {isUp ? (
+                <ChevronDown
+                  onClick={() => setIsUp(true)}
+                  className="w-5 h-5"
+                />
+              ) : (
+                <ChevronUp onClick={() => setIsUp(false)} className="w-5 h-5" />
+              )}
             </div>
           </label>
 
           <div className="hidden peer-checked:block pb-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-              {pages.map((page) => (
+              {filteredPages.map((page) => (
                 <Link
                   key={page.href}
                   href={page.href}
