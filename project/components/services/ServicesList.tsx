@@ -72,7 +72,6 @@ const ServicesList = () => {
         {
           name: 'Ремонт материнских плат',
           price: 'от 110,00 руб.',
-          link: "/services/motherboard-repair",
           variants: [
             { name: 'Система питания', price: '250,00 руб.' },
             { name: 'Мультиконтроллер', price: '130,00 руб.' },
@@ -131,8 +130,7 @@ const ServicesList = () => {
             { name: 'Ремонт крышки экрана с переклейкой матрицы', price: '160,00 руб.' },
             { name: 'Ремонт крышки без переклейки матрицы', price: '110,00 руб.' },
             { name: 'Ремонт нижней части корпуса ноутбука', price: '110,00 руб.' }
-          ],
-          link: "/services/caserepair"
+          ]
         }
       ]
     },
@@ -284,22 +282,11 @@ const ServicesList = () => {
                       )}
                       
                       <div className="mt-4 pt-4 border-t border-gray-100">
-                        {service.link ? (
-                          <Link href={service.link}>
-                            <Button variant="ghost" className="w-full text-navy-600 hover:bg-navy-50 hover:text-navy-700">
-                              Узнать подробности
-                            </Button>
-                          </Link>
-                        ) : category.id === 'software-services' ? (
-                          // Для программного ремонта убираем кнопку
-                          null
-                        ) : (
-                          <Link href={category.link}>
-                            <Button variant="ghost" className="w-full text-navy-600 hover:bg-navy-50 hover:text-navy-700">
-                              Узнать подробности
-                            </Button>
-                          </Link>
-                        )}
+                        <Link href={category.link}>
+                          <Button variant="ghost" className="w-full text-navy-600 hover:bg-navy-50 hover:text-navy-700">
+                            Узнать подробности
+                          </Button>
+                        </Link>
                       </div>
                     </Card>
                   ))}

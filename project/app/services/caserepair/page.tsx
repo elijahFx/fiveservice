@@ -16,8 +16,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import CallbackModal from '@/components/modal/CallbackModal';
+import { useState } from 'react';
 
 const CaseRepairPage = () => {
+  const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('diagnostics');
+
   const failureCauses = [
     {
       icon: Settings,
@@ -125,29 +130,52 @@ const CaseRepairPage = () => {
     }
   ];
 
+  const handleRepairClick = () => {
+    setModalType('repair');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleDiagnosticsClick = () => {
+    setModalType('diagnostics');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsCallbackModalOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-6">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-amber-900 to-orange-900 text-white py-20">
+      <section className="relative bg-gradient-to-br from-navy-900 to-navy-700 text-white py-20">
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Badge className="mb-4 bg-amber-500 hover:bg-amber-600">
+            <Badge className="mb-4 bg-white text-navy-900 hover:bg-gray-100">
               Срочный ремонт
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Профессиональный ремонт корпуса ноутбука
             </h1>
-            <p className="text-xl md:text-2xl text-orange-200 mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-navy-200 mb-8 max-w-4xl mx-auto leading-relaxed">
               Срочная замена на новые и б/у. Качественное восстановление корпуса. Сварка петель
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="bg-amber-600 hover:bg-amber-700 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+                onClick={handleRepairClick}
+              >
                 <Phone className="w-5 h-5 mr-2" />
                 Срочный ремонт
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-amber-900 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+                onClick={handleDiagnosticsClick}
+              >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Бесплатная диагностика
               </Button>
@@ -162,8 +190,8 @@ const CaseRepairPage = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             Ремонт корпуса ноутбука, замена петель, замена крышки
           </h2>
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-8">
-            <p className="text-2xl font-bold text-amber-800 mb-4">
+          <div className="bg-navy-50 border border-navy-200 rounded-2xl p-8">
+            <p className="text-2xl font-bold text-navy-800 mb-4">
               Восстановим! Будет лучше нового!
             </p>
             <p className="text-gray-700 text-lg">
@@ -189,8 +217,8 @@ const CaseRepairPage = () => {
               <Card key={index} className="group hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center mb-4">
-                    <div className="p-2 bg-amber-100 rounded-lg group-hover:bg-amber-600 transition-colors">
-                      <cause.icon className="w-6 h-6 text-amber-600 group-hover:text-white" />
+                    <div className="p-2 bg-navy-100 rounded-lg group-hover:bg-navy-600 transition-colors">
+                      <cause.icon className="w-6 h-6 text-navy-600 group-hover:text-white" />
                     </div>
                   </div>
                   <CardTitle className="text-lg">{cause.title}</CardTitle>
@@ -228,7 +256,7 @@ const CaseRepairPage = () => {
                       <p className="text-gray-600">{item.solution}</p>
                     </div>
                     <div className="flex items-center">
-                      <Wrench className="w-6 h-6 text-amber-600" />
+                      <Wrench className="w-6 h-6 text-navy-600" />
                     </div>
                   </div>
                 </CardContent>
@@ -245,8 +273,8 @@ const CaseRepairPage = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Стоимость ремонта корпуса
             </h2>
-            <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 max-w-2xl mx-auto">
-              <p className="text-blue-800 font-semibold">
+            <div className="bg-navy-50 border border-navy-200 rounded-2xl p-6 max-w-2xl mx-auto">
+              <p className="text-navy-800 font-semibold">
                 Какова бы ни была стоимость ремонта, вы можете быть уверены — мы вас не поставим перед фактом. 
                 Наш принцип — оплата только за выполненную работу!
               </p>
@@ -258,7 +286,7 @@ const CaseRepairPage = () => {
               <Card key={index} className="text-center">
                 <CardHeader>
                   <CardTitle className="text-lg">{item.service}</CardTitle>
-                  <div className="text-2xl font-bold text-amber-600">{item.price}</div>
+                  <div className="text-2xl font-bold text-navy-600">{item.price}</div>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 text-sm mb-2">{item.description}</p>
@@ -268,8 +296,8 @@ const CaseRepairPage = () => {
             ))}
           </div>
 
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6">
-            <p className="text-amber-800 text-center">
+          <div className="bg-navy-50 border border-navy-200 rounded-2xl p-6">
+            <p className="text-navy-800 text-center">
               Определение стоимости ремонта корпуса производится индивидуально для каждого случая. 
               Каждая поломка имеет свои нюансы и сложности, а также варианты решения.
             </p>
@@ -300,12 +328,12 @@ const CaseRepairPage = () => {
                   <ul className="space-y-2 mb-6">
                     {option.benefits.map((benefit, benefitIndex) => (
                       <li key={benefitIndex} className="flex items-center text-sm text-gray-700">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-navy-600 mr-2 flex-shrink-0" />
                         {benefit}
                       </li>
                     ))}
                   </ul>
-                  <Button variant="outline" className="w-full">
+                  <Button variant="outline" className="w-full" onClick={handleDiagnosticsClick}>
                     Узнать стоимость
                   </Button>
                 </CardContent>
@@ -335,7 +363,7 @@ const CaseRepairPage = () => {
               <Card key={index} className="text-center group hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex justify-center mb-4">
-                    <div className="w-12 h-12 bg-amber-600 text-white rounded-full flex items-center justify-center text-lg font-bold">
+                    <div className="w-12 h-12 bg-navy-600 text-white rounded-full flex items-center justify-center text-lg font-bold">
                       {step.step}
                     </div>
                   </div>
@@ -351,7 +379,7 @@ const CaseRepairPage = () => {
       </section>
 
       {/* Advantages */}
-      <section className="py-16 bg-amber-50">
+      <section className="py-16 bg-navy-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -362,7 +390,7 @@ const CaseRepairPage = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {advantages.map((advantage, index) => (
               <div key={index} className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
-                <Shield className="w-6 h-6 text-amber-600 flex-shrink-0" />
+                <Shield className="w-6 h-6 text-navy-600 flex-shrink-0" />
                 <span className="text-gray-700">{advantage}</span>
               </div>
             ))}
@@ -373,7 +401,7 @@ const CaseRepairPage = () => {
               Если ваш ноутбук пострадал от механических повреждений или износа, не стоит откладывать ремонт. 
               Своевременное обращение к профессионалам поможет восстановить корпус и продлить жизнь вашего устройства.
             </p>
-            <p className="text-amber-700 font-semibold">
+            <p className="text-navy-700 font-semibold">
               Доверьте ремонт опытным мастерам, использующим качественные материалы и современные технологии восстановления.
             </p>
           </div>
@@ -381,25 +409,48 @@ const CaseRepairPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-amber-600 text-white">
+      <section className="py-16 bg-navy-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Готовы восстановить корпус вашего ноутбука?
           </h2>
-          <p className="text-xl text-amber-100 mb-8">
+          <p className="text-xl text-navy-100 mb-8">
             Получите бесплатную диагностику и точную стоимость ремонта
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-amber-600 hover:bg-gray-100 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+              onClick={handleRepairClick}
+            >
               <Phone className="w-5 h-5 mr-2" />
               Заказать ремонт
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-amber-600 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white text-navy-900 hover:bg-white hover:px-8 py-4 text-lg"
+              onClick={handleDiagnosticsClick}
+            >
               Бесплатная диагностика
             </Button>
           </div>
         </div>
       </section>
+
+      {/* Callback Modal */}
+      <CallbackModal 
+        isOpen={isCallbackModalOpen}
+        onClose={handleCloseModal}
+        initialData={{
+          name: "",
+          phone: "",
+          note: modalType === 'diagnostics' 
+            ? "Запрос на бесплатную диагностику корпуса ноутбука" 
+            : "Запрос на срочный ремонт корпуса ноутбука",
+          agree: false
+        }}
+      />
 
       {/* Schema.org Structured Data */}
       <script

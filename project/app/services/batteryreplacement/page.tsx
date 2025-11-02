@@ -17,8 +17,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import CallbackModal from '@/components/modal/CallbackModal';
+import { useState } from 'react';
 
 const BatteryReplacementPage = () => {
+  const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('diagnostics');
+
   const solutions = [
     {
       type: 'Замена батареи',
@@ -114,29 +119,52 @@ const BatteryReplacementPage = () => {
     }
   ];
 
+  const handleReplacementClick = () => {
+    setModalType('replacement');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleDiagnosticsClick = () => {
+    setModalType('diagnostics');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsCallbackModalOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-6">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-green-900 to-emerald-900 text-white py-20">
+      <section className="relative bg-gradient-to-br from-navy-900 to-navy-700 text-white py-20">
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Badge className="mb-4 bg-green-500 hover:bg-green-600">
+            <Badge className="mb-4 bg-white text-navy-900 hover:bg-gray-100">
               Профессиональный ремонт
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Замена и ремонт батареи ноутбука
             </h1>
-            <p className="text-xl md:text-2xl text-emerald-200 mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-navy-200 mb-8 max-w-4xl mx-auto leading-relaxed">
               Когда это необходимо и как продлить срок службы АКБ
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="bg-green-600 hover:bg-green-700 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+                onClick={handleReplacementClick}
+              >
                 <Phone className="w-5 h-5 mr-2" />
                 Заказать замену
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-900 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+                onClick={handleDiagnosticsClick}
+              >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Бесплатная диагностика
               </Button>
@@ -174,18 +202,14 @@ const BatteryReplacementPage = () => {
 
           <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {solutions.map((solution, index) => (
-              <Card key={index} className={`text-center hover:shadow-lg transition-shadow ${
-                index === 0 ? 'ring-2 ring-green-500' : 'ring-2 ring-blue-500'
-              }`}>
+              <Card key={index} className="text-center hover:shadow-lg transition-shadow ring-2 ring-navy-500">
                 <CardHeader>
                   <CardTitle className="text-2xl flex items-center justify-center">
-                    <Battery className="w-8 h-8 mr-3" />
+                    <Battery className="w-8 h-8 mr-3 text-navy-600" />
                     {solution.type}
                   </CardTitle>
                   <p className="text-gray-600">{solution.description}</p>
-                  <div className={`text-3xl font-bold ${
-                    index === 0 ? 'text-green-600' : 'text-blue-600'
-                  }`}>
+                  <div className="text-3xl font-bold text-navy-600">
                     {solution.price}
                   </div>
                 </CardHeader>
@@ -193,17 +217,19 @@ const BatteryReplacementPage = () => {
                   <ul className="space-y-3 mb-6">
                     {solution.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-start text-left">
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-5 h-5 text-navy-600 mr-3 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700">{feature}</span>
                       </li>
                     ))}
                   </ul>
                   {solution.note && (
-                    <p className="text-sm text-gray-600 mb-4 text-left bg-gray-50 p-3 rounded-lg">
+                    <p className="text-sm text-gray-600 mb-4 text-left bg-navy-50 p-3 rounded-lg">
                       {solution.note}
                     </p>
                   )}
-                  <Button className="w-full">Выбрать этот вариант</Button>
+                  <Button className="w-full" onClick={handleDiagnosticsClick}>
+                    Выбрать этот вариант
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -226,24 +252,24 @@ const BatteryReplacementPage = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {symptoms.map((symptom, index) => (
               <Card key={index} className={`group hover:shadow-lg transition-shadow ${
-                symptom.danger ? 'border-red-200 bg-red-50' : ''
+                symptom.danger ? 'border-navy-200 bg-navy-50' : ''
               }`}>
                 <CardHeader>
                   <div className="flex items-center mb-4">
                     <div className={`p-2 rounded-lg ${
-                      symptom.danger ? 'bg-red-100 group-hover:bg-red-600' : 'bg-blue-100 group-hover:bg-blue-600'
+                      symptom.danger ? 'bg-navy-100 group-hover:bg-navy-600' : 'bg-navy-100 group-hover:bg-navy-600'
                     } transition-colors`}>
                       <symptom.icon className={`w-6 h-6 ${
-                        symptom.danger ? 'text-red-600 group-hover:text-white' : 'text-blue-600 group-hover:text-white'
+                        symptom.danger ? 'text-navy-600 group-hover:text-white' : 'text-navy-600 group-hover:text-white'
                       }`} />
                     </div>
                   </div>
-                  <CardTitle className={`text-lg ${symptom.danger ? 'text-red-700' : ''}`}>
+                  <CardTitle className={`text-lg ${symptom.danger ? 'text-navy-700' : ''}`}>
                     {symptom.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className={`text-sm ${symptom.danger ? 'text-red-600' : 'text-gray-600'}`}>
+                  <p className={`text-sm ${symptom.danger ? 'text-navy-600' : 'text-gray-600'}`}>
                     {symptom.description}
                   </p>
                 </CardContent>
@@ -264,8 +290,8 @@ const BatteryReplacementPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {advantages.map((advantage, index) => (
-              <div key={index} className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg">
-                <Shield className="w-6 h-6 text-green-600 flex-shrink-0" />
+              <div key={index} className="flex items-center space-x-3 p-4 bg-navy-50 rounded-lg">
+                <Shield className="w-6 h-6 text-navy-600 flex-shrink-0" />
                 <span className="text-gray-700">{advantage}</span>
               </div>
             ))}
@@ -298,7 +324,7 @@ const BatteryReplacementPage = () => {
             {tips.map((tip, index) => (
               <Card key={index}>
                 <CardHeader>
-                  <CardTitle className="flex items-center text-green-600">
+                  <CardTitle className="flex items-center text-navy-600">
                     <Zap className="w-6 h-6 mr-2" />
                     {tip.category}
                   </CardTitle>
@@ -307,7 +333,7 @@ const BatteryReplacementPage = () => {
                   <ul className="space-y-3">
                     {tip.items.map((item, itemIndex) => (
                       <li key={itemIndex} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-5 h-5 text-navy-600 mr-3 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700 text-sm">{item}</span>
                       </li>
                     ))}
@@ -317,12 +343,12 @@ const BatteryReplacementPage = () => {
             ))}
           </div>
 
-          <div className="mt-12 bg-blue-50 border border-blue-200 rounded-2xl p-6">
+          <div className="mt-12 bg-navy-50 border border-navy-200 rounded-2xl p-6">
             <div className="flex items-start">
-              <RefreshCw className="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+              <RefreshCw className="w-6 h-6 text-navy-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-lg font-semibold text-blue-800 mb-2">Поддержание здоровья батареи:</h3>
-                <ul className="text-blue-700 space-y-2">
+                <h3 className="text-lg font-semibold text-navy-800 mb-2">Поддержание здоровья батареи:</h3>
+                <ul className="text-navy-700 space-y-2">
                   <li className="flex items-start">
                     <span className="mr-2">•</span>
                     <span>Чистите вентиляционные отверстия. Регулярно удаляйте пыль из вентиляционных отверстий ноутбука, чтобы предотвратить перегрев.</span>
@@ -336,7 +362,7 @@ const BatteryReplacementPage = () => {
                     <span>Проводите калибровку батареи. Раз в несколько месяцев полностью разрядите и затем полностью зарядите батарею, чтобы калибровать индикатор заряда.</span>
                   </li>
                 </ul>
-                <p className="text-blue-600 font-semibold mt-4">
+                <p className="text-navy-600 font-semibold mt-4">
                   Эти простые советы помогут вам значительно продлить срок службы батареи ноутбука.
                 </p>
               </div>
@@ -346,25 +372,48 @@ const BatteryReplacementPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-green-600 text-white">
+      <section className="py-16 bg-navy-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Готовы вернуть мобильность вашему ноутбуку?
           </h2>
-          <p className="text-xl text-green-100 mb-8">
+          <p className="text-xl text-navy-100 mb-8">
             Получите бесплатную диагностику батареи и подберем оптимальное решение
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-green-600 hover:bg-gray-100 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+              onClick={handleReplacementClick}
+            >
               <Phone className="w-5 h-5 mr-2" />
               Заказать замену
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-green-600 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+              onClick={handleDiagnosticsClick}
+            >
               Бесплатная диагностика
             </Button>
           </div>
         </div>
       </section>
+
+      {/* Callback Modal */}
+      <CallbackModal 
+        isOpen={isCallbackModalOpen}
+        onClose={handleCloseModal}
+        initialData={{
+          name: "",
+          phone: "",
+          note: modalType === 'diagnostics' 
+            ? "Запрос на бесплатную диагностику батареи ноутбука" 
+            : "Запрос на замену батареи ноутбука",
+          agree: false
+        }}
+      />
 
       {/* Schema.org Structured Data */}
       <script

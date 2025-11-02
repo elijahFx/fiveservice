@@ -23,8 +23,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import CallbackModal from '@/components/modal/CallbackModal';
+import { useState } from 'react';
 
 const MotherboardRepairPage = () => {
+  const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('diagnostics');
+
   const symptoms = [
     {
       icon: Zap,
@@ -77,52 +82,6 @@ const MotherboardRepairPage = () => {
         'Восстановление после повреждения прошивки',
         'Embedded Controller ремонт'
       ]
-    }
-  ];
-
-  const failureCauses = [
-    {
-      cause: 'Залитие и коррозия',
-      description: 'Влага с примесями образует паразитные токопроводящие пути и вызывает коррозию под микросхемами. Без полной очистки последствия могут проявиться через недели или месяцы.',
-      warning: 'Поэтому «рисом» такие вещи не лечатся.'
-    },
-    {
-      cause: 'Перегрев и термоциклирование',
-      description: 'Постоянные нагрев-охлаждение приводят к усталостным трещинам в паяных соединениях, особенно под BGA-корпусами.',
-      warning: 'Правильный ремонт предполагает именно перепайку/реболл, а не временный прогрев.'
-    },
-    {
-      cause: 'Скачки напряжения и износ',
-      description: 'Перепады сети, удар по разъёму питания, падение — типичные предыстории ремонта.',
-      warning: 'Механические нагрузки требуют профессиональной диагностики.'
-    }
-  ];
-
-  const repairProcess = [
-    {
-      step: '1',
-      title: 'Экспресс-диагностика',
-      description: 'Считываем ошибки/индикаторы, снимаем осциллограммы ключевых линий питания, проверяем короткие.'
-    },
-    {
-      step: '2',
-      title: 'Полная диагностика',
-      description: 'Термокамера, лабораторный БП, микроскоп. Формируем смету с вариантами ремонта.'
-    },
-    {
-      step: '3',
-      title: 'Профессиональные работы',
-      description: 'Микропайка, реболл BGA, восстановление дорожек, прошивка BIOS/EC.'
-    },
-    {
-      step: '4',
-      title: 'Тестирование',
-      description: 'Длительная нагрузка, проверка портов, заряд/разряд.'
-    },
-    {
-      step: '5',
-      title: 'Выдача',
-      description: 'Акт, рекомендации по температурному режиму и эксплуатации.'
     }
   ];
 
@@ -238,29 +197,57 @@ const MotherboardRepairPage = () => {
     }
   ];
 
+  const handleDiagnosticsClick = () => {
+    setModalType('diagnostics');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleConsultationClick = () => {
+    setModalType('consultation');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleCourierClick = () => {
+    setModalType('courier');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsCallbackModalOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-20">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-purple-900 to-indigo-900 text-white py-20">
+      <section className="relative bg-gradient-to-br from-navy-900 to-navy-700 text-white py-20">
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Badge className="mb-4 bg-purple-500 hover:bg-purple-600">
+            <Badge className="mb-4 bg-white text-navy-900 hover:bg-gray-100">
               Профессиональный ремонт
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Ремонт и замена материнской платы ноутбука в Минске
             </h1>
-            <p className="text-xl md:text-2xl text-indigo-200 mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-navy-200 mb-8 max-w-4xl mx-auto leading-relaxed">
               Диагностика, компонентный ремонт, реболл BGA, прошивка BIOS/EC
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="bg-purple-600 hover:bg-purple-700 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+                onClick={handleDiagnosticsClick}
+              >
                 <Phone className="w-5 h-5 mr-2" />
                 Срочная диагностика
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-900 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+                onClick={handleConsultationClick}
+              >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Бесплатная консультация
               </Button>
@@ -270,7 +257,7 @@ const MotherboardRepairPage = () => {
       </section>
 
       {/* Warning Section */}
-      <section className="py-8 bg-red-600 text-white">
+      <section className="py-8 bg-navy-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4">
             <AlertTriangle className="w-8 h-8 flex-shrink-0" />
@@ -298,8 +285,8 @@ const MotherboardRepairPage = () => {
               <Card key={index} className="group hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center mb-4">
-                    <div className="p-2 bg-red-100 rounded-lg group-hover:bg-red-600 transition-colors">
-                      <symptom.icon className="w-6 h-6 text-red-600 group-hover:text-white" />
+                    <div className="p-2 bg-navy-100 rounded-lg group-hover:bg-navy-600 transition-colors">
+                      <symptom.icon className="w-6 h-6 text-navy-600 group-hover:text-white" />
                     </div>
                   </div>
                   <CardTitle className="text-lg">{symptom.title}</CardTitle>
@@ -311,8 +298,8 @@ const MotherboardRepairPage = () => {
             ))}
           </div>
 
-          <div className="mt-8 bg-orange-50 border border-orange-200 rounded-2xl p-6 text-center">
-            <p className="text-orange-800 font-semibold">
+          <div className="mt-8 bg-navy-50 border border-navy-200 rounded-2xl p-6 text-center">
+            <p className="text-navy-800 font-semibold">
               Если что-то из этого похоже на ваш случай, не гоняйте ноутбук «до последнего» — так проще и дешевле починить.
             </p>
           </div>
@@ -336,7 +323,7 @@ const MotherboardRepairPage = () => {
               <Card key={index} className="group hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center">
-                    <Wrench className="w-5 h-5 text-purple-600 mr-2" />
+                    <Wrench className="w-5 h-5 text-navy-600 mr-2" />
                     {service.title}
                   </CardTitle>
                 </CardHeader>
@@ -344,7 +331,7 @@ const MotherboardRepairPage = () => {
                   <ul className="space-y-2">
                     {service.items.map((item, itemIndex) => (
                       <li key={itemIndex} className="flex items-start text-sm">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-navy-600 mr-2 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700">{item}</span>
                       </li>
                     ))}
@@ -354,11 +341,11 @@ const MotherboardRepairPage = () => {
             ))}
           </div>
 
-          <div className="mt-12 bg-green-50 border border-green-200 rounded-2xl p-6">
+          <div className="mt-12 bg-navy-50 border border-navy-200 rounded-2xl p-6">
             <div className="flex items-start">
-              <TestTube className="w-6 h-6 text-green-600 mr-3 mt-1 flex-shrink-0" />
+              <TestTube className="w-6 h-6 text-navy-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <p className="text-green-800 font-semibold">
+                <p className="text-navy-800 font-semibold">
                   После работ прогоняем стресс-тесты, проверяем все интерфейсы и выдаём акт с рекомендациями.
                 </p>
               </div>
@@ -381,7 +368,7 @@ const MotherboardRepairPage = () => {
               <Card key={index} className="text-center">
                 <CardHeader>
                   <CardTitle className="text-lg">{item.type}</CardTitle>
-                  <div className="text-2xl font-bold text-purple-600">{item.price}</div>
+                  <div className="text-2xl font-bold text-navy-600">{item.price}</div>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-600 text-sm">{item.description}</p>
@@ -399,7 +386,7 @@ const MotherboardRepairPage = () => {
       </section>
 
       {/* Emergency Steps */}
-      <section className="py-16 bg-red-50">
+      <section className="py-16 bg-navy-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -415,7 +402,7 @@ const MotherboardRepairPage = () => {
               <Card key={index} className="text-center">
                 <CardHeader>
                   <div className="flex justify-center mb-4">
-                    <div className="w-10 h-10 bg-red-600 text-white rounded-full flex items-center justify-center text-lg font-bold">
+                    <div className="w-10 h-10 bg-navy-600 text-white rounded-full flex items-center justify-center text-lg font-bold">
                       {step.step}
                     </div>
                   </div>
@@ -428,14 +415,14 @@ const MotherboardRepairPage = () => {
             ))}
           </div>
 
-          <div className="bg-white border border-red-200 rounded-2xl p-6">
+          <div className="bg-white border border-navy-200 rounded-2xl p-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <h3 className="text-red-700 font-bold mb-3 flex items-center">
+                <h3 className="text-navy-700 font-bold mb-3 flex items-center">
                   <XCircle className="w-5 h-5 mr-2" />
                   НЕЛЬЗЯ:
                 </h3>
-                <ul className="text-red-600 space-y-2 text-sm">
+                <ul className="text-navy-600 space-y-2 text-sm">
                   <li>• Включать/заряжать</li>
                   <li>• Сушить феном или в духовке</li>
                   <li>• Трясти, класть в рис</li>
@@ -443,11 +430,11 @@ const MotherboardRepairPage = () => {
                 </ul>
               </div>
               <div>
-                <h3 className="text-green-700 font-bold mb-3 flex items-center">
+                <h3 className="text-navy-700 font-bold mb-3 flex items-center">
                   <CheckCircle className="w-5 h-5 mr-2" />
                   Можно и нужно:
                 </h3>
-                <ul className="text-green-600 space-y-2 text-sm">
+                <ul className="text-navy-600 space-y-2 text-sm">
                   <li>• Обесточить</li>
                   <li>• Зафиксировать обстоятельства</li>
                   <li>• Как можно быстрее передать в сервис</li>
@@ -476,13 +463,13 @@ const MotherboardRepairPage = () => {
               <Card key={index} className="hover:shadow-md transition-shadow">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-start cursor-pointer">
-                    <Search className="w-5 h-5 text-purple-600 mr-3 mt-1 flex-shrink-0" />
+                    <Search className="w-5 h-5 text-navy-600 mr-3 mt-1 flex-shrink-0" />
                     {item.question}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-start">
-                    <div className="bg-purple-100 text-purple-600 rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-1 flex-shrink-0">
+                    <div className="bg-navy-100 text-navy-600 rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-1 flex-shrink-0">
                       A
                     </div>
                     <p className="text-gray-700">{item.answer}</p>
@@ -495,28 +482,53 @@ const MotherboardRepairPage = () => {
       </section>
 
       {/* Final CTA */}
-      <section className="py-16 bg-purple-600 text-white">
+      <section className="py-16 bg-navy-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Что дальше
           </h2>
-          <p className="text-xl text-purple-100 mb-8">
+          <p className="text-xl text-navy-100 mb-8">
             Приезжайте в сервис или вызовите курьера. Для предварительной оценки можете отметить симптомы в калькуляторе стоимости на сайте — получите ориентир по цене и срокам.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+              onClick={handleDiagnosticsClick}
+            >
               <Phone className="w-5 h-5 mr-2" />
               Записаться на диагностику
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+              onClick={handleCourierClick}
+            >
               Вызвать курьера
             </Button>
           </div>
-          <p className="text-purple-200 mt-6 text-sm">
+          <p className="text-navy-200 mt-6 text-sm">
             Диагностика при согласии на ремонт — бесплатно. Срок: от 1 дня.
           </p>
         </div>
       </section>
+
+      {/* Callback Modal */}
+      <CallbackModal 
+        isOpen={isCallbackModalOpen}
+        onClose={handleCloseModal}
+        initialData={{
+          name: "",
+          phone: "",
+          note: modalType === 'diagnostics' 
+            ? "Запрос на диагностику материнской платы ноутбука" 
+            : modalType === 'consultation'
+            ? "Запрос на консультацию по ремонту материнской платы"
+            : "Запрос на вызов курьера для диагностики материнской платы",
+          agree: false
+        }}
+      />
 
       {/* Schema.org Structured Data */}
       <script

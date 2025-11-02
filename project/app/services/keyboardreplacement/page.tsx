@@ -13,8 +13,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import CallbackModal from '@/components/modal/CallbackModal';
+import { useState } from 'react';
 
 const KeyboardReplacementPage = () => {
+  const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('diagnostics');
+
   const problems = [
     'Клавиатура внезапно перестала работать',
     'Не работают несколько отдельных кнопок',
@@ -92,8 +97,22 @@ const KeyboardReplacementPage = () => {
     }
   ];
 
+  const handleDiagnosticsClick = () => {
+    setModalType('diagnostics');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleRepairClick = () => {
+    setModalType('repair');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsCallbackModalOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-6">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-navy-900 to-blue-900 text-white py-20">
         <div className="absolute inset-0 bg-black/40" />
@@ -110,11 +129,20 @@ const KeyboardReplacementPage = () => {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                className="bg-blue-600 hover:bg-blue-700 px-8 py-4 text-lg"
+                onClick={handleRepairClick}
+              >
                 <Phone className="w-5 h-5 mr-2" />
                 Срочный ремонт
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-navy-900 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+                onClick={handleDiagnosticsClick}
+              >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Бесплатная диагностика
               </Button>
@@ -305,7 +333,7 @@ const KeyboardReplacementPage = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full">Узнать точную стоимость</Button>
+                  <Button onClick={handleDiagnosticsClick}>Узнать точную стоимость</Button>
                 </CardContent>
               </Card>
             ))}
@@ -371,16 +399,39 @@ const KeyboardReplacementPage = () => {
             Получите бесплатную диагностику и точную стоимость замены клавиатуры
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg"
+              onClick={handleRepairClick}
+            >
               <Phone className="w-5 h-5 mr-2" />
               Заказать замену
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white text-blue-600 hover:bg-white hover: px-8 py-4 text-lg"
+              onClick={handleDiagnosticsClick}
+            >
               Бесплатная диагностика
             </Button>
           </div>
         </div>
       </section>
+
+      {/* Callback Modal */}
+      <CallbackModal 
+        isOpen={isCallbackModalOpen}
+        onClose={handleCloseModal}
+        initialData={{
+          name: "",
+          phone: "",
+          note: modalType === 'diagnostics' 
+            ? "Запрос на бесплатную диагностику клавиатуры" 
+            : "Запрос на срочный ремонт клавиатуры",
+          agree: false
+        }}
+      />
 
       {/* Schema.org Structured Data */}
       <script

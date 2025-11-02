@@ -23,7 +23,7 @@ const pages = [
     title: "Диагностика",
   },
   {
-    href: "/services#cleaning",
+    href: "/services/cleaning",
     title: "Чистка",
   },
   {

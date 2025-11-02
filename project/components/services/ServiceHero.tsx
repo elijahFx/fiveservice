@@ -5,7 +5,7 @@ const ServiceHero = () => {
     <section className="relative py-20 bg-navy-900 text-white overflow-hidden pt-24 sm:pt-28">
       <div className="absolute inset-0">
         <Image
-          src="/serviceslight.webp"
+          src="https://images.pexels.com/photos/3861972/pexels-photo-3861972.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop"
           alt="Ремонт ноутбуков"
           fill
           className="object-cover opacity-30"

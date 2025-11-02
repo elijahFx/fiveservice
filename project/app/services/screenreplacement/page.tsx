@@ -16,8 +16,13 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import CallbackModal from '@/components/modal/CallbackModal';
+import { useState } from 'react';
 
 const ScreenReplacementPage = () => {
+  const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('consultation');
+
   const screenTechnologies = [
     {
       name: 'IPS',
@@ -91,29 +96,52 @@ const ScreenReplacementPage = () => {
     'Современные технологии'
   ];
 
+  const handleReplacementClick = () => {
+    setModalType('replacement');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleConsultationClick = () => {
+    setModalType('consultation');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsCallbackModalOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-6">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-purple-900 to-blue-900 text-white py-20">
+      <section className="relative bg-gradient-to-br from-navy-900 to-navy-700 text-white py-20">
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Badge className="mb-4 bg-purple-500 hover:bg-purple-600">
+            <Badge className="mb-4 bg-white text-navy-900 hover:bg-gray-100">
               Гарантия 6 месяцев
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Замена экрана ноутбука с гарантией 6 месяцев
             </h1>
-            <p className="text-xl md:text-2xl text-blue-200 mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-navy-200 mb-8 max-w-4xl mx-auto leading-relaxed">
               Вернем кристально четкое изображение! Широкий выбор матриц для каждого запроса
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
-              <Button size="lg" className="bg-purple-600 hover:bg-purple-700 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+                onClick={handleReplacementClick}
+              >
                 <Phone className="w-5 h-5 mr-2" />
                 Срочная замена
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-900 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+                onClick={handleConsultationClick}
+              >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Подбор матрицы
               </Button>
@@ -140,8 +168,8 @@ const ScreenReplacementPage = () => {
               <Card key={index} className="text-center group hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex justify-center mb-4">
-                    <div className="p-3 bg-purple-100 rounded-2xl group-hover:bg-purple-600 transition-colors">
-                      <Monitor className="w-8 h-8 text-purple-600 group-hover:text-white" />
+                    <div className="p-3 bg-navy-100 rounded-2xl group-hover:bg-navy-600 transition-colors">
+                      <Monitor className="w-8 h-8 text-navy-600 group-hover:text-white" />
                     </div>
                   </div>
                   <CardTitle className="text-xl">{tech.name}</CardTitle>
@@ -151,7 +179,7 @@ const ScreenReplacementPage = () => {
                   <ul className="space-y-2">
                     {tech.benefits.map((benefit, benefitIndex) => (
                       <li key={benefitIndex} className="flex items-center text-sm text-gray-600">
-                        <CheckCircle className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" />
+                        <CheckCircle className="w-4 h-4 text-navy-600 mr-2 flex-shrink-0" />
                         {benefit}
                       </li>
                     ))}
@@ -172,9 +200,9 @@ const ScreenReplacementPage = () => {
       {/* Budget Options */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Card className="bg-orange-50 border-orange-200">
+          <Card className="bg-navy-50 border-navy-200">
             <CardHeader>
-              <CardTitle className="flex items-center text-orange-700">
+              <CardTitle className="flex items-center text-navy-700">
                 <DollarSign className="w-6 h-6 mr-2" />
                 Хотите сэкономить на ремонте старого ноутбука?
               </CardTitle>
@@ -211,7 +239,7 @@ const ScreenReplacementPage = () => {
               <Card key={index} className="text-center">
                 <CardHeader>
                   <CardTitle className="text-2xl flex items-center justify-center">
-                    <Monitor className="w-8 h-8 mr-3" />
+                    <Monitor className="w-8 h-8 mr-3 text-navy-600" />
                     {option.type}
                   </CardTitle>
                   <p className="text-gray-600">{option.description}</p>
@@ -220,23 +248,25 @@ const ScreenReplacementPage = () => {
                   <ul className="space-y-3 mb-6">
                     {option.features.map((feature, featureIndex) => (
                       <li key={featureIndex} className="flex items-start text-left">
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="w-5 h-5 text-navy-600 mr-3 mt-0.5 flex-shrink-0" />
                         <span className="text-gray-700">{feature}</span>
                       </li>
                     ))}
                   </ul>
-                  <Button className="w-full">Узнать стоимость</Button>
+                  <Button className="w-full" onClick={handleConsultationClick}>
+                    Узнать стоимость
+                  </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 text-center">
+          <div className="bg-navy-50 border border-navy-200 rounded-2xl p-6 text-center">
             <p className="text-gray-700 mb-4">
               Цена замены матрицы варьируется в зависимости от модели ноутбука и типа матрицы. 
               Мы предлагаем как новые, так и б/у экраны. Звоните или пишите нам для консультации и точного расчета стоимости!
             </p>
-            <p className="text-red-600 font-semibold">
+            <p className="text-navy-600 font-semibold">
               Помните, точную стоимость можно определить только после диагностики вашего ноутбука. 
               Не доверяйте предложениям с фиксированной ценой без учёта особенностей модели.
             </p>
@@ -253,9 +283,9 @@ const ScreenReplacementPage = () => {
             </h2>
           </div>
 
-          <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
+          <Card className="bg-gradient-to-r from-navy-50 to-navy-100 border-navy-200">
             <CardHeader>
-              <CardTitle className="flex items-center text-purple-700">
+              <CardTitle className="flex items-center text-navy-700">
                 <Sparkles className="w-6 h-6 mr-2" />
                 Устали от тусклых красок на экране?
               </CardTitle>
@@ -276,8 +306,8 @@ const ScreenReplacementPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
             {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-center space-x-3 p-4 bg-green-50 rounded-lg">
-                <Palette className="w-6 h-6 text-green-600 flex-shrink-0" />
+              <div key={index} className="flex items-center space-x-3 p-4 bg-navy-50 rounded-lg">
+                <Palette className="w-6 h-6 text-navy-600 flex-shrink-0" />
                 <span className="text-gray-700">{benefit}</span>
               </div>
             ))}
@@ -286,7 +316,7 @@ const ScreenReplacementPage = () => {
       </section>
 
       {/* Common Problems */}
-      <section className="py-16 bg-red-50">
+      <section className="py-16 bg-navy-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -301,7 +331,7 @@ const ScreenReplacementPage = () => {
           <div className="grid md:grid-cols-2 gap-8">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center text-red-600">
+                <CardTitle className="flex items-center text-navy-600">
                   <AlertTriangle className="w-6 h-6 mr-2" />
                   Основные причины поломок
                 </CardTitle>
@@ -310,7 +340,7 @@ const ScreenReplacementPage = () => {
                 <ul className="space-y-3">
                   {commonProblems.map((problem, index) => (
                     <li key={index} className="flex items-start">
-                      <AlertTriangle className="w-5 h-5 text-red-500 mr-3 mt-0.5 flex-shrink-0" />
+                      <AlertTriangle className="w-5 h-5 text-navy-600 mr-3 mt-0.5 flex-shrink-0" />
                       <span className="text-gray-700">{problem}</span>
                     </li>
                   ))}
@@ -320,7 +350,7 @@ const ScreenReplacementPage = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center text-blue-600">
+                <CardTitle className="flex items-center text-navy-600">
                   <Shield className="w-6 h-6 mr-2" />
                   Профилактика повреждений
                 </CardTitle>
@@ -334,7 +364,7 @@ const ScreenReplacementPage = () => {
                   <p className="mb-4">
                     Кроме того, частой причиной обращений является повреждение корпуса ноутбука и его креплений.
                   </p>
-                  <p className="text-red-600 font-semibold">
+                  <p className="text-navy-600 font-semibold">
                     Если вы заметили, что корпус начинает расходиться, крышка шатается или на корпусе появились трещины, 
                     рекомендуется не откладывать ремонт. Ремонт корпусных элементов обойдется значительно дешевле, 
                     чем замена матрицы.
@@ -357,8 +387,8 @@ const ScreenReplacementPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {priceFactors.map((factor, index) => (
-              <div key={index} className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm border">
-                <DollarSign className="w-6 h-6 text-purple-500 flex-shrink-0" />
+              <div key={index} className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm border border-navy-200">
+                <DollarSign className="w-6 h-6 text-navy-600 flex-shrink-0" />
                 <span className="text-gray-700">{factor}</span>
               </div>
             ))}
@@ -381,7 +411,7 @@ const ScreenReplacementPage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {guarantees.map((guarantee, index) => (
               <div key={index} className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
-                <Shield className="w-6 h-6 text-green-600 flex-shrink-0" />
+                <Shield className="w-6 h-6 text-navy-600 flex-shrink-0" />
                 <span className="text-gray-700">{guarantee}</span>
               </div>
             ))}
@@ -390,25 +420,48 @@ const ScreenReplacementPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-purple-600 text-white">
+      <section className="py-16 bg-navy-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Готовы вернуть кристально четкое изображение?
           </h2>
-          <p className="text-xl text-purple-100 mb-8">
+          <p className="text-xl text-navy-100 mb-8">
             Получите бесплатную диагностику и подбор оптимальной матрицы для вашего ноутбука
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+              onClick={handleReplacementClick}
+            >
               <Phone className="w-5 h-5 mr-2" />
               Заказать замену
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+              onClick={handleConsultationClick}
+            >
               Бесплатная консультация
             </Button>
           </div>
         </div>
       </section>
+
+      {/* Callback Modal */}
+      <CallbackModal 
+        isOpen={isCallbackModalOpen}
+        onClose={handleCloseModal}
+        initialData={{
+          name: "",
+          phone: "",
+          note: modalType === 'consultation' 
+            ? "Запрос на подбор матрицы и консультацию по замене экрана" 
+            : "Запрос на срочную замену экрана ноутбука",
+          agree: false
+        }}
+      />
 
       {/* Schema.org Structured Data */}
       <script

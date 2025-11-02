@@ -18,8 +18,14 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import CallbackModal from '@/components/modal/CallbackModal';
+import { useState } from 'react';
+import Link from 'next/link';
 
 const PowerConnectorPage = () => {
+  const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
+  const [modalType, setModalType] = useState('diagnostics');
+
   const symptoms = [
     {
       icon: Battery,
@@ -194,47 +200,77 @@ const PowerConnectorPage = () => {
     }
   ];
 
+  const handleDiagnosticsClick = () => {
+    setModalType('diagnostics');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleRepairClick = () => {
+    setModalType('repair');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleCostClick = () => {
+    setModalType('cost');
+    setIsCallbackModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsCallbackModalOpen(false);
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-6">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-amber-900 to-orange-900 text-white py-20">
+      <section className="relative bg-gradient-to-br from-navy-900 to-navy-700 text-white py-20">
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <Badge className="mb-4 bg-amber-500 hover:bg-amber-600">
+            <Badge className="mb-4 bg-white text-navy-900 hover:bg-gray-100">
               Гарантия до 12 месяцев
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Разъём питания ноутбука
             </h1>
-            <p className="text-xl md:text-2xl text-orange-200 mb-8 max-w-4xl mx-auto leading-relaxed">
+            <p className="text-xl md:text-2xl text-navy-200 mb-8 max-w-4xl mx-auto leading-relaxed">
               Диагностика, ремонт и стоимость. DC-jack, USB-C PD и разъёмы на шлейфах
             </p>
             
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-8">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
-                <div className="text-2xl font-bold text-amber-300">85–180 BYN</div>
-                <div className="text-orange-200">Типовой ремонт</div>
+                <div className="text-2xl font-bold text-white">85–180 BYN</div>
+                <div className="text-navy-200">Типовой ремонт</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
-                <div className="text-2xl font-bold text-amber-300">1–3 дня</div>
-                <div className="text-orange-200">Сроки ремонта</div>
+                <div className="text-2xl font-bold text-white">1–3 дня</div>
+                <div className="text-navy-200">Сроки ремонта</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center">
-                <div className="text-2xl font-bold text-amber-300">до 12 мес</div>
-                <div className="text-orange-200">Гарантия</div>
+                <div className="text-2xl font-bold text-white">до 12 мес</div>
+                <div className="text-navy-200">Гарантия</div>
               </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="bg-amber-600 hover:bg-amber-700 px-8 py-4 text-lg">
+              <Button 
+                size="lg" 
+                className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+                onClick={handleDiagnosticsClick}
+              >
                 <Phone className="w-5 h-5 mr-2" />
                 Срочная диагностика
               </Button>
-              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-orange-900 px-8 py-4 text-lg">
+              <Link href="/calculator">
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+                
+              >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Рассчитать стоимость
               </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -257,8 +293,8 @@ const PowerConnectorPage = () => {
               <Card key={index} className="group hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center mb-4">
-                    <div className="p-2 bg-red-100 rounded-lg group-hover:bg-red-600 transition-colors">
-                      <symptom.icon className="w-6 h-6 text-red-600 group-hover:text-white" />
+                    <div className="p-2 bg-navy-100 rounded-lg group-hover:bg-navy-600 transition-colors">
+                      <symptom.icon className="w-6 h-6 text-navy-600 group-hover:text-white" />
                     </div>
                   </div>
                   <CardTitle className="text-lg">{symptom.title}</CardTitle>
@@ -270,14 +306,14 @@ const PowerConnectorPage = () => {
             ))}
           </div>
 
-          <div className="mt-8 bg-red-50 border border-red-200 rounded-2xl p-6">
+          <div className="mt-8 bg-navy-50 border border-navy-200 rounded-2xl p-6">
             <div className="flex items-start">
-              <AlertTriangle className="w-6 h-6 text-red-500 mr-3 mt-1 flex-shrink-0" />
+              <AlertTriangle className="w-6 h-6 text-navy-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <p className="text-red-800 font-semibold mb-2">
+                <p className="text-navy-800 font-semibold mb-2">
                   Если слышны щелчки, виден нагрев или искрение — прекратите попытки и не включайте ноутбук до диагностики.
                 </p>
-                <p className="text-red-700">
+                <p className="text-navy-700">
                   Признаки поломки — люфт штекера, искра при подключении, пропадание зарядки при малейшем движении, 
                   запах гари, перегрев области DC-in. Дома допустимы только безопасные проверки.
                 </p>
@@ -304,7 +340,7 @@ const PowerConnectorPage = () => {
               <Card key={index} className="group hover:shadow-md transition-shadow">
                 <CardContent className="p-6">
                   <div className="flex items-start space-x-4">
-                    <div className="flex items-center justify-center w-8 h-8 bg-blue-600 text-white rounded-full text-sm font-bold flex-shrink-0">
+                    <div className="flex items-center justify-center w-8 h-8 bg-navy-600 text-white rounded-full text-sm font-bold flex-shrink-0">
                       {item.step}
                     </div>
                     <div>
@@ -322,7 +358,7 @@ const PowerConnectorPage = () => {
       </section>
 
       {/* Don't Do Section */}
-      <section className="py-16 bg-red-50">
+      <section className="py-16 bg-navy-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -336,7 +372,7 @@ const PowerConnectorPage = () => {
           <div className="space-y-4">
             {dontDo.map((warning, index) => (
               <div key={index} className="flex items-start space-x-3 p-4 bg-white rounded-lg shadow-sm">
-                <XCircle className="w-6 h-6 text-red-500 mt-1 flex-shrink-0" />
+                <XCircle className="w-6 h-6 text-navy-600 mt-1 flex-shrink-0" />
                 <span className="text-gray-700">{warning}</span>
               </div>
             ))}
@@ -361,10 +397,10 @@ const PowerConnectorPage = () => {
               <Card key={index} className="group hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center justify-center w-8 h-8 bg-amber-600 text-white rounded-full text-sm font-bold">
+                    <div className="flex items-center justify-center w-8 h-8 bg-navy-600 text-white rounded-full text-sm font-bold">
                       {step.step}
                     </div>
-                    <Wrench className="w-6 h-6 text-amber-600" />
+                    <Wrench className="w-6 h-6 text-navy-600" />
                   </div>
                   <CardTitle className="text-lg">{step.title}</CardTitle>
                 </CardHeader>
@@ -375,10 +411,10 @@ const PowerConnectorPage = () => {
             ))}
           </div>
 
-          <div className="mt-8 bg-amber-50 border border-amber-200 rounded-2xl p-6 text-center">
+          <div className="mt-8 bg-navy-50 border border-navy-200 rounded-2xl p-6 text-center">
             <div className="flex items-center justify-center mb-2">
-              <Shield className="w-6 h-6 text-amber-600 mr-2" />
-              <span className="text-amber-800 font-semibold text-lg">
+              <Shield className="w-6 h-6 text-navy-600 mr-2" />
+              <span className="text-navy-800 font-semibold text-lg">
                 Гарантия: от 120 дней (от 4 месяцев) на все работы и заменённые компоненты
               </span>
             </div>
@@ -408,7 +444,7 @@ const PowerConnectorPage = () => {
                     </div>
                     <div className="flex items-center gap-6">
                       <div className="text-right">
-                        <div className="text-amber-600 font-bold text-lg">{item.price}</div>
+                        <div className="text-navy-600 font-bold text-lg">{item.price}</div>
                         <div className="text-gray-500 text-sm">{item.duration}</div>
                       </div>
                     </div>
@@ -418,12 +454,12 @@ const PowerConnectorPage = () => {
             ))}
           </div>
 
-          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6">
+          <div className="bg-navy-50 border border-navy-200 rounded-2xl p-6">
             <div className="flex items-start">
-              <Clock className="w-6 h-6 text-blue-600 mr-3 mt-1 flex-shrink-0" />
+              <Clock className="w-6 h-6 text-navy-600 mr-3 mt-1 flex-shrink-0" />
               <div>
-                <p className="text-blue-800 font-semibold mb-2">Сроки: типовой цикл ремонта — 1–3 дня</p>
-                <p className="text-blue-700">
+                <p className="text-navy-800 font-semibold mb-2">Сроки: типовой цикл ремонта — 1–3 дня</p>
+                <p className="text-navy-700">
                   Итоговая цена зависит от конструкции (шлейф/плата), состояния площадок и наличия запчастей. 
                   Стоимость подтверждаем после диагностики.
                 </p>
@@ -445,7 +481,7 @@ const PowerConnectorPage = () => {
           <div className="grid gap-4">
             {preparation.map((item, index) => (
               <div key={index} className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
-                <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0" />
+                <CheckCircle className="w-6 h-6 text-navy-600 flex-shrink-0" />
                 <span className="text-gray-700">{item}</span>
               </div>
             ))}
@@ -467,13 +503,13 @@ const PowerConnectorPage = () => {
               <Card key={index}>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-start">
-                    <Search className="w-5 h-5 text-amber-600 mr-3 mt-1 flex-shrink-0" />
+                    <Search className="w-5 h-5 text-navy-600 mr-3 mt-1 flex-shrink-0" />
                     {item.question}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-start">
-                    <div className="bg-amber-100 text-amber-600 rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-1 flex-shrink-0">
+                    <div className="bg-navy-100 text-navy-600 rounded-full w-6 h-6 flex items-center justify-center text-sm mr-3 mt-1 flex-shrink-0">
                       A
                     </div>
                     <p className="text-gray-700">{item.answer}</p>
@@ -486,25 +522,50 @@ const PowerConnectorPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-amber-600 text-white">
+      <section className="py-16 bg-navy-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6">
             Нужна профессиональная диагностика разъёма питания?
           </h2>
-          <p className="text-xl text-amber-100 mb-8">
+          <p className="text-xl text-navy-100 mb-8">
             Получите точную стоимость ремонта и гарантию до 12 месяцев
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-white text-amber-600 hover:bg-gray-100 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
+              onClick={handleRepairClick}
+            >
               <Phone className="w-5 h-5 mr-2" />
               Записаться на ремонт
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-amber-600 px-8 py-4 text-lg">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+              onClick={handleDiagnosticsClick}
+            >
               Бесплатная диагностика
             </Button>
           </div>
         </div>
       </section>
+
+      {/* Callback Modal */}
+      <CallbackModal 
+        isOpen={isCallbackModalOpen}
+        onClose={handleCloseModal}
+        initialData={{
+          name: "",
+          phone: "",
+          note: modalType === 'diagnostics' 
+            ? "Запрос на бесплатную диагностику разъёма питания ноутбука" 
+            : modalType === 'repair'
+            ? "Запрос на ремонт разъёма питания ноутбука"
+            : "Запрос на расчет стоимости ремонта разъёма питания",
+          agree: false
+        }}
+      />
 
       {/* Schema.org Structured Data */}
       <script
