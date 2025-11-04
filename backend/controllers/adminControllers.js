@@ -1,6 +1,10 @@
 const fs = require('fs').promises;
 const path = require('path');
 const { exec } = require('child_process');
+const parser = require('@babel/parser');
+const traverse = require('@babel/traverse').default;
+const t = require('@babel/types');
+const generator = require('@babel/generator').default;
 
 // Укажите абсолютный путь к папке проекта
 // ДЛЯ ПРОДА ИСПОЛЬЗОВАТЬ ЭТУ СТРОЧКУ, НО ВМЕСТО testend.site правильный адрес сайта -
@@ -1257,81 +1261,41 @@ const getSeoInfo = async (req, res) => {
       return res.json({
         success: true,
         folder: normalizedPath,
-        seo: {
-          title: '',
-          description: '',
-          keywords: '',
-          openGraph: {
-            title: '',
-            description: '',
-            images: [],
-            type: 'website'
-          },
-          twitter: {
-            card: 'summary_large_image',
-            title: '',
-            description: '',
-            images: []
-          }
-        },
+        seo: getEmptySeoData(),
         pageFiles: [],
         message: 'Файлы page.tsx или layout.tsx не найдены'
       });
     }
 
-    // Парсим metadata из всех найденных файлов
+    // Парсим metadata из всех найденных файлов с помощью Babel
     const allSeoData = [];
     for (const filePath of pageFiles) {
-      const seoData = await parseMetadataFromFile(filePath);
-      if (seoData) {
-        allSeoData.push({
-          file: path.relative(PROJECT_ROOT, filePath),
-          seo: seoData
-        });
+      try {
+        const seoData = await parseMetadataWithBabel(filePath);
+        if (seoData && hasSeoContent(seoData)) {
+          allSeoData.push({
+            file: path.relative(PROJECT_ROOT, filePath),
+            seo: seoData
+          });
+        }
+      } catch (error) {
+        console.error(`Ошибка при парсинге файла ${filePath}:`, error);
       }
     }
 
     // Объединяем данные (приоритет у page.tsx над layout.tsx)
-    let mergedSeo = {
-      title: '',
-      description: '',
-      keywords: '',
-      openGraph: {
-        title: '',
-        description: '',
-        images: [],
-        type: 'website'
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: '',
-        description: '',
-        images: []
-      }
-    };
+    let mergedSeo = getEmptySeoData();
 
     // Сортируем: page.tsx имеет приоритет над layout.tsx
     const sortedFiles = allSeoData.sort((a, b) => {
       const aIsPage = a.file.includes('page.tsx') || a.file.includes('page.jsx');
       const bIsPage = b.file.includes('page.tsx') || b.file.includes('page.jsx');
-      return bIsPage - aIsPage;
+      return (bIsPage ? 1 : 0) - (aIsPage ? 1 : 0);
     });
 
     // Мерджим данные
     for (const { seo } of sortedFiles) {
-      if (seo.title) mergedSeo.title = seo.title;
-      if (seo.description) mergedSeo.description = seo.description;
-      if (seo.keywords) mergedSeo.keywords = seo.keywords;
-      
-      if (seo.openGraph.title) mergedSeo.openGraph.title = seo.openGraph.title;
-      if (seo.openGraph.description) mergedSeo.openGraph.description = seo.openGraph.description;
-      if (seo.openGraph.type) mergedSeo.openGraph.type = seo.openGraph.type;
-      if (seo.openGraph.images.length > 0) mergedSeo.openGraph.images = seo.openGraph.images;
-      
-      if (seo.twitter.title) mergedSeo.twitter.title = seo.twitter.title;
-      if (seo.twitter.description) mergedSeo.twitter.description = seo.twitter.description;
-      if (seo.twitter.card) mergedSeo.twitter.card = seo.twitter.card;
-      if (seo.twitter.images.length > 0) mergedSeo.twitter.images = seo.twitter.images;
+      mergedSeo = mergeSeoData(mergedSeo, seo);
     }
 
     res.json({
@@ -1339,7 +1303,11 @@ const getSeoInfo = async (req, res) => {
       folder: normalizedPath,
       seo: mergedSeo,
       pageFiles: allSeoData.map(f => f.file),
-      foundFiles: pageFiles.map(p => path.relative(PROJECT_ROOT, p))
+      foundFiles: pageFiles.map(p => path.relative(PROJECT_ROOT, p)),
+      debug: {
+        parsedFiles: allSeoData.length,
+        totalFiles: pageFiles.length
+      }
     });
 
   } catch (error) {
@@ -1351,6 +1319,247 @@ const getSeoInfo = async (req, res) => {
   }
 };
 
+// Вспомогательные функции
+
+const getEmptySeoData = () => ({
+  title: '',
+  description: '',
+  keywords: '',
+  openGraph: {
+    title: '',
+    description: '',
+    images: [],
+    type: 'website'
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: '',
+    description: '',
+    images: []
+  }
+});
+
+const hasSeoContent = (seoData) => {
+  return (
+    seoData.title ||
+    seoData.description ||
+    seoData.keywords ||
+    seoData.openGraph?.title ||
+    seoData.openGraph?.description ||
+    seoData.openGraph?.images?.length > 0 ||
+    seoData.twitter?.title ||
+    seoData.twitter?.description ||
+    seoData.twitter?.images?.length > 0
+  );
+};
+
+const mergeSeoData = (target, source) => {
+  const result = { ...target };
+  
+  if (source.title) result.title = source.title;
+  if (source.description) result.description = source.description;
+  if (source.keywords) result.keywords = source.keywords;
+  
+  if (source.openGraph) {
+    if (source.openGraph.title) result.openGraph.title = source.openGraph.title;
+    if (source.openGraph.description) result.openGraph.description = source.openGraph.description;
+    if (source.openGraph.type) result.openGraph.type = source.openGraph.type;
+    if (source.openGraph.images && source.openGraph.images.length > 0) {
+      result.openGraph.images = source.openGraph.images;
+    }
+  }
+  
+  if (source.twitter) {
+    if (source.twitter.title) result.twitter.title = source.twitter.title;
+    if (source.twitter.description) result.twitter.description = source.twitter.description;
+    if (source.twitter.card) result.twitter.card = source.twitter.card;
+    if (source.twitter.images && source.twitter.images.length > 0) {
+      result.twitter.images = source.twitter.images;
+    }
+  }
+  
+  return result;
+};
+
+const parseMetadataWithBabel = async (filePath) => {
+  try {
+    const content = await fs.readFile(filePath, 'utf8');
+    
+    const ast = parser.parse(content, {
+      sourceType: 'module',
+      plugins: ['typescript', 'jsx'],
+      tokens: true
+    });
+
+    let finalMetadata = null;
+    let importsEndPosition = 0;
+
+    // Находим где заканчиваются импорты
+    traverse(ast, {
+      ImportDeclaration(path) {
+        if (path.node.end > importsEndPosition) {
+          importsEndPosition = path.node.end;
+        }
+      }
+    });
+
+    const metadataExports = [];
+
+    // Ищем все экспорты metadata
+    traverse(ast, {
+      ExportNamedDeclaration(path) {
+        if (path.node.declaration && t.isVariableDeclaration(path.node.declaration)) {
+          for (const declaration of path.node.declaration.declarations) {
+            if (t.isIdentifier(declaration.id) && 
+                declaration.id.name === 'metadata' && 
+                declaration.init) {
+              
+              const extracted = extractValue(declaration.init);
+              if (extracted) {
+                metadataExports.push({
+                  metadata: extracted,
+                  position: path.node.start,
+                  isAfterImports: path.node.start > importsEndPosition
+                });
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Выбираем самый подходящий экспорт (после импортов имеет приоритет)
+    if (metadataExports.length > 0) {
+      // Сначала ищем экспорт после импортов
+      const afterImports = metadataExports.filter(m => m.isAfterImports);
+      if (afterImports.length > 0) {
+        finalMetadata = afterImports[0].metadata;
+      } else {
+        // Иначе берем первый найденный
+        finalMetadata = metadataExports[0].metadata;
+      }
+      
+      console.log(`Найдено ${metadataExports.length} экспортов metadata, выбран:`, {
+        afterImports: afterImports.length > 0,
+        position: metadataExports[0].position
+      });
+    }
+
+    return finalMetadata ? normalizeSeoData(finalMetadata) : null;
+    
+  } catch (error) {
+    console.error(`Ошибка Babel парсинга в файле ${filePath}:`, error);
+    return null;
+  }
+};
+
+const extractValue = (node) => {
+  if (!node) return null;
+
+  try {
+    // Обрабатываем объекты
+    if (t.isObjectExpression(node)) {
+      const obj = {};
+      for (const prop of node.properties) {
+        if (t.isObjectProperty(prop)) {
+          const key = getKeyName(prop.key);
+          if (key) {
+            // Пропускаем spread операторы (...operator)
+            if (t.isSpreadElement(prop)) {
+              continue;
+            }
+            obj[key] = extractValue(prop.value);
+          }
+        }
+      }
+      return obj;
+    }
+    
+    // Обрабатываем массивы
+    if (t.isArrayExpression(node)) {
+      return node.elements
+        .map(element => extractValue(element))
+        .filter(val => val !== null && val !== undefined);
+    }
+    
+    // Обрабатываем строки
+    if (t.isStringLiteral(node)) {
+      return node.value;
+    }
+    
+    // Обрабатываем шаблонные строки (без выражений)
+    if (t.isTemplateLiteral(node)) {
+      if (node.expressions.length === 0 && node.quasis.length === 1) {
+        return node.quasis[0].value.raw;
+      }
+      return null;
+    }
+    
+    // Обрабатываем идентификаторы (пропускаем)
+    if (t.isIdentifier(node)) {
+      return null;
+    }
+    
+    // Обрабатываем вызовы функций (пропускаем)
+    if (t.isCallExpression(node)) {
+      return null;
+    }
+    
+    // Обрабатываем логические значения
+    if (t.isBooleanLiteral(node)) {
+      return node.value;
+    }
+    
+    // Обрабатываем числа
+    if (t.isNumericLiteral(node)) {
+      return node.value;
+    }
+    
+    // Обрабатываем null
+    if (t.isNullLiteral(node)) {
+      return null;
+    }
+    
+    return null;
+  } catch (error) {
+    console.error('Ошибка при извлечении значения:', error);
+    return null;
+  }
+};
+
+const getKeyName = (keyNode) => {
+  if (t.isIdentifier(keyNode)) {
+    return keyNode.name;
+  }
+  if (t.isStringLiteral(keyNode)) {
+    return keyNode.value;
+  }
+  return null;
+};
+
+const normalizeSeoData = (metadata) => {
+  if (!metadata || typeof metadata !== 'object') {
+    return getEmptySeoData();
+  }
+
+  return {
+    title: metadata.title || '',
+    description: metadata.description || '',
+    keywords: metadata.keywords || '',
+    openGraph: {
+      title: metadata.openGraph?.title || '',
+      description: metadata.openGraph?.description || '',
+      images: Array.isArray(metadata.openGraph?.images) ? metadata.openGraph.images : [],
+      type: metadata.openGraph?.type || 'website'
+    },
+    twitter: {
+      card: metadata.twitter?.card || 'summary_large_image',
+      title: metadata.twitter?.title || '',
+      description: metadata.twitter?.description || '',
+      images: Array.isArray(metadata.twitter?.images) ? metadata.twitter.images : []
+    }
+  };
+};
 // Сохранение SEO информации в page.tsx
 const saveSeoInfo = async (req, res) => {
   try {
@@ -1419,87 +1628,12 @@ const saveSeoInfo = async (req, res) => {
     
     if (fileExists) {
       fileContent = await fs.readFile(pageFilePath, 'utf8');
-    } else {
-      // Базовый шаблон для нового page.tsx
-      fileContent = `import React from 'react';
-
-export const metadata = {
-  title: '${seo.title || ''}',
-  description: '${seo.description || ''}',
-  ${seo.keywords ? `keywords: '${seo.keywords}',` : ''}
-  openGraph: {
-    title: '${seo.openGraph?.title || seo.title || ''}',
-    description: '${seo.openGraph?.description || seo.description || ''}',
-    ${seo.openGraph?.images?.[0] ? `images: ['${seo.openGraph.images[0]}'],` : ''}
-    type: '${seo.openGraph?.type || 'website'}'
-  },
-  twitter: {
-    card: '${seo.twitter?.card || 'summary_large_image'}',
-    title: '${seo.twitter?.title || seo.title || ''}',
-    description: '${seo.twitter?.description || seo.description || ''}',
-    ${seo.twitter?.images?.[0] ? `images: ['${seo.twitter.images[0]}']` : ''}
-  }
-};
-
-export default function Page() {
-  return (
-    <div>
-      <h1>${seo.title || 'Новая страница'}</h1>
-      <p>${seo.description || 'Описание страницы'}</p>
-    </div>
-  );
-}`;
-    }
-
-    // Если файл существует, обновляем metadata
-    if (fileExists) {
-      // Упрощенная замена metadata (для сложных случаев лучше использовать AST парсер)
-      const metadataRegex = /export\s+(const\s+metadata|async\s+function\s+generateMetadata)\s*[=:]\s*{([^}]*)}/gs;
       
-      if (metadataRegex.test(fileContent)) {
-        // Заменяем существующий metadata
-        const newMetadata = `export const metadata = {
-  title: '${(seo.title || '').replace(/'/g, "\\'")}',
-  description: '${(seo.description || '').replace(/'/g, "\\'")}',
-  ${seo.keywords ? `keywords: '${seo.keywords.replace(/'/g, "\\'")}',` : ''}
-  openGraph: {
-    title: '${(seo.openGraph?.title || seo.title || '').replace(/'/g, "\\'")}',
-    description: '${(seo.openGraph?.description || seo.description || '').replace(/'/g, "\\'")}',
-    ${seo.openGraph?.images?.[0] ? `images: ['${seo.openGraph.images[0].replace(/'/g, "\\'")}'],` : ''}
-    type: '${seo.openGraph?.type || 'website'}'
-  },
-  twitter: {
-    card: '${seo.twitter?.card || 'summary_large_image'}',
-    title: '${(seo.twitter?.title || seo.title || '').replace(/'/g, "\\'")}',
-    description: '${(seo.twitter?.description || seo.description || '').replace(/'/g, "\\'")}',
-    ${seo.twitter?.images?.[0] ? `images: ['${seo.twitter.images[0].replace(/'/g, "\\'")}']` : ''}
-  }
-}`;
-
-        fileContent = fileContent.replace(metadataRegex, newMetadata);
-      } else {
-        // Добавляем metadata в начало файла
-        const newMetadata = `export const metadata = {
-  title: '${(seo.title || '').replace(/'/g, "\\'")}',
-  description: '${(seo.description || '').replace(/'/g, "\\'")}',
-  ${seo.keywords ? `keywords: '${seo.keywords.replace(/'/g, "\\'")}',` : ''}
-  openGraph: {
-    title: '${(seo.openGraph?.title || seo.title || '').replace(/'/g, "\\'")}',
-    description: '${(seo.openGraph?.description || seo.description || '').replace(/'/g, "\\'")}',
-    ${seo.openGraph?.images?.[0] ? `images: ['${seo.openGraph.images[0].replace(/'/g, "\\'")}'],` : ''}
-    type: '${seo.openGraph?.type || 'website'}'
-  },
-  twitter: {
-    card: '${seo.twitter?.card || 'summary_large_image'}',
-    title: '${(seo.twitter?.title || seo.title || '').replace(/'/g, "\\'")}',
-    description: '${(seo.twitter?.description || seo.description || '').replace(/'/g, "\\'")}',
-    ${seo.twitter?.images?.[0] ? `images: ['${seo.twitter.images[0].replace(/'/g, "\\'")}']` : ''}
-  }
-};
-
-`;
-        fileContent = newMetadata + fileContent;
-      }
+      // Обновляем существующий файл с помощью Babel
+      fileContent = await updateMetadataWithBabel(fileContent, seo);
+    } else {
+      // Создаем новый файл с правильной структурой
+      fileContent = generateNewPageFile(seo);
     }
 
     await fs.writeFile(pageFilePath, fileContent, 'utf8');
@@ -1521,6 +1655,308 @@ export default function Page() {
   }
 };
 
+// Функция для обновления metadata с помощью Babel
+const updateMetadataWithBabel = (fileContent, seo) => {
+  try {
+    const ast = parser.parse(fileContent, {
+      sourceType: 'module',
+      plugins: ['typescript', 'jsx'],
+      tokens: true
+    });
+
+    let metadataUpdated = false;
+    let hasMetadataImport = false;
+
+    // Проверяем есть ли импорт Metadata из next
+    traverse(ast, {
+      ImportDeclaration(path) {
+        if (path.node.source.value === 'next' && 
+            path.node.specifiers.some(spec => 
+              t.isImportSpecifier(spec) && spec.imported.name === 'Metadata')) {
+          hasMetadataImport = true;
+        }
+      }
+    });
+
+    // Ищем и обновляем существующие экспорты metadata
+    traverse(ast, {
+      ExportNamedDeclaration(path) {
+        if (path.node.declaration && t.isVariableDeclaration(path.node.declaration)) {
+          for (const declaration of path.node.declaration.declarations) {
+            if (t.isIdentifier(declaration.id) && 
+                declaration.id.name === 'metadata' && 
+                declaration.init) {
+              
+              // Заменяем объект metadata
+              const newMetadataObject = createMetadataObject(seo, hasMetadataImport);
+              path.node.declaration.declarations[0].init = newMetadataObject;
+              metadataUpdated = true;
+              
+              console.log('✅ Существующий metadata обновлен');
+            }
+          }
+        }
+      }
+    });
+
+    // Если не нашли существующий metadata, добавляем новый
+    if (!metadataUpdated) {
+      console.log('⚠️ Существующий metadata не найден, добавляем новый');
+      
+      // Добавляем импорт Metadata если его нет
+      if (!hasMetadataImport) {
+        traverse(ast, {
+          Program(path) {
+            const importDeclaration = t.importDeclaration(
+              [t.importSpecifier(t.identifier('Metadata'), t.identifier('Metadata'))],
+              t.stringLiteral('next')
+            );
+            // Добавляем импорт в начало файла
+            path.node.body.unshift(importDeclaration);
+          }
+        });
+      }
+
+      // Добавляем экспорт metadata
+      traverse(ast, {
+        Program(path) {
+          const metadataExport = t.exportNamedDeclaration(
+            t.variableDeclaration('const', [
+              t.variableDeclarator(
+                t.identifier('metadata'),
+                createMetadataObject(seo, true)
+              )
+            ])
+          );
+
+          // Находим позицию после последнего импорта
+          let lastImportIndex = -1;
+          path.node.body.forEach((node, index) => {
+            if (t.isImportDeclaration(node)) {
+              lastImportIndex = index;
+            }
+          });
+
+          if (lastImportIndex !== -1) {
+            path.node.body.splice(lastImportIndex + 1, 0, metadataExport);
+          } else {
+            path.node.body.unshift(metadataExport);
+          }
+        }
+      });
+    }
+
+    // Генерируем обновленный код с правильными настройками для кириллицы
+    const { code } = generator(ast, {
+      retainLines: false,
+      compact: false,
+      concise: false,
+      jsescOption: {
+        minimal: true // Это важно! Отключает экранирование Unicode
+      }
+    });
+    
+    return code;
+
+  } catch (error) {
+    console.error('Ошибка при обновлении metadata с Babel:', error);
+    // Fallback: простой заменой
+    return updateMetadataWithRegex(fileContent, seo);
+  }
+};
+
+// Создание AST объекта для metadata
+const createMetadataObject = (seo) => {
+  const properties = [];
+
+  // title
+  if (seo.title) {
+    properties.push(
+      t.objectProperty(
+        t.identifier('title'),
+        t.stringLiteral(seo.title)
+      )
+    );
+  }
+
+  // description
+  if (seo.description) {
+    properties.push(
+      t.objectProperty(
+        t.identifier('description'),
+        t.stringLiteral(seo.description)
+      )
+    );
+  }
+
+  // keywords
+  if (seo.keywords) {
+    properties.push(
+      t.objectProperty(
+        t.identifier('keywords'),
+        t.stringLiteral(seo.keywords)
+      )
+    );
+  }
+
+  // openGraph
+  if (seo.openGraph && (seo.openGraph.title || seo.openGraph.description || seo.openGraph.images)) {
+    const openGraphProperties = [];
+    
+    if (seo.openGraph.title) {
+      openGraphProperties.push(
+        t.objectProperty(
+          t.identifier('title'),
+          t.stringLiteral(seo.openGraph.title)
+        )
+      );
+    }
+    if (seo.openGraph.description) {
+      openGraphProperties.push(
+        t.objectProperty(
+          t.identifier('description'),
+          t.stringLiteral(seo.openGraph.description)
+        )
+      );
+    }
+    if (seo.openGraph.type) {
+      openGraphProperties.push(
+        t.objectProperty(
+          t.identifier('type'),
+          t.stringLiteral(seo.openGraph.type)
+        )
+      );
+    }
+    if (seo.openGraph.images && seo.openGraph.images.length > 0) {
+      openGraphProperties.push(
+        t.objectProperty(
+          t.identifier('images'),
+          t.arrayExpression(
+            seo.openGraph.images.map(img => t.stringLiteral(img))
+          )
+        )
+      );
+    }
+
+    properties.push(
+      t.objectProperty(
+        t.identifier('openGraph'),
+        t.objectExpression(openGraphProperties)
+      )
+    );
+  }
+
+  // twitter
+  if (seo.twitter && (seo.twitter.title || seo.twitter.description || seo.twitter.images)) {
+    const twitterProperties = [];
+    
+    if (seo.twitter.title) {
+      twitterProperties.push(
+        t.objectProperty(
+          t.identifier('title'),
+          t.stringLiteral(seo.twitter.title)
+        )
+      );
+    }
+    if (seo.twitter.description) {
+      twitterProperties.push(
+        t.objectProperty(
+          t.identifier('description'),
+          t.stringLiteral(seo.twitter.description)
+        )
+      );
+    }
+    if (seo.twitter.card) {
+      twitterProperties.push(
+        t.objectProperty(
+          t.identifier('card'),
+          t.stringLiteral(seo.twitter.card)
+        )
+      );
+    }
+    if (seo.twitter.images && seo.twitter.images.length > 0) {
+      twitterProperties.push(
+        t.objectProperty(
+          t.identifier('images'),
+          t.arrayExpression(
+            seo.twitter.images.map(img => t.stringLiteral(img))
+          )
+        )
+      );
+    }
+
+    properties.push(
+      t.objectProperty(
+        t.identifier('twitter'),
+        t.objectExpression(twitterProperties)
+      )
+    );
+  }
+
+  return t.objectExpression(properties);
+};
+// Fallback функция с регулярными выражениями
+const updateMetadataWithRegex = (fileContent, seo) => {
+  const metadataRegex = /export\s+(const|let|var)\s+metadata\s*:?\s*\w*\s*=\s*{[\s\S]*?}(?=;|\n|$)/g;
+  
+  const newMetadata = `export const metadata = {
+  title: '${(seo.title || '').replace(/'/g, "\\'")}',
+  description: '${(seo.description || '').replace(/'/g, "\\'")}',${seo.keywords ? `
+  keywords: '${seo.keywords.replace(/'/g, "\\'")}',` : ''}${(seo.openGraph || seo.twitter) ? `
+  openGraph: {
+    title: '${(seo.openGraph?.title || seo.title || '').replace(/'/g, "\\'")}',
+    description: '${(seo.openGraph?.description || seo.description || '').replace(/'/g, "\\'")}',${seo.openGraph?.images?.[0] ? `
+    images: ['${seo.openGraph.images[0].replace(/'/g, "\\'")}'],` : ''}
+    type: '${seo.openGraph?.type || 'website'}'
+  },` : ''}${seo.twitter ? `
+  twitter: {
+    card: '${seo.twitter?.card || 'summary_large_image'}',
+    title: '${(seo.twitter?.title || seo.title || '').replace(/'/g, "\\'")}',
+    description: '${(seo.twitter?.description || seo.description || '').replace(/'/g, "\\'")}'${seo.twitter?.images?.[0] ? `,
+    images: ['${seo.twitter.images[0].replace(/'/g, "\\'")}']` : ''}
+  }` : ''}
+}`;
+
+  if (metadataRegex.test(fileContent)) {
+    return fileContent.replace(metadataRegex, newMetadata);
+  } else {
+    // Добавляем после импортов
+    const importEnd = fileContent.lastIndexOf("';\n") + 3;
+    return fileContent.slice(0, importEnd) + '\n\n' + newMetadata + '\n\n' + fileContent.slice(importEnd);
+  }
+};
+
+// Генерация нового файла
+const generateNewPageFile = (seo) => {
+  return `import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '${(seo.title || '').replace(/'/g, "\\'")}',
+  description: '${(seo.description || '').replace(/'/g, "\\'")}',${seo.keywords ? `
+  keywords: '${seo.keywords.replace(/'/g, "\\'")}',` : ''}${(seo.openGraph || seo.twitter) ? `
+  openGraph: {
+    title: '${(seo.openGraph?.title || seo.title || '').replace(/'/g, "\\'")}',
+    description: '${(seo.openGraph?.description || seo.description || '').replace(/'/g, "\\'")}',${seo.openGraph?.images?.[0] ? `
+    images: ['${seo.openGraph.images[0].replace(/'/g, "\\'")}'],` : ''}
+    type: '${seo.openGraph?.type || 'website'}'
+  },` : ''}${seo.twitter ? `
+  twitter: {
+    card: '${seo.twitter?.card || 'summary_large_image'}',
+    title: '${(seo.twitter?.title || seo.title || '').replace(/'/g, "\\'")}',
+    description: '${(seo.twitter?.description || seo.description || '').replace(/'/g, "\\'")}'${seo.twitter?.images?.[0] ? `,
+    images: ['${seo.twitter.images[0].replace(/'/g, "\\'")}']` : ''}
+  }` : ''}
+};
+
+export default function Page() {
+  return (
+    <div>
+      <h1>${seo.title || 'Новая страница'}</h1>
+      <p>${seo.description || 'Описание страницы'}</p>
+    </div>
+  );
+}`;
+};
 // Удаление SEO информации
 const deleteSeoInfo = async (req, res) => {
   try {

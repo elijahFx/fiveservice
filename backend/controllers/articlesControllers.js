@@ -146,14 +146,14 @@ const editArticle = async (req, res) => {
   try {
     connection = await createDbConnection();
     const { id } = req.params;
-    const { title, content, category, tags, readTime, annotation, preview } = req.body;
+    const { title, content, category, tags, readTime, annotation, preview, author } = req.body;
 
 
     const [result] = await connection.execute(
       `UPDATE articles 
-      SET title = ?, content = ?, category = ?, tags = ?, readTime = ?, annotation = ?, preview = ?
+      SET title = ?, content = ?, category = ?, tags = ?, readTime = ?, annotation = ?, preview = ?, author = ?
       WHERE id = ?`,
-      [title, content, category, tags || null, readTime, annotation, preview, id]
+      [title, content, category, tags || null, readTime, annotation, preview, author, id]
     );
 
     if (result.affectedRows === 0) {

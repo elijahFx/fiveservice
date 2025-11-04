@@ -1,9 +1,22 @@
 import { Metadata } from 'next';
 import { Phone, MessageCircle, CircleCheck as CheckCircle, QrCode, FileText, Headphones } from 'lucide-react';
 
-export const metadata: Metadata = {
-  title: 'Бонусная программа для организаций | FiveService',
+export const metadata = {
+  title: 'Бонусная программа для организаций | FiveServiceвфывфв',
   description: 'Скидка от 25 до 30% на ремонт ноутбуков для сотрудников вашей организации',
+  
+  openGraph: {
+    title: 'Бонусная программа для организаций | FiveServiceвфывфв',
+    description: 'Скидка от 25 до 30% на ремонт ноутбуков для сотрудников вашей организации',
+    
+    type: 'website'
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Бонусная программа для организаций | FiveServiceвфывфв',
+    description: 'Скидка от 25 до 30% на ремонт ноутбуков для сотрудников вашей организации',
+    
+  }
 };
 
 export default function BonusProgramPage() {

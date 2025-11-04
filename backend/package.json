@@ -13,6 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/generator": "^7.28.5",
+    "@babel/parser": "^7.28.5",
+    "@babel/traverse": "^7.28.5",
+    "@babel/types": "^7.28.5",
     "@yandex-cloud/nodejs-sdk": "^2.9.0",
     "axios": "^1.9.0",
     "bcrypt": "^5.1.1",

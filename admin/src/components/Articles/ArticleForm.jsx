@@ -10,6 +10,7 @@ export const ArticleForm = ({ article, onClose, onSubmit, isSubmitting, user_id,
     category: article?.category || '',
     tags: article?.tags ? article.tags.split(",").join(', ') : '',
     readTime: article?.readTime || 0,
+    author: article?.author || author || '', // Добавляем автора в formData
   });
 
   // Автоматический расчет времени прочтения при изменении контента
@@ -26,11 +27,11 @@ export const ArticleForm = ({ article, onClose, onSubmit, isSubmitting, user_id,
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const submitData = {
       ...formData,
       user_id: user_id,
-      author: author
+      // author теперь берется из formData
     };
 
     await onSubmit(submitData);
@@ -74,6 +75,21 @@ export const ArticleForm = ({ article, onClose, onSubmit, isSubmitting, user_id,
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                   placeholder="Введите заголовок статьи"
                   required
+                />
+              </div>
+
+              {/* Автор */}
+              <div>
+                <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-1">
+                  Автор
+                </label>
+                <input
+                  type="text"
+                  id="author"
+                  value={formData.author}
+                  onChange={(e) => setFormData({...formData, author: e.target.value})}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Укажите автора статьи"
                 />
               </div>
 
@@ -160,7 +176,7 @@ export const ArticleForm = ({ article, onClose, onSubmit, isSubmitting, user_id,
                     </span>
                   </div>
                 </div>
-                
+
                 {/* Статистика текста */}
                 <div className="bg-gray-50 p-3 rounded-md">
                   <p className="text-xs text-gray-600">

@@ -7,6 +7,7 @@ import { filesApi } from "./apis/filesApi";
 import { questionsApi } from "./apis/questionsApi";
 import { adminApi } from "./apis/adminsApi";
 import authReducer from "./slices/authSlice";
+import { telegramApi } from "./apis/telegramApi";
 
 
 
@@ -18,6 +19,7 @@ export const store = configureStore({
     [filesApi.reducerPath]: filesApi.reducer,
     [questionsApi.reducerPath]: questionsApi.reducer,
     [adminApi.reducerPath]: adminApi.reducer,
+    [telegramApi.reducerPath]: telegramApi.reducer,
     auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -28,6 +30,7 @@ export const store = configureStore({
       .concat(filesApi.middleware)
       .concat(questionsApi.middleware)
       .concat(adminApi.middleware)
+      .concat(telegramApi.middleware)
 });
 
 setupListeners(store.dispatch);
