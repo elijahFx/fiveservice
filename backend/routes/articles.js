@@ -11,11 +11,14 @@ const {
   likeArticle,
   unlikeArticle,
   searchArticles,
-  getArticlesByID
+  getArticlesByID,
+  getRandomArticles
 } = require("../controllers/articlesControllers");
 const requireAuth = require("../requireAuth");
 
 const router = express.Router();
+
+router.get("/rand", getRandomArticles);
 
 router.get("/", getArticles);
 

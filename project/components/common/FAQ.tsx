@@ -23,7 +23,7 @@ const FAQ = ({ special_questions = [] }) => {
         <>
           Ориентиры по прайсу: чистка ноутбука — 75 / 125 / 195 BYN (Standard / Gaming / Extreme Pro); установка ОС — 60 BYN; чистка от вирусов — 60 BYN; копирование данных — 35 BYN; замена матрицы — 130 BYN без стоимости детали. Точную сумму озвучиваем после диагностики модели и дефекта.
           <br /><br />
-          Полный перечень работ смотрите на странице <Link href="/services" className="text-navy-600 hover:text-navy-700 underline font-medium">Услуги</Link>.
+          Полный перечень работ смотрите на странице <Link href="/services" scroll={true} className="text-navy-600 hover:text-navy-700 underline font-medium">Услуги</Link>.
         </>
       )
     },
@@ -102,8 +102,8 @@ const FAQ = ({ special_questions = [] }) => {
                     {item.answer}
                   </div>
                   {item.href && (
-                    <Link href={item.href}>
-                      <p className='text-blue-400 mt-2 hover:text-blue-500'>Узнать больше</p>
+                    <Link href={item.href} scroll={true} className="text-blue-400 mt-2 hover:text-blue-500 block">
+                      Узнать больше
                     </Link>
                   )}
                 </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Menu, X, Phone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -8,18 +8,42 @@ import { Button } from '@/components/ui/button';
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
+      // Закрываем меню при скролле
+      setIsOpen(false);
     };
+
+    const handleClickOutside = (event: MouseEvent) => {
+      // Закрываем меню если клик был вне меню и вне кнопки меню
+      if (
+        menuRef.current && 
+        !menuRef.current.contains(event.target as Node) &&
+        buttonRef.current && 
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    // Добавляем обработчики
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Убираем обработчики при размонтировании
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const navItems = [
     { href: '/', label: 'Главная' },
-    { href: '/services', label: 'Услуги' },
+    { href: '/services', label: 'Цены' },
     { href: '/articles', label: 'Статьи' },
     { href: '/corporate', label: 'Юр. лицам' },
     { href: '/questions', label: 'Вопросы' },
@@ -60,6 +84,7 @@ const Navigation = () => {
           {/* Mobile menu button */}
           <div className="lg:hidden">
             <button
+              ref={buttonRef}
               onClick={() => setIsOpen(!isOpen)}
               className="inline-flex items-center px-4 py-2.5 text-sm font-semibold text-navy-600 bg-white border-b-2 border-navy-600 hover:bg-navy-50 hover:border-navy-700 active:bg-navy-100 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-navy-500"
             >
@@ -70,7 +95,10 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="lg:hidden bg-white border-t shadow-lg">
+          <div 
+            ref={menuRef}
+            className="lg:hidden bg-white border-t shadow-lg"
+          >
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
                 <Link

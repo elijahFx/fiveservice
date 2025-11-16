@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from 'react';
 import { 
   Laptop, 
   Keyboard, 
@@ -12,23 +15,30 @@ import {
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
+import CallbackModal from '@/components/modal/CallbackModal';
 
 const Services = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDiscount, setSelectedDiscount] = useState<string>('');
+
   const discountOffers = [
     {
       title: 'Скидка -10% при первом обращении к нам',
       description: 'Скидка на работы сервиса. Фиксируем в заказ-подряде.',
-      discount: '-10%'
+      discount: '-10%',
+      type: 'first_time'
     },
     {
       title: 'Скидка -20% студентам и пенсионерам',
       description: 'Укажите основание при оформлении заявки.',
-      discount: '-20%'
+      discount: '-20%',
+      type: 'student_senior'
     },
     {
       title: 'Скидка -30% на чистку ноутбука или ПК по субботам',
       description: 'Профилактика, термопаста/прокладки, тест под нагрузкой.',
-      discount: '-30%'
+      discount: '-30%',
+      type: 'saturday_cleaning'
     }
   ];
 
@@ -36,49 +46,76 @@ const Services = () => {
     {
       name: 'Ремонт ноутбука',
       icon: Laptop,
-      description: 'Ремонт любых неисправностей ноутбука'
+      description: 'Ремонт любых неисправностей ноутбука',
+      href: "/"
     },
     {
       name: 'Замена клавиатуры',
       icon: Keyboard,
-      description: 'Залипают или не работают клавиши — заменим клавиатуру или шлейф'
+      description: 'Залипают или не работают клавиши — заменим клавиатуру или шлейф',
+      href: "/services/keyboardreplacement"
     },
     {
       name: 'Замена экрана',
       icon: Monitor,
-      description: 'Трещины, полосы или нет подсветки — подберём и заменим матрицу'
+      description: 'Трещины, полосы или нет подсветки — подберём и заменим матрицу',
+      href: "/services/screenreplacement"
     },
     {
       name: 'Разъём питания',
       icon: Zap,
-      description: 'Плохой контакт и не заряжает — заменим DC-jack и усилим крепление'
+      description: 'Плохой контакт и не заряжает — заменим DC-jack и усилим крепление',
+      href: "/services/powerconnection"
     },
     {
       name: 'После залития',
       icon: Droplets,
-      description: 'Мойка платы, удаление окислов, восстановление дорожек'
+      description: 'Мойка платы, удаление окислов, восстановление дорожек',
+      href: "/services/liquiddamage"
     },
     {
       name: 'Замена аккумулятора',
       icon: Battery,
-      description: 'Быстро садится или не заряжается — подберём и установим АКБ'
+      description: 'Быстро садится или не заряжается — подберём и установим АКБ',
+      href: "/services/batteryreplacement"
     },
     {
       name: 'Чистка системы',
       icon: Brush,
-      description: 'Чистка, термопаста/прокладки, проверка температур'
+      description: 'Чистка, термопаста/прокладки, проверка температур',
+      href: "/services/cleaning"
     },
     {
       name: 'Ремонт платы / пайка',
       icon: Cpu,
-      description: 'Диагностика питания, реболл, восстановление цепей и BGA'
+      description: 'Диагностика питания, реболл, восстановление цепей и BGA',
+      href: "/services/motherboard-repair"
     },
     {
       name: 'Ремонт корпуса',
       icon: Hammer,
-      description: 'Сломаны петли/крепления, трещины — восстановим или заменим элемент'
+      description: 'Сломаны петли/крепления, трещины — восстановим или заменим элемент',
+      href: "/services/caserepair"
     }
   ];
+
+  const handleDiscountClick = (discountType: string) => {
+    setSelectedDiscount(discountType);
+    setIsModalOpen(true);
+  };
+
+  const getDiscountNote = (type: string): string => {
+    switch (type) {
+      case 'first_time':
+        return 'Заявка на скидку -10% при первом обращении';
+      case 'student_senior':
+        return 'Заявка на скидку -20% для студентов и пенсионеров';
+      case 'saturday_cleaning':
+        return 'Заявка на скидку -30% на чистку по субботам';
+      default:
+        return 'Заявка на скидку';
+    }
+  };
 
   return (
     <section className="py-20 bg-white">
@@ -95,7 +132,18 @@ const Services = () => {
         {/* Discount Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {discountOffers.map((offer, index) => (
-            <Card key={index} className="p-6 bg-navy-600 text-white border-navy-700 hover:bg-navy-700 transition-all duration-300 shadow-lg">
+            <Card 
+              key={index} 
+              className="p-6 bg-navy-600 text-white border-navy-700 hover:bg-navy-700 transition-all duration-300 shadow-lg cursor-pointer"
+              onClick={() => handleDiscountClick(offer.type)}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleDiscountClick(offer.type);
+                }
+              }}
+            >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold mb-2 leading-tight">
@@ -118,6 +166,7 @@ const Services = () => {
         {/* Service Badges */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
           {services.map((service, index) => (
+            <Link href={service.href} scroll={true}>
             <div
               key={index}
               className="group flex items-center p-6 bg-gray-50 rounded-2xl border border-gray-200 hover:bg-navy-50 hover:border-navy-300 hover:shadow-lg transition-all duration-300 cursor-pointer"
@@ -140,17 +189,34 @@ const Services = () => {
                 </p>
               </div>
             </div>
+            </Link>
           ))}
         </div>
 
         <div className="text-center">
           <Link 
+            scroll={true}
             href="/services"
             className="inline-flex items-center px-8 py-4 bg-navy-600 text-white font-semibold rounded-lg hover:bg-navy-700 transition-colors duration-300 shadow-lg"
           >
             Все услуги и цены
           </Link>
         </div>
+
+        {/* Modal */}
+        <CallbackModal 
+          isOpen={isModalOpen} 
+          onClose={() => {
+            setIsModalOpen(false);
+            setSelectedDiscount('');
+          }}
+          initialData={{
+            name: "",
+            phone: "",
+            note: selectedDiscount ? getDiscountNote(selectedDiscount) : "",
+            agree: false
+          }}
+        />
       </div>
     </section>
   );

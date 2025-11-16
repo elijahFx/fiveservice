@@ -1,8 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import logoImg from "../../public/fs.svg";
+import logoImg from "../../public/fs2.svg";
 import Image from "next/image";
+import {
+  validatePhone,
+  getFieldValidity,
+  cleanPhone,
+  formatPhoneSimple,
+} from "@/lib/validation";
 
 interface FormData {
   name: string;
@@ -14,7 +20,7 @@ interface FormData {
 interface CallbackModalProps {
   isOpen: boolean;
   onClose: () => void;
-  initialData?: FormData; // Добавляем опциональный пропс для начальных данных
+  initialData?: FormData;
 }
 
 export default function CallbackModal({
@@ -29,8 +35,10 @@ export default function CallbackModal({
     agree: false,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState<{ [key: string]: boolean }>(
+    {}
+  );
 
-  // Обновляем форму при получении новых initialData
   useEffect(() => {
     if (initialData) {
       setForm(initialData);
@@ -43,14 +51,43 @@ export default function CallbackModal({
     const { name, value, type } = e.target;
     const checked = (e.target as HTMLInputElement).checked;
 
+    let newValue = value;
+
+    // Автоматическое форматирование телефона
+    if (name === "phone") {
+      newValue = formatPhoneSimple(value);
+    }
+
     setForm((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : newValue,
     }));
+
+    // Проверяем валидность поля в реальном времени (только когда поле заполнено)
+    if ((name === "phone" || name === "email") && newValue.trim()) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        [name]: !getFieldValidity(name, newValue),
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Проверяем валидность всех полей перед отправкой
+    const errors = {
+      phone: form.phone.trim() && !validatePhone(form.phone),
+    };
+
+    setFieldErrors(errors);
+
+    // Если есть ошибки валидации, не отправляем форму
+    if (Object.values(errors).some((error) => error)) {
+      alert("Пожалуйста, проверьте правильность введенного номера телефона");
+      return;
+    }
+
     if (!form.agree) {
       alert("Необходимо принять условия обработки персональных данных");
       return;
@@ -67,7 +104,7 @@ export default function CallbackModal({
         },
         body: JSON.stringify({
           name: form.name,
-          phone: form.phone,
+          phone: cleanPhone(form.phone), // Очищаем телефон перед отправкой
           content: form.note,
           type: "callback_request",
         }),
@@ -77,8 +114,8 @@ export default function CallbackModal({
         const result = await res.json();
         alert("Заявка отправлена! Мы свяжемся с вами в ближайшее время.");
         onClose();
-        // Сбрасываем форму к исходным данным (но не к пустым)
         setForm(initialData || { name: "", phone: "", note: "", agree: false });
+        setFieldErrors({});
       } else {
         throw new Error(`Ошибка сервера: ${res.status}`);
       }
@@ -94,7 +131,7 @@ export default function CallbackModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-      <div className="bg-black text-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md relative border-2 border-[#90D5FF] overflow-hidden">
+      <div className="bg-gradient-to-br from-navy-700 to-navy-900 text-gray-900 p-6 rounded-lg shadow-lg w-full max-w-md relative border-2 border-blue-400 overflow-hidden">
         {/* Фоновое SVG изображение внутри модального окна */}
         <div className="absolute inset-0 z-0 overflow-hidden">
           <Image
@@ -106,7 +143,7 @@ export default function CallbackModal({
               objectPosition: "left center",
               padding: "0.5rem",
               filter:
-                "brightness(0) invert(1) opacity(0.50) drop-shadow(0 0 0 #90D5FF)",
+                "brightness(0) invert(1) opacity(0.15) drop-shadow(0 0 0 #90D5FF)",
               transform: "scale(1.4) translateX(10%)",
             }}
             className="select-none pointer-events-none"
@@ -117,7 +154,7 @@ export default function CallbackModal({
         <div className="relative z-10">
           <button
             onClick={onClose}
-            className="absolute top-0 right-0 text-white hover:text-blue-600 text-xl font-bold transition-colors"
+            className="absolute top-0 right-0 text-white hover:text-blue-300 text-xl font-bold transition-colors"
           >
             ✕
           </button>
@@ -169,9 +206,17 @@ export default function CallbackModal({
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-blue-400 rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                className={`w-full px-3 py-2 border rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm ${
+                  fieldErrors.phone ? "border-red-500" : "border-blue-400"
+                }`}
+                placeholder="+375 29 123 45 67"
                 required
               />
+              {fieldErrors.phone && (
+                <p className="text-red-400 text-xs mt-1">
+                  Введите телефон в формате: +375 29 123 45 67
+                </p>
+              )}
             </div>
 
             <div>
@@ -182,7 +227,7 @@ export default function CallbackModal({
                 name="note"
                 value={form.note}
                 onChange={handleChange}
-                rows={4} // Увеличиваем высоту для лучшего отображения данных
+                rows={4}
                 className="w-full px-3 py-2 border border-blue-400 rounded-md bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
                 placeholder="Укажите 'СРОЧНО' если нужен срочный звонок"
               />
@@ -194,7 +239,7 @@ export default function CallbackModal({
                 name="agree"
                 checked={form.agree}
                 onChange={handleChange}
-                className="accent-blue-600 mt-0.5"
+                className="accent-blue-400 mt-0.5"
                 required
               />
               <span className="text-xs text-white">
@@ -202,7 +247,7 @@ export default function CallbackModal({
                 <a
                   href="/privacy-policy"
                   target="_blank"
-                  className="text-blue-600 underline font-medium hover:text-blue-400 transition-colors"
+                  className="text-blue-300 underline font-medium hover:text-blue-200 transition-colors"
                 >
                   персональных данных
                 </a>
@@ -212,7 +257,7 @@ export default function CallbackModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-2 bg-blue-500 text-white rounded-md shadow-md hover:bg-blue-600 transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? "Отправка..." : "Отправить"}
             </button>

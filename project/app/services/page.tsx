@@ -4,7 +4,7 @@ import ServiceHero from '@/components/services/ServiceHero';
 import FAQ from '@/components/common/FAQ';
 
 export const metadata: Metadata = {
-  title: 'Все услуги по ремонту ноутбуков | FiveService Минск',
+  title: 'Цена на ремонт ноутбуков | FiveService Минск',
   description: 'Полный спектр услуг по ремонту ноутбуков в Минске. Замена экранов, чистка, ремонт материнских плат, восстановление данных. Гарантия качества.',
   keywords: 'услуги ремонта ноутбуков, замена экрана ноутбука, чистка ноутбука, ремонт материнской платы, диагностика ноутбука, восстановление данных Минск',
   openGraph: {

@@ -1,17 +1,18 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { ChevronDown, ChevronUp, Phone, MessageCircle } from 'lucide-react';
-import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { ChevronDown, ChevronUp, Phone, MessageCircle } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import CallbackModal from "../modal/CallbackModal";
 
 const FaqList = () => {
   const [openItems, setOpenItems] = useState<number[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const toggleItem = (index: number) => {
-    setOpenItems(prev => 
-      prev.includes(index) 
-        ? prev.filter(item => item !== index)
+    setOpenItems((prev) =>
+      prev.includes(index)
+        ? prev.filter((item) => item !== index)
         : [...prev, index]
     );
   };
@@ -19,28 +20,34 @@ const FaqList = () => {
   const faqItems = [
     {
       question: "За сколько времени сделаете ремонт?",
-      answer: "Часто — в течение 1–3 дней. Сложные случаи (пайка, BGA, редкие запчасти) — 2–5 дней. Все сроки действительны при наличии комплектующих. Срочный ремонт возможен по согласованию. В таком случае ремонт выполняется в течение 24 часов."
+      answer:
+        "Часто — в течение 1–3 дней. Сложные случаи (пайка, BGA, редкие запчасти) — 2–5 дней. Все сроки действительны при наличии комплектующих. Срочный ремонт возможен по согласованию. В таком случае ремонт выполняется в течение 24 часов.",
     },
     {
       question: "Какая гарантия на ремонт?",
-      answer: "Мы предоставляем гарантию от 4 месяцев на выполненные работы и до 12 месяцев на установленные запчасти в соответствии с СТБ. Гарантийные условия прописываются в договоре."
+      answer:
+        "Мы предоставляем гарантию от 4 месяцев на выполненные работы и до 12 месяцев на установленные запчасти в соответствии с СТБ. Гарантийные условия прописываются в договоре.",
     },
     {
       question: "Сколько стоит диагностика?",
-      answer: "Диагностика платная и составляет от 15 до 25 BYN в зависимости от сложности. При согласии на ремонт стоимость диагностики засчитывается в общую сумму ремонта."
+      answer:
+        "Диагностика платная и составляет от 15 до 25 BYN в зависимости от сложности. При согласии на ремонт стоимость диагностики засчитывается в общую сумму ремонта.",
     },
     {
       question: "Используете ли вы оригинальные запчасти?",
-      answer: "Мы предлагаем как оригинальные запчасти, так и качественные сертифицированные аналоги. Для критически важных компонентов рекомендуем оригинальные детали, для остальных случаев — качественные аналоги по более доступной цене."
+      answer:
+        "Мы предлагаем как оригинальные запчасти, так и качественные сертифицированные аналоги. Для критически важных компонентов рекомендуем оригинальные детали, для остальных случаев — качественные аналоги по более доступной цене.",
     },
     {
       question: "Можно ли отремонтировать залитый ноутбук?",
-      answer: "Да, мы специализируемся на ремонте залитой техники. Важно как можно быстрее обратиться к нам и не пытаться включать устройство. Чем быстрее начнется профессиональная чистка, тем больше шансов на успешное восстановление."
+      answer:
+        "Да, мы специализируемся на ремонте залитой техники. Важно как можно быстрее обратиться к нам и не пытаться включать устройство. Чем быстрее начнется профессиональная чистка, тем больше шансов на успешное восстановление.",
     },
     {
       question: "Выезжаете ли на дом или в офис?",
-      answer: "Да, мы предоставляем услугу курьерской доставки. Курьер может забрать ваш ноутбук и доставить его обратно после ремонта. Стоимость услуги зависит от района и обговаривается отдельно."
-    }
+      answer:
+        "Да, мы предоставляем услугу курьерской доставки. Курьер может забрать ваш ноутбук и доставить его обратно после ремонта. Стоимость услуги зависит от района и обговаривается отдельно.",
+    },
   ];
 
   return (
@@ -65,12 +72,12 @@ const FaqList = () => {
                   )}
                 </div>
               </button>
-              
-              <div 
+
+              <div
                 className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                  openItems.includes(index) 
-                    ? 'max-h-96 opacity-100' 
-                    : 'max-h-0 opacity-0'
+                  openItems.includes(index)
+                    ? "max-h-96 opacity-100"
+                    : "max-h-0 opacity-0"
                 }`}
               >
                 <div className="px-6 pb-4 border-t border-gray-100">
@@ -86,19 +93,22 @@ const FaqList = () => {
         {/* Contact Section */}
         <div className="mt-16">
           <div className="bg-navy-600 rounded-2xl p-8 text-center text-white">
-            <h3 className="text-2xl font-bold mb-4">Не нашли ответ на свой вопрос?</h3>
+            <h3 className="text-2xl font-bold mb-4">
+              Не нашли ответ на свой вопрос?
+            </h3>
             <p className="text-xl mb-8 text-gray-200 max-w-2xl mx-auto">
-              Свяжитесь с нами любым удобным способом, и наши мастера ответят на все ваши вопросы
+              Свяжитесь с нами любым удобным способом, и наши мастера ответят на
+              все ваши вопросы
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a 
+              <a
                 href="tel:+375297349077"
                 className="inline-flex items-center px-8 py-4 bg-white text-navy-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg"
               >
                 <Phone className="w-5 h-5 mr-2" />
                 +375 29 734 90 77
               </a>
-              <a 
+              <a
                 href="https://t.me/fiveservice_by"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -107,26 +117,26 @@ const FaqList = () => {
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Telegram
               </a>
-              <a 
+              <a
                 href="viber://add?number=375447534796"
                 className="inline-flex items-center px-8 py-4 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors shadow-lg"
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
                 Viber
               </a>
-              <button 
-                onClick={() => {
-                  const contactSection = document.getElementById('contact-section');
-                  if (contactSection) {
-                    contactSection.scrollIntoView({ behavior: 'smooth' });
-                  } else {
-                    window.location.href = '/#contact-section';
-                  }
-                }}
+              <button
+                onClick={() => setIsModalOpen(true)}
                 className="inline-flex items-center px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-navy-600 transition-colors"
               >
                 Оставить заявку
               </button>
+              // И не забудьте добавить модальное окно в рендер:
+              {isModalOpen && (
+                <CallbackModal
+                  isOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                />
+              )}
             </div>
           </div>
         </div>

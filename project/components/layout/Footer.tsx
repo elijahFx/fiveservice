@@ -22,18 +22,24 @@ const Footer = () => {
               <p>УНП 193013342</p>
               <p>ООО {`"Наши инновации"`}</p>
             </div>
-             <Link
-                href="/privacy-policy"
-                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors mt-4"
-              >
-                Политика обработки персональных данных
-              </Link>
-              <Link
-                href="/service-rules"
-                className="block text-sm text-gray-400 hover:text-blue-200 transition-colors mt-2"
-              >
-                Правила оказания услуг и ремонта <br /> ООО «Наши инновации»
-              </Link>
+            <Link
+              href="/privacy-policy"
+              className="block text-sm text-gray-400 hover:text-blue-200 transition-colors mt-4"
+            >
+              Политика обработки персональных данных
+            </Link>
+            <Link
+              href="/service-rules"
+              className="block text-sm text-gray-400 hover:text-blue-200 transition-colors mt-2"
+            >
+              Правила оказания услуг и ремонта <br /> ООО «Наши инновации»
+            </Link>
+            <div className="space-y-2 text-sm text-gray-400 mt-4">
+              <p>
+                Перепечатка, а равно использование материалов с данного сайта,
+                разрешена только по согласию с владельцем.{" "}
+              </p>
+            </div>
           </div>
 
           {/* Contact Info */}
@@ -213,12 +219,3 @@ const Footer = () => {
 };
 
 export default Footer;
-
-{
-  /* Добавленная надпись о разработчике 
-         
-
-
-
-*/
-}

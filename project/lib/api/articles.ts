@@ -71,3 +71,24 @@ export async function getArticleBySlugFromList(slug: string): Promise<Article | 
     return null;
   }
 }
+
+export async function getRandomArticles(): Promise<Article[]> {
+  try {
+    const response = await fetch('https://testend2.site/api/articles/rand', {
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const articles = await response.json();
+    return articles;
+  } catch (error) {
+    console.error('Failed to fetch random articles:', error);
+    return [];
+  }
+}

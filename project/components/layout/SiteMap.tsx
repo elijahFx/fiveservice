@@ -23,10 +23,6 @@ const pages = [
     title: "Диагностика",
   },
   {
-    href: "/services/cleaning",
-    title: "Чистка",
-  },
-  {
     href: "/articles",
     title: "Полезные статьи",
   },
@@ -72,7 +68,7 @@ const pages = [
   },
   {
     href: "/services/liquiddamage",
-    title: "Заливание ноутбука",
+    title: "Залитие ноутбука",
   },
   {
     href: "/services/powerconnection",
@@ -83,7 +79,7 @@ const pages = [
     title: "Замена клавиатуры",
   },
   {
-    href: "/services/motherboardrepair",
+    href: "/services/motherboard-repair",
     title: "Ремонт материнской платы",
   },
   {

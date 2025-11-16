@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import CallbackModal from "../modal/CallbackModal";
+import { useState, useEffect, useCallback, lazy, Suspense } from "react";
+
+// Ленивая загрузка CallbackModal
+const CallbackModal = lazy(() => import("../modal/CallbackModal"));
 
 interface CalculatorState {
   brand: string;
@@ -83,8 +85,20 @@ const SYMPTOMS = [
   { value: "diag", title: "Не уверен, нужна диагностика", price: "55 BYN" },
 ];
 
+// Fallback компонент для загрузки модального окна
+const ModalFallback = () => (
+  <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg p-8 max-w-md mx-4">
+      <div className="flex justify-center mb-4">
+        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+      <p className="text-center text-gray-600">Загрузка формы...</p>
+    </div>
+  </div>
+);
+
 export default function PriceCalculator() {
-   const [state, setState] = useState<CalculatorState>({
+  const [state, setState] = useState<CalculatorState>({
     brand: "",
     model: "",
     dtype: "office",
@@ -109,7 +123,6 @@ export default function PriceCalculator() {
     note: '',
     agree: false
   });
-
 
   const prepareModalData = useCallback(() => {
     const deviceInfo = [
@@ -142,6 +155,10 @@ export default function PriceCalculator() {
   const handleOpenModal = () => {
     setModalData(prepareModalData());
     setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
   };
 
   const detectFamily = useCallback(
@@ -663,20 +680,20 @@ export default function PriceCalculator() {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3">
             <a
-              href="/price"
+              href="/services"
               className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-4 rounded-lg font-semibold text-center hover:shadow-lg transition-all text-sm sm:text-base"
             >
               Прайс
             </a>
             <a
-              href="/remont-noutbukov"
+              href="/"
               className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-lg font-semibold text-center hover:shadow-lg transition-all text-sm sm:text-base"
             >
               Ремонт ноутбуков
             </a>
             <button
-              onClick={handleOpenModal} // Изменено здесь
-              className="bg-gradient-to-r from-orange-500 to-amber-600 text-white py-3 px-4 rounded-lg font-semibold text-center hover:shadow-lg transition-all text-sm sm:text-base"
+              onClick={handleOpenModal}
+              className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-4 rounded-lg font-semibold text-center hover:shadow-lg transition-all text-sm sm:text-base"
             >
               Оставить заявку
             </button>
@@ -686,28 +703,26 @@ export default function PriceCalculator() {
 
       {/* Mobile Sticky Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 py-3 px-4 sm:hidden shadow-lg">
-        <div className="flex items-center justify-between max-w-4xl mx-auto">
-          <div className="flex flex-col">
-            <div className="text-gray-600 text-xs">Стоимость</div>
-            <div className="font-bold text-gray-900 text-lg">
-              {formatPrice(price)}
-            </div>
-          </div>
+        <div className="flex items-center justify-center max-w-4xl mx-auto">
           <button
-            onClick={handleOpenModal} // Изменено здесь
-            className="bg-gradient-to-r from-orange-500 to-amber-600 text-white py-2.5 px-5 rounded-xl font-semibold hover:shadow-lg transition-all text-sm whitespace-nowrap"
+            onClick={handleOpenModal}
+            className="bg-gradient-to-r from-blue-500 to-blue-600 text-white py-2.5 px-5 rounded-xl font-semibold hover:shadow-lg transition-all text-sm whitespace-nowrap"
           >
             Оставить заявку
           </button>
         </div>
       </div>
 
-      {/* Модальное окно с передачей данных */}
-      <CallbackModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        initialData={modalData}
-      />
+      {/* Лениво загружаемое модальное окно */}
+      {isModalOpen && (
+        <Suspense fallback={<ModalFallback />}>
+          <CallbackModal
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            initialData={modalData}
+          />
+        </Suspense>
+      )}
     </section>
   );
 }

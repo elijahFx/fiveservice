@@ -14,10 +14,19 @@ export default function Home() {
     <>
       <Head>
         {/* Dublin Core Metadata */}
-        <meta name="DC.title" content="Название вашей компании - Услуги красоты" />
+        <meta
+          name="DC.title"
+          content="Название вашей компании - Услуги красоты"
+        />
         <meta name="DC.creator" content="Ваше имя или компания" />
-        <meta name="DC.subject" content="услуги красоты, парикмахерские услуги, маникюр, педикюр, косметология" />
-        <meta name="DC.description" content="Профессиональные услуги красоты от опытных мастеров. Качественный уход за волосами, ногтями и кожей." />
+        <meta
+          name="DC.subject"
+          content="услуги красоты, парикмахерские услуги, маникюр, педикюр, косметология"
+        />
+        <meta
+          name="DC.description"
+          content="Профессиональные услуги красоты от опытных мастеров. Качественный уход за волосами, ногтями и кожей."
+        />
         <meta name="DC.publisher" content="Название вашей компании" />
         <meta name="DC.date" content="2024" />
         <meta name="DC.type" content="Service" />
@@ -32,59 +41,57 @@ export default function Home() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "BeautySalon",
-              "name": "Название вашей компании",
-              "description": "Профессиональные услуги красоты от опытных мастеров",
-              "url": "https://ваш-сайт.com",
-              "telephone": "+7-XXX-XXX-XX-XX",
-              "address": {
+              name: "Название вашей компании",
+              description:
+                "Профессиональные услуги красоты от опытных мастеров",
+              url: "https://ваш-сайт.com",
+              telephone: "+7-XXX-XXX-XX-XX",
+              address: {
                 "@type": "PostalAddress",
-                "streetAddress": "Улица, дом",
-                "addressLocality": "Город",
-                "postalCode": "XXXXXX",
-                "addressCountry": "RU"
+                streetAddress: "Улица, дом",
+                addressLocality: "Город",
+                postalCode: "XXXXXX",
+                addressCountry: "RU",
               },
-              "openingHours": [
-                "Mo-Fr 09:00-21:00",
-                "Sa-Su 10:00-20:00"
-              ],
-              "priceRange": "$$",
-              "serviceArea": {
+              openingHours: ["Mo-Fr 09:00-21:00", "Sa-Su 10:00-20:00"],
+              priceRange: "$$",
+              serviceArea: {
                 "@type": "GeoCircle",
-                "geoMidpoint": {
+                geoMidpoint: {
                   "@type": "GeoCoordinates",
-                  "latitude": "55.7558",
-                  "longitude": "37.6173"
+                  latitude: "55.7558",
+                  longitude: "37.6173",
                 },
-                "geoRadius": "5000"
+                geoRadius: "5000",
               },
-              "services": [
+              services: [
                 "Парикмахерские услуги",
                 "Маникюр",
                 "Педикюр",
                 "Косметология",
-                "Макияж"
+                "Макияж",
               ],
-              "hasOfferCatalog": {
+              hasOfferCatalog: {
                 "@type": "OfferCatalog",
-                "name": "Услуги салона красоты",
-                "itemListElement": [
+                name: "Услуги салона красоты",
+                itemListElement: [
                   {
                     "@type": "Offer",
-                    "itemOffered": {
+                    itemOffered: {
                       "@type": "Service",
-                      "name": "Стрижка женская"
-                    }
+                      name: "Стрижка женская",
+                    },
                   },
                   {
                     "@type": "Offer",
-                    "itemOffered": {
+                    itemOffered: {
                       "@type": "Service",
-                      "name": "Маникюр"
-                    }
-                  }
-                ]
-              }
-            })
+                      name: "Маникюр",
+                    },
+                  },
+                ],
+              },
+            }),
           }}
         />
 
@@ -95,29 +102,26 @@ export default function Home() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              "name": "Название вашей компании",
-              "image": "https://ваш-сайт.com/images/logo.jpg",
-              "telephone": "+7-XXX-XXX-XX-XX",
-              "email": "info@ваш-сайт.com",
-              "address": {
+              name: "Название вашей компании",
+              image: "https://ваш-сайт.com/images/logo.jpg",
+              telephone: "+7-XXX-XXX-XX-XX",
+              email: "info@ваш-сайт.com",
+              address: {
                 "@type": "PostalAddress",
-                "streetAddress": "Улица, дом",
-                "addressLocality": "Город",
-                "postalCode": "XXXXXX",
-                "addressCountry": "RU"
+                streetAddress: "Улица, дом",
+                addressLocality: "Город",
+                postalCode: "XXXXXX",
+                addressCountry: "RU",
               },
-              "geo": {
+              geo: {
                 "@type": "GeoCoordinates",
-                "latitude": "55.7558",
-                "longitude": "37.6173"
+                latitude: "55.7558",
+                longitude: "37.6173",
               },
-              "url": "https://ваш-сайт.com",
-              "openingHours": [
-                "Mo-Fr 09:00-21:00",
-                "Sa-Su 10:00-20:00"
-              ],
-              "priceRange": "$$"
-            })
+              url: "https://ваш-сайт.com",
+              openingHours: ["Mo-Fr 09:00-21:00", "Sa-Su 10:00-20:00"],
+              priceRange: "$$",
+            }),
           }}
         />
       </Head>
@@ -126,25 +130,25 @@ export default function Home() {
         <div itemScope itemType="https://schema.org/Service">
           <Hero />
         </div>
-        
+
         <div itemScope itemType="https://schema.org/ItemList">
           <Services />
         </div>
-        
+
         <Benefits />
-        
+
+        <Calculator />
+
         <div itemScope itemType="https://schema.org/Review">
           <Reviews />
         </div>
-        
+
         <div itemScope itemType="https://schema.org/Person">
           <Masters />
         </div>
-        
-        <HowWeWork />
-        <Calculator />
+
         <FAQ />
-        
+
         <div itemScope itemType="https://schema.org/ContactPoint">
           <Contact />
         </div>

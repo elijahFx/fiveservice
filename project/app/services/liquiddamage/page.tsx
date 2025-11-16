@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { 
-  AlertTriangle, 
-  Clock, 
-  Shield, 
+import {
+  AlertTriangle,
+  Clock,
+  Shield,
   Power,
   RotateCcw,
   Coffee,
@@ -13,128 +13,137 @@ import {
   Phone,
   MessageCircle,
   XCircle,
-  CheckCircle
-} from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import CallbackModal from '@/components/modal/CallbackModal';
-import { useState } from 'react';
+  CheckCircle,
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import CallbackModal from "@/components/modal/CallbackModal";
+import { useState } from "react";
 
 const LiquidDamagePage = () => {
   const [isCallbackModalOpen, setIsCallbackModalOpen] = useState(false);
-  const [modalType, setModalType] = useState('emergency');
+  const [modalType, setModalType] = useState("emergency");
 
   const emergencySteps = [
     {
-      step: '1',
+      step: "1",
       icon: Power,
-      title: 'Отключите питание',
-      description: 'Обесточьте ноутбук. Отсоедините от зарядного устройства и извлеките аккумулятор'
+      title: "Отключите питание",
+      description:
+        "Обесточьте ноутбук. Отсоедините от зарядного устройства и извлеките аккумулятор",
     },
     {
-      step: '2',
+      step: "2",
       icon: RotateCcw,
-      title: 'Отсоедините устройства',
-      description: 'Все внешние устройства: принтеры, жесткие диски, USB-флешки и мыши'
+      title: "Отсоедините устройства",
+      description:
+        "Все внешние устройства: принтеры, жесткие диски, USB-флешки и мыши",
     },
     {
-      step: '3',
+      step: "3",
       icon: Droplets,
-      title: 'Промокните жидкость',
-      description: 'Аккуратно промокните корпус сухой тканью или бумажным полотенцем'
+      title: "Промокните жидкость",
+      description:
+        "Аккуратно промокните корпус сухой тканью или бумажным полотенцем",
     },
     {
-      step: '4',
+      step: "4",
       icon: Thermometer,
-      title: 'Переверните ноутбук',
-      description: 'Переверните чтобы жидкость стекала и не проникала глубже в корпус'
+      title: "Переверните ноутбук",
+      description:
+        "Переверните чтобы жидкость стекала и не проникала глубже в корпус",
     },
     {
-      step: '5',
+      step: "5",
       icon: Phone,
-      title: 'Обратитесь за помощью',
-      description: 'Как можно скорее отнесите ноутбук в сервисный центр'
-    }
+      title: "Обратитесь за помощью",
+      description: "Как можно скорее отнесите ноутбук в сервисный центр",
+    },
   ];
 
   const liquids = [
     {
-      type: 'Вода',
+      type: "Вода",
       icon: Droplets,
-      danger: 'Средняя',
-      description: 'Хотя вода считается относительно безвредной, даже небольшое количество (20-30 мл) может привести к серьёзным поломкам внутренних компонентов, включая материнскую плату.',
-      consequences: 'Короткое замыкание, окисление контактов'
+      danger: "Средняя",
+      description:
+        "Хотя вода считается относительно безвредной, даже небольшое количество (20-30 мл) может привести к серьёзным поломкам внутренних компонентов, включая материнскую плату.",
+      consequences: "Короткое замыкание, окисление контактов",
     },
     {
-      type: 'Чай, кофе, сладкие напитки',
+      type: "Чай, кофе, сладкие напитки",
       icon: Coffee,
-      danger: 'Высокая',
-      description: 'Эти жидкости особенно опасны из-за содержания кислот и сахаров, которые могут привести к коррозии и липкости клавиш.',
-      consequences: 'Коррозия плат, липкие клавиши, сахарный налёт'
+      danger: "Высокая",
+      description:
+        "Эти жидкости особенно опасны из-за содержания кислот и сахаров, которые могут привести к коррозии и липкости клавиш.",
+      consequences: "Коррозия плат, липкие клавиши, сахарный налёт",
     },
     {
-      type: 'Пиво и алкоголь',
+      type: "Пиво и алкоголь",
       icon: Beer,
-      danger: 'Очень высокая',
-      description: 'Несмотря на кажущуюся безвредность, пиво содержит кислоты, которые со временем могут разрушать электронные компоненты.',
-      consequences: 'Разрушение компонентов, необходимость капитального ремонта'
+      danger: "Очень высокая",
+      description:
+        "Несмотря на кажущуюся безвредность, пиво содержит кислоты, которые со временем могут разрушать электронные компоненты.",
+      consequences:
+        "Разрушение компонентов, необходимость капитального ремонта",
     },
     {
-      type: 'Кола и газировка',
+      type: "Кола и газировка",
       icon: AlertTriangle,
-      danger: 'Критическая',
-      description: 'Содержание ортофосфорной кислоты делает их чрезвычайно агрессивными в отношении электроники.',
-      consequences: 'Мгновенная коррозия, необратимые повреждения'
-    }
+      danger: "Критическая",
+      description:
+        "Содержание ортофосфорной кислоты делает их чрезвычайно агрессивными в отношении электроники.",
+      consequences: "Мгновенная коррозия, необратимые повреждения",
+    },
   ];
 
   const warnings = [
-    'Самая большая ошибка многих пользователей — это попытка включить не просушенный ноутбук!',
-    'Нельзя включать устройство, залитое агрессивной жидкостью, которая добралась до материнской платы',
+    "Самая большая ошибка многих пользователей — это попытка включить не просушенный ноутбук!",
+    "Нельзя включать устройство, залитое агрессивной жидкостью, которая добралась до материнской платы",
     'Не сушите технику феном - только "поплавите" кнопки',
-    'Если клавиатура залита - ее в 90% случаях нужно менять на новую!',
-    'Дорожки кнопок клавиатуры не восстанавливаются'
+    "Если клавиатура залита - ее в 90% случаях нужно менять на новую!",
+    "Дорожки кнопок клавиатуры не восстанавливаются",
   ];
 
   const consequences = [
-    'Жидкостью разъедает все элементы на материнской плате',
-    'Коррозия плат, восстановить которые будет невозможно',
-    'Одна капля, попавшая на плату, может привести к короткому замыканию цепей',
-    'Потеря данных с жесткого диска',
-    'Необходимость замены клавиатуры и других компонентов'
+    "Жидкостью разъедает все элементы на материнской плате",
+    "Коррозия плат, восстановить которые будет невозможно",
+    "Одна капля, попавшая на плату, может привести к короткому замыканию цепей",
+    "Потеря данных с жесткого диска",
+    "Необходимость замены клавиатуры и других компонентов",
   ];
 
   const services = [
     {
-      service: 'Экстренная диагностика',
-      description: 'Бесплатная диагностика в течение 30 минут',
-      time: '30 мин'
+      service: "Экстренная диагностика",
+      description: "Бесплатная диагностика в течение 30 минут",
+      time: "30 мин",
     },
     {
-      service: 'Чистка от коррозии',
-      description: 'Профессиональная ультразвуковая чистка плат',
-      time: '2-4 часа'
+      service: "Чистка от коррозии",
+      description: "Профессиональная ультразвуковая чистка плат",
+      time: "2-4 часа",
     },
     {
-      service: 'Замена клавиатуры',
-      description: 'Установка новой клавиатуры при необходимости',
-      time: '1-2 часа'
+      service: "Замена клавиатуры",
+      description: "Установка новой клавиатуры при необходимости",
+      time: "1-2 часа",
     },
     {
-      service: 'Ремонт материнской платы',
-      description: 'Восстановление поврежденных компонентов',
-      time: '1-3 дня'
-    }
+      service: "Ремонт материнской платы",
+      description: "Восстановление поврежденных компонентов",
+      time: "1-3 дня",
+    },
   ];
 
   const handleEmergencyClick = () => {
-    setModalType('emergency');
+    setModalType("emergency");
     setIsCallbackModalOpen(true);
   };
 
   const handleConsultationClick = () => {
-    setModalType('consultation');
+    setModalType("consultation");
     setIsCallbackModalOpen(true);
   };
 
@@ -158,11 +167,13 @@ const LiquidDamagePage = () => {
             <p className="text-xl md:text-2xl text-navy-200 mb-8 max-w-4xl mx-auto leading-relaxed">
               Оперативная помощь! Гарантии на выполненные работы
             </p>
-            
+
             <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-8 max-w-2xl mx-auto">
               <div className="flex items-center justify-center mb-4">
                 <AlertTriangle className="w-8 h-8 text-white mr-3" />
-                <span className="text-2xl font-bold">ГЛАВНОЕ — НЕ ВКЛЮЧАЙТЕ ЗАЛИТЫЙ НОУТБУК</span>
+                <span className="text-2xl font-bold">
+                  ГЛАВНОЕ — НЕ ВКЛЮЧАЙТЕ ЗАЛИТЫЙ НОУТБУК
+                </span>
               </div>
               <p className="text-navy-200">
                 Время работает против Вас! Немедленно принимайте меры.
@@ -170,18 +181,17 @@ const LiquidDamagePage = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button 
-                size="lg" 
-                className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg"
-                onClick={handleEmergencyClick}
+              <a
+                href="tel:+375297349077"
+                className="inline-flex items-center justify-center bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg rounded-lg font-medium transition-colors h-14 min-w-[200px]"
               >
                 <Phone className="w-5 h-5 mr-2" />
                 СРОЧНЫЙ ВЫЗОВ
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+              </a>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg h-14 min-w-[200px]"
                 onClick={handleConsultationClick}
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
@@ -198,7 +208,8 @@ const LiquidDamagePage = () => {
           <div className="flex flex-col md:flex-row items-center justify-center gap-4">
             <AlertTriangle className="w-8 h-8 flex-shrink-0" />
             <p className="text-xl font-semibold">
-              В НОУТБУК ПОПАЛА ЖИДКОСТЬ? ПРОЛИЛИ ВОДУ, ЧАЙ, КОФЕ, НА КЛАВИАТУРУ НОУТБУКА?
+              В НОУТБУК ПОПАЛА ЖИДКОСТЬ? ПРОЛИЛИ ВОДУ, ЧАЙ, КОФЕ, НА КЛАВИАТУРУ
+              НОУТБУКА?
             </p>
           </div>
         </div>
@@ -218,7 +229,10 @@ const LiquidDamagePage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
             {emergencySteps.map((step, index) => (
-              <Card key={index} className="text-center group hover:shadow-lg transition-shadow border-2 border-navy-200">
+              <Card
+                key={index}
+                className="text-center group hover:shadow-lg transition-shadow border-2 border-navy-200"
+              >
                 <CardHeader>
                   <div className="flex justify-center mb-4">
                     <div className="relative">
@@ -252,7 +266,10 @@ const LiquidDamagePage = () => {
 
           <div className="space-y-4">
             {warnings.map((warning, index) => (
-              <div key={index} className="flex items-start space-x-3 p-4 bg-white rounded-lg shadow-sm border border-navy-200">
+              <div
+                key={index}
+                className="flex items-start space-x-3 p-4 bg-white rounded-lg shadow-sm border border-navy-200"
+              >
                 <XCircle className="w-6 h-6 text-navy-600 mt-1 flex-shrink-0" />
                 <span className="text-gray-700 font-semibold">{warning}</span>
               </div>
@@ -260,7 +277,9 @@ const LiquidDamagePage = () => {
           </div>
 
           <div className="mt-8 bg-navy-600 text-white rounded-2xl p-6 text-center">
-            <p className="text-xl font-bold mb-2">ПОМНИТЕ: Время работает против Вас!</p>
+            <p className="text-xl font-bold mb-2">
+              ПОМНИТЕ: Время работает против Вас!
+            </p>
             <p>Каждая минута промедления увеличивает стоимость ремонта</p>
           </div>
         </div>
@@ -292,8 +311,12 @@ const LiquidDamagePage = () => {
                 <CardContent>
                   <p className="text-gray-700 mb-4">{liquid.description}</p>
                   <div className="bg-navy-50 p-3 rounded-lg">
-                    <p className="text-sm font-semibold text-gray-900">Последствия:</p>
-                    <p className="text-sm text-gray-600">{liquid.consequences}</p>
+                    <p className="text-sm font-semibold text-gray-900">
+                      Последствия:
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      {liquid.consequences}
+                    </p>
                   </div>
                 </CardContent>
               </Card>
@@ -313,7 +336,10 @@ const LiquidDamagePage = () => {
 
           <div className="space-y-4 mb-8">
             {consequences.map((consequence, index) => (
-              <div key={index} className="flex items-start space-x-3 p-4 bg-white rounded-lg shadow-sm">
+              <div
+                key={index}
+                className="flex items-start space-x-3 p-4 bg-white rounded-lg shadow-sm"
+              >
                 <AlertTriangle className="w-6 h-6 text-navy-600 mt-1 flex-shrink-0" />
                 <span className="text-gray-700">{consequence}</span>
               </div>
@@ -322,7 +348,8 @@ const LiquidDamagePage = () => {
 
           <div className="bg-white border border-navy-200 rounded-2xl p-6">
             <p className="text-navy-800 font-semibold text-center">
-              Отключайте ноутбук от сети, снимайте батарею, звоните и привозите сразу в ремонт.
+              Отключайте ноутбук от сети, снимайте батарею, звоните и привозите
+              сразу в ремонт.
             </p>
           </div>
         </div>
@@ -342,7 +369,10 @@ const LiquidDamagePage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
-              <Card key={index} className="text-center group hover:shadow-lg transition-shadow">
+              <Card
+                key={index}
+                className="text-center group hover:shadow-lg transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex justify-center mb-4">
                     <div className="p-3 bg-navy-100 rounded-2xl group-hover:bg-navy-600 transition-colors">
@@ -363,11 +393,13 @@ const LiquidDamagePage = () => {
 
           <div className="mt-12 bg-navy-50 border border-navy-200 rounded-2xl p-6 text-center">
             <p className="text-navy-800 mb-4">
-              <strong>Совет:</strong> Если ваш ноутбук подвергся воздействию любой из этих жидкостей, 
-              необходимо как можно быстрее доставить его в сервисный центр.
+              <strong>Совет:</strong> Если ваш ноутбук подвергся воздействию
+              любой из этих жидкостей, необходимо как можно быстрее доставить
+              его в сервисный центр.
             </p>
             <p className="text-navy-700">
-              Помните, что стоимость ремонта значительно ниже стоимости нового устройства.
+              Помните, что стоимость ремонта значительно ниже стоимости нового
+              устройства.
             </p>
           </div>
         </div>
@@ -394,15 +426,21 @@ const LiquidDamagePage = () => {
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-navy-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Гарантия на все выполненные работы</span>
+                    <span className="text-gray-700">
+                      Гарантия на все выполненные работы
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-navy-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Использование качественных материалов</span>
+                    <span className="text-gray-700">
+                      Использование качественных материалов
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-navy-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Профессиональное оборудование</span>
+                    <span className="text-gray-700">
+                      Профессиональное оборудование
+                    </span>
                   </li>
                 </ul>
               </CardContent>
@@ -423,11 +461,15 @@ const LiquidDamagePage = () => {
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-navy-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Бесплатная диагностика</span>
+                    <span className="text-gray-700">
+                      Бесплатная диагностика
+                    </span>
                   </li>
                   <li className="flex items-start">
                     <CheckCircle className="w-5 h-5 text-navy-600 mr-3 mt-0.5 flex-shrink-0" />
-                    <span className="text-gray-700">Конфиденциальность данных</span>
+                    <span className="text-gray-700">
+                      Конфиденциальность данных
+                    </span>
                   </li>
                 </ul>
               </CardContent>
@@ -436,9 +478,10 @@ const LiquidDamagePage = () => {
 
           <div className="mt-8 text-center">
             <p className="text-gray-600">
-              Обратите внимание: Не каждый сервисный центр может оперативно предложить решение вашей проблемы. 
-              В Five Service мы гарантируем быстрый и качественный ремонт, чтобы вы могли вернуться к полноценной 
-              работе с вашим ноутбуком как можно скорее.
+              Обратите внимание: Не каждый сервисный центр может оперативно
+              предложить решение вашей проблемы. В Five Service мы гарантируем
+              быстрый и качественный ремонт, чтобы вы могли вернуться к
+              полноценной работе с вашим ноутбуком как можно скорее.
             </p>
           </div>
         </div>
@@ -455,18 +498,17 @@ const LiquidDamagePage = () => {
               Не теряйте время! Действуйте немедленно!
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg font-bold"
-                onClick={handleEmergencyClick}
+              <a
+                href="tel:+375297349077"
+                className="inline-flex items-center justify-center bg-white text-navy-900 hover:bg-gray-100 px-8 py-4 text-lg rounded-lg font-bold font-medium transition-colors h-14 min-w-[240px]"
               >
                 <Phone className="w-5 h-5 mr-2" />
                 ВЫЗВАТЬ КУРЬЕРА
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
-                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg"
+              </a>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-white text-navy-900 hover:bg-white hover: px-8 py-4 text-lg h-14 min-w-[240px]"
                 onClick={handleConsultationClick}
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
@@ -474,27 +516,31 @@ const LiquidDamagePage = () => {
               </Button>
             </div>
           </div>
-          
+
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
-            <p className="text-2xl font-bold mb-2">⏰ ВРЕМЯ РАБОТЫ ПРОТИВ ВАС</p>
+            <p className="text-2xl font-bold mb-2">
+              ⏰ ВРЕМЯ РАБОТЫ ПРОТИВ ВАС
+            </p>
             <p className="text-navy-100">
-              Каждая минута увеличивает риск необратимых повреждений. Действуйте сейчас!
+              Каждая минута увеличивает риск необратимых повреждений. Действуйте
+              сейчас!
             </p>
           </div>
         </div>
       </section>
 
       {/* Callback Modal */}
-      <CallbackModal 
+      <CallbackModal
         isOpen={isCallbackModalOpen}
         onClose={handleCloseModal}
         initialData={{
           name: "",
           phone: "",
-          note: modalType === 'emergency' 
-            ? "СРОЧНЫЙ ВЫЗОВ: Залитие ноутбука жидкостью" 
-            : "Консультация по залитию ноутбука жидкостью",
-          agree: false
+          note:
+            modalType === "emergency"
+              ? "СРОЧНЫЙ ВЫЗОВ: Залитие ноутбука жидкостью"
+              : "Консультация по залитию ноутбука жидкостью",
+          agree: false,
         }}
       />
 
@@ -505,31 +551,32 @@ const LiquidDamagePage = () => {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Service",
-            "name": "Ремонт ноутбука залитого жидкостью",
-            "description": "Экстренный ремонт ноутбуков после залития жидкостью. Оперативная помощь, гарантия на работы.",
-            "provider": {
+            name: "Ремонт ноутбука залитого жидкостью",
+            description:
+              "Экстренный ремонт ноутбуков после залития жидкостью. Оперативная помощь, гарантия на работы.",
+            provider: {
               "@type": "LocalBusiness",
-              "name": "Five Service",
-              "address": {
+              name: "Five Service",
+              address: {
                 "@type": "PostalAddress",
-                "addressLocality": "Минск"
-              }
+                addressLocality: "Минск",
+              },
             },
-            "areaServed": "Минск",
-            "serviceType": "Liquid Damage Repair",
-            "hasOfferCatalog": {
+            areaServed: "Минск",
+            serviceType: "Liquid Damage Repair",
+            hasOfferCatalog: {
               "@type": "OfferCatalog",
-              "name": "Услуги восстановления после залития",
-              "itemListElement": services.map((service, index) => ({
+              name: "Услуги восстановления после залития",
+              itemListElement: services.map((service, index) => ({
                 "@type": "Offer",
-                "itemOffered": {
+                itemOffered: {
                   "@type": "Service",
-                  "name": service.service,
-                  "description": service.description
-                }
-              }))
-            }
-          })
+                  name: service.service,
+                  description: service.description,
+                },
+              })),
+            },
+          }),
         }}
       />
     </div>

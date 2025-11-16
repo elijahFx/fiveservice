@@ -1,94 +1,219 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
-import { Phone, MessageCircle, CheckCircle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import CallbackModal from "@/components/modal/CallbackModal";
+import { useState, useMemo, lazy, Suspense } from "react";
+import Image from "next/image";
+import { Phone, MessageCircle, CheckCircle, Star, Clock, Shield, Truck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+// Динамический импорт модального окна
+const CallbackModal = lazy(() => import("@/components/modal/CallbackModal"));
 
 const Hero = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const benefits = [
-    'Ремонт за 1-3 дня',
-    'Средняя оценка по отзывам — 5,0',
-    'Гарантия на детали и работы'
-  ];
+  // Мемоизация benefits для предотвращения ненужных пересозданий
+  const benefits = useMemo(
+    () => [
+      { 
+        text: "Ремонт за 1-3 дня", 
+        icon: Clock,
+        color: "text-blue-400"
+      },
+      { 
+        text: "Средняя оценка 5,0", 
+        icon: Star,
+        color: "text-yellow-400"
+      },
+      { 
+        text: "Гарантия до 12 месяцев", 
+        icon: Shield,
+        color: "text-green-400"
+      },
+      { 
+        text: "Бесплатный курьер", 
+        icon: Truck,
+        color: "text-purple-400"
+      },
+    ],
+    []
+  );
+
+  // Мемоизация обработчиков
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  // Компонент для Benefit item
+  const BenefitItem = ({ benefit }: { benefit: typeof benefits[0] }) => {
+    const IconComponent = benefit.icon;
+    return (
+      <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105">
+        <IconComponent className={`w-5 h-5 ${benefit.color} flex-shrink-0`} />
+        <span className="text-white text-sm font-medium">{benefit.text}</span>
+      </div>
+    );
+  };
+
+  // Компонент для телефонных ссылок
+  const PhoneLink = ({ number }: { number: string }) => (
+    <a
+      href={`tel:${number}`}
+      className="text-white hover:text-blue-300 font-medium border-b border-white/40 hover:border-blue-300 transition-colors whitespace-nowrap hover:scale-105 transform"
+    >
+      {number}
+    </a>
+  );
+
+  // Мемоизированные телефонные номера
+  const phoneNumbers = useMemo(
+    () => ["+375 44 753 47 96", "+375 25 784 97 31", "+375 17 24 24 111"],
+    []
+  );
+
+  // Fallback для модального окна
+  const ModalFallback = () => (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg p-8 max-w-md mx-4">
+        <div className="flex justify-center mb-4">
+          <div className="w-8 h-8 border-4 border-navy-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+        <p className="text-center text-gray-600">Загрузка формы...</p>
+      </div>
+    </div>
+  );
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 sm:pt-20">
-      {/* Background Image */}
+    <section className="relative min-h-[120vh] flex items-center justify-center overflow-hidden sm:pt-20">
+      {/* Background Image с градиентным наложением */}
       <div className="absolute inset-0">
         <Image
           src="/main.webp"
-          alt="Ремонт ноутбуков"
+          alt="Ремонт ноутбуков в сервисном центре FiveService"
           fill
-          className="object-cover"
+          className="object-cover object-center scale-110"
           priority
+          quality={85}
+          sizes="100vw"
+          placeholder="blur"
+          blurDataURL="data:image/webp;base64,UklGRh4CAABXRUJQVlA4IBICAACwCACdASoWAAsAAAAAAwBQBOgCdAFAAAAAA+g=="
         />
-        <div className="absolute inset-0 bg-navy-900/70" />
+        <div className="absolute inset-0 bg-gradient-to-br from-navy-900/80 via-blue-900/70 to-purple-900/60" />
+        {/* Анимированные элементы фона */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-conic from-blue-500/10 via-transparent to-purple-500/10 animate-spin-slow" />
+          <div className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-conic from-green-500/10 via-transparent to-yellow-500/10 animate-spin-slow reverse" />
+        </div>
       </div>
 
-      {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-           <span className='text-blue-400'>Ремонт ноутбуков</span>
-           <span className='block'>в Минске за 1 день с гарантией</span>
-          </h1>
-          
-          <p className="text-xl text-gray-200 mb-8 leading-relaxed">
-            13 лет опыта, официальные гарантии, аккуратная работа с платами, бесплатный курьер по городу.
-          </p>
+      {/* Декоративные элементы */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-32 left-10 w-4 h-4 bg-blue-400/30 rounded-full animate-pulse" />
+        <div className="absolute top-20 right-32 w-6 h-6 bg-green-400/20 rounded-full animate-bounce delay-300" />
+        <div className="absolute top-60 left-1/4 w-3 h-3 bg-yellow-400/40 rounded-full animate-ping" />
+        <div className="absolute top-40 right-20 w-5 h-5 bg-purple-400/30 rounded-full animate-pulse delay-1000" />
+        <div className="absolute bottom-40 left-32 w-4 h-4 bg-cyan-400/25 rounded-full animate-bounce delay-700" />
+        <div className="absolute bottom-32 right-16 w-3 h-3 bg-orange-400/35 rounded-full animate-pulse delay-500" />
+      </div>
 
-          {/* Benefits */}
-          <div className="flex flex-wrap justify-center gap-4 mb-8">
+      {/* Content с увеличенными отступами */}
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
+        <div className="max-w-4xl mx-auto">
+          
+          {/* Верхний отступ с дополнительным контентом */}
+          <div className="mb-2">
+            
+          </div>
+
+          {/* Основной заголовок с увеличенными отступами */}
+          <div className="mb-12">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400">
+                Ремонт ноутбуков
+              </span>
+              <span className="block mt-4 bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent">
+                в Минске за 1 день
+              </span>
+            </h1>
+
+            <p className="text-xl md:text-2xl text-gray-200 leading-relaxed max-w-3xl mx-auto">
+              <span className="font-semibold text-white">13+ лет опыта</span> • Официальные гарантии • 
+              Аккуратная работа с платами • <span className="text-green-300">Бесплатный курьер</span>
+            </p>
+          </div>
+
+          {/* Benefits Grid с увеличенным отступом */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12 max-w-2xl mx-auto">
             {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2">
-                <CheckCircle className="w-5 h-5 text-green-400" />
-                <span className="text-white text-sm font-medium">{benefit}</span>
-              </div>
+              <BenefitItem key={index} benefit={benefit} />
             ))}
           </div>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
-              size="lg" 
-              className="bg-navy-600 hover:bg-navy-700 text-white px-8 py-4 text-lg font-semibold shadow-xl"
+          {/* CTA Buttons с увеличенным отступом */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
+            <Button
+              size="lg"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-10 py-5 text-lg font-semibold shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-2xl border-0 min-h-[64px]"
+              asChild
             >
-              <Phone className="w-5 h-5 mr-2" />
-              <a href="tel:+375297349077">+375 29 734 90 77</a>
+              <a href="tel:+375297349077" className="flex items-center">
+                <Phone className="w-6 h-6 mr-3 flex-shrink-0" />
+                <span className="text-lg">+375 29 734 90 77</span>
+              </a>
             </Button>
-            
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="border-white text-navy-600 hover:bg-white hover:text-navy-900 px-8 py-4 text-lg font-semibold"
-              onClick={() => setIsModalOpen(true)}
+
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-2 border-white bg-white/10 backdrop-blur-sm text-white hover:bg-white hover:text-navy-900 px-10 py-5 text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-2xl min-h-[64px]"
+              onClick={openModal}
             >
-              <MessageCircle className="w-5 h-5 mr-2" />
-              Оставить заявку
+              <MessageCircle className="w-6 h-6 mr-3 flex-shrink-0" />
+              <span className="text-lg">Оставить заявку</span>
             </Button>
           </div>
 
-          {/* Additional Phones */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-300 text-sm mb-2">Дополнительные номера:</p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm mb-2">
-              <a href="tel:+375447534796" className="text-blue-400 hover:text-blue-300">+375 44 753 47 96</a>
-              <a href="tel:+375257849731" className="text-blue-400 hover:text-blue-300">+375 25 784 97 31</a>
-              <a href="tel:+375172424111" className="text-blue-400 hover:text-blue-300">+375 17 24 24 111</a>
+          {/* Trust Indicators с увеличенным отступом */}
+          <div className="flex flex-wrap justify-center items-center gap-8 text-base text-gray-300 mb-10">
+            <div className="flex items-center space-x-3">
+              <CheckCircle className="w-5 h-5 text-green-400" />
+              <span>25.000+ довольных клиентов</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Shield className="w-5 h-5 text-blue-400" />
+              <span>Гарантия до 12 месяцев</span>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Star className="w-5 h-5 text-yellow-400" />
+              <span>Рейтинг 5.0 на основе 312 отзывов</span>
+            </div>
+          </div>
+
+          {/* Additional Phones с увеличенным отступом */}
+          <div className="mt-12 p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 max-w-md mx-auto">
+            <p className="text-gray-100 font-medium mb-4 text-lg">
+              Дополнительные номера:
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 text-lg flex-wrap">
+              {phoneNumbers.map((number, index) => (
+                <PhoneLink key={index} number={number} />
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Modal */}
-      <CallbackModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-      />
+      {/* Scroll Indicator с увеличенным отступом */}
+      <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="w-8 h-12 border-2 border-white/50 rounded-full flex justify-center">
+          <div className="w-1.5 h-4 bg-white/70 rounded-full mt-3 animate-pulse" />
+        </div>
+      </div>
+
+      {/* Modal с Suspense */}
+      {isModalOpen && (
+        <Suspense fallback={<ModalFallback />}>
+          <CallbackModal isOpen={isModalOpen} onClose={closeModal} />
+        </Suspense>
+      )}
     </section>
   );
 };

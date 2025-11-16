@@ -72,6 +72,7 @@ const ServicesList = () => {
         {
           name: 'Ремонт материнских плат',
           price: 'от 110,00 руб.',
+          link: '/services/motherboard-repair', // Добавлена ссылка для материнских плат
           variants: [
             { name: 'Система питания', price: '250,00 руб.' },
             { name: 'Мультиконтроллер', price: '130,00 руб.' },
@@ -282,7 +283,8 @@ const ServicesList = () => {
                       )}
                       
                       <div className="mt-4 pt-4 border-t border-gray-100">
-                        <Link href={category.link}>
+                        {/* Используем индивидуальную ссылку для материнских плат, для остальных - общую ссылку категории */}
+                        <Link href={service.link || category.link}>
                           <Button variant="ghost" className="w-full text-navy-600 hover:bg-navy-50 hover:text-navy-700">
                             Узнать подробности
                           </Button>

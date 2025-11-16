@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { formatDateToDDMMYYYY } from "@/lib/utils/dates";
 import ErrorBoundary from "@/components/articles/ErrorBoundary";
-import { getArticleBySlug } from "@/lib/api/articles";
+import { getArticleBySlug, getRandomArticles } from "@/lib/api/articles";
 import formatContent from "@/lib/formatArticle";
 
 interface ArticlePageProps {
@@ -63,6 +63,9 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       notFound();
     }
 
+    // Получаем случайные статьи для блока "Похожие статьи"
+    const randomArticles = await getRandomArticles();
+
     // Safe default values
     const safeArticle = {
       id: article?.id || "unknown",
@@ -79,24 +82,31 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
     // Format the content using our formatContent function
     const formattedContent = formatContent(safeArticle.content);
 
-    const relatedArticles = [
-      {
-        title: "Признаки неисправности жесткого диска",
-        annotation: "Как распознать проблемы с накопителем на ранней стадии",
-        preview: "/opengraph.webp",
-        slug: "hdd-problems",
-        readTime: "6 мин",
-        id: "related-1",
-      },
-      {
-        title: "Почему ноутбук медленно работает",
-        annotation: "Основные причины снижения производительности",
-        preview: "/opengraph.webp",
-        slug: "slow-laptop",
-        readTime: "5 мин",
-        id: "related-2",
-      },
-    ];
+    // Форматируем полученные случайные статьи для отображения
+    const relatedArticles = randomArticles.map(article => ({
+      id: article.id?.toString() || "unknown",
+      slug: article.slug || `article-${article.id}`,
+      title: article.title || "Без названия",
+      annotation: article.annotation || "Описание отсутствует",
+      preview: article.preview || "/opengraph.webp",
+      readTime: article.readTime || "5 мин",
+    }));
+
+    // Если случайных статей меньше 2, добавляем заглушки
+    const finalRelatedArticles = relatedArticles.length >= 2 
+      ? relatedArticles.slice(0, 2)
+      : [
+          ...relatedArticles,
+          // Заглушка если статей недостаточно
+          ...Array.from({ length: 2 - relatedArticles.length }, (_, index) => ({
+            id: `fallback-${index}`,
+            slug: `fallback-${index}`,
+            title: "Статья скоро появится",
+            annotation: "Мы готовим для вас новые полезные материалы",
+            preview: "/opengraph.webp",
+            readTime: "5 мин",
+          }))
+        ];
 
     return (
       <ErrorBoundary>
@@ -186,7 +196,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                       <Phone className="w-4 h-4 mr-2" />
                       <a href="tel:+375297349077">Консультация</a>
                     </Button>
-                    <Link href="/services">
+                    <Link href="/services" scroll={true}>
                       <Button
                         variant="outline"
                         className="border-blue-600 text-blue-600 hover:bg-blue-50"
@@ -205,7 +215,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 Похожие статьи
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {relatedArticles.map((relatedArticle) => (
+                {finalRelatedArticles.map((relatedArticle) => (
                   <Card
                     key={relatedArticle.id}
                     className="overflow-hidden hover:shadow-lg transition-all duration-300 group"
@@ -231,7 +241,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center text-sm text-gray-500">
                           <Clock className="w-4 h-4 mr-1" />
-                          <span>{relatedArticle.readTime}</span>
+                          <span>{relatedArticle.readTime} минут</span>
                         </div>
                         <Link
                           href={`/articles/${relatedArticle.slug}`}

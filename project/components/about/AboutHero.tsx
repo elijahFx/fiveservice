@@ -1,6 +1,13 @@
-import { Users, Award, Heart } from 'lucide-react';
+"use client";
+
+import { useState } from "react";
+import { Users, Award, Heart, Phone, MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import CallbackModal from "@/components/modal/CallbackModal";
 
 const AboutHero = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <section className="py-20 bg-gradient-to-br from-navy-600 to-navy-800 text-white pt-24 sm:pt-28">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -9,15 +16,17 @@ const AboutHero = () => {
             <div className="flex items-center justify-center w-16 h-16 bg-blue-400 rounded-2xl mr-4">
               <Users className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold">
-              О нас
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold">О нас</h1>
           </div>
-          
-          <p className="text-xl text-gray-200 leading-relaxed mb-8">
-            Оправдать доверие людей, которые обращаются к тебе за помощью, это, наверное, одно из самых достойных чувств, которые может испытывать уважающая себя личность.
-— Директор сервисного центра «Five Service»
-          </p>
+
+          <blockquote className="text-lg md:text-xl text-gray-200 leading-relaxed mb-8 italic">
+            "Оправдать доверие людей, которые обращаются к тебе за помощью, это,
+            наверное, одно из самых достойных чувств, которые может испытывать
+            уважающая себя личность."
+            <footer className="text-base text-blue-300 mt-4 not-italic">
+              — Директор сервисного центра «Five Service»
+            </footer>
+          </blockquote>
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
@@ -45,6 +54,33 @@ const AboutHero = () => {
           </div>
         </div>
       </div>
+
+      {/* CTA Buttons */}
+      <div className="mt-12 flex flex-col sm:flex-row gap-4 justify-center items-center">
+        <Button
+          size="lg"
+          className="bg-white text-navy-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold shadow-xl"
+        >
+          <Phone className="w-5 h-5 mr-2" />
+          <a href="tel:+375297349077">Позвонить</a>
+        </Button>
+
+        <Button
+          size="lg"
+          variant="outline"
+          className="border-white bg-white text-navy-600 hover:bg-navy-600 hover:text-white px-8 py-4 text-lg font-semibold"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <MessageCircle className="w-5 h-5 mr-2" />
+          Оставить заявку
+        </Button>
+      </div>
+
+      {/* Modal */}
+      <CallbackModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </section>
   );
 };

@@ -267,6 +267,27 @@ const searchArticles = async (req, res) => {
   }
 };
 
+const getRandomArticles = async (req, res) => {
+  let connection;
+  try {
+    connection = await createDbConnection();
+
+    const [rows] = await connection.execute(`
+      SELECT id, title, preview, annotation, readTime 
+      FROM articles 
+      ORDER BY RAND() 
+      LIMIT 2
+    `);
+
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error("Error fetching random articles:", error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    if (connection) await connection.end();
+  }
+};
+
 module.exports = {
   addArticle,
   getArticles,
@@ -278,5 +299,6 @@ module.exports = {
   likeArticle,
   unlikeArticle,
   searchArticles,
-  getArticlesByID
+  getArticlesByID,
+  getRandomArticles
 };
