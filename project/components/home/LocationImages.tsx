@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import { X } from "lucide-react";
+import Image from "next/image";
 
 const LocationImages = ({ onClose }: { onClose: () => void }) => {
   return (
@@ -23,7 +24,9 @@ const LocationImages = ({ onClose }: { onClose: () => void }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <div className="rounded-lg overflow-hidden border border-gray-200">
-                <img
+                <Image
+                  height={500}
+                  width={500}
                   src="/vxod2.webp"
                   alt="Вход в сервисный центр - вариант 1"
                   className="w-full h-auto object-cover"
@@ -33,7 +36,9 @@ const LocationImages = ({ onClose }: { onClose: () => void }) => {
 
             <div>
               <div className="rounded-lg overflow-hidden border border-gray-200">
-                <img
+                <Image
+                  height={500}
+                  width={500}
                   src="/vxod1.webp"
                   alt="Вход в сервисный центр - вариант 2"
                   className="w-full h-auto object-cover"
@@ -53,4 +58,4 @@ const LocationImages = ({ onClose }: { onClose: () => void }) => {
   );
 };
 
-export default LocationImages
+export default LocationImages;

@@ -24,7 +24,7 @@ const AboutHero = () => {
             наверное, одно из самых достойных чувств, которые может испытывать
             уважающая себя личность."
             <footer className="text-base text-blue-300 mt-4 not-italic">
-              — Директор сервисного центра «Five Service»
+              — Директор сервисного центра {`«Five Service»`}
             </footer>
           </blockquote>
 
@@ -34,7 +34,7 @@ const AboutHero = () => {
               <div className="flex items-center justify-center w-16 h-16 bg-white/10 rounded-2xl mx-auto mb-4">
                 <Award className="w-8 h-8 text-blue-400" />
               </div>
-              <div className="text-3xl font-bold mb-2">13 лет</div>
+              <div className="text-3xl font-bold mb-2">13+ лет</div>
               <div className="text-gray-300">опыта работы</div>
             </div>
             <div className="text-center">
