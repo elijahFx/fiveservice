@@ -1,0 +1,62 @@
+{
+  "name": "Ремонт ноутбуков в Минске | FiveService",
+  "short_name": "FiveService", 
+  "description": "Профессиональный ремонт ноутбуков в Минске. Быстро, качественно, с гарантией. Замена экранов, чистка, ремонт материнских плат.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e3a8a",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "ru",
+  "categories": ["business", "technology", "repair"],
+  "icons": [
+    {
+      "src": "/32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/180x180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/375x667scr.png",
+      "sizes": "375x667",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/414x896scr.png", 
+      "sizes": "414x896",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/768x1024scr.png",
+      "sizes": "768x1024",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/1280x720scr.png",
+      "sizes": "1280x720", 
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

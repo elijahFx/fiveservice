@@ -194,19 +194,19 @@ const ComponentReplacementPage = () => {
             </div>
 
             {/* Важное уведомление */}
-            <div className="bg-yellow-500/20 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto border border-yellow-400/30">
-              <div className="flex items-center justify-center space-x-3">
-                <AlertTriangle className="w-8 h-8 text-yellow-400" />
-                <div>
-                  <h3 className="text-xl font-bold text-yellow-100 mb-2">
-                    Внимание: цены указаны только за работу!
-                  </h3>
-                  <p className="text-yellow-200">
-                    Стоимость деталей рассчитывается отдельно. Бесплатная консультация по подбору комплектующих.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto border border-gray-200 shadow-lg">
+  <div className="flex items-center justify-center space-x-3">
+    <AlertTriangle className="w-8 h-8 text-blue-500" />
+    <div>
+      <h3 className="text-xl font-bold text-gray-800 mb-2">
+        Внимание: цены указаны только за работу!
+      </h3>
+      <p className="text-gray-600">
+        Стоимость деталей рассчитывается отдельно. Бесплатная консультация по подбору комплектующих.
+      </p>
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </section>

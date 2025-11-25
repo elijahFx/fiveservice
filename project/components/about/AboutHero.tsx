@@ -20,9 +20,9 @@ const AboutHero = () => {
           </div>
 
           <blockquote className="text-lg md:text-xl text-gray-200 leading-relaxed mb-8 italic">
-            "Оправдать доверие людей, которые обращаются к тебе за помощью, это,
+            &quotОправдать доверие людей, которые обращаются к тебе за помощью, это,
             наверное, одно из самых достойных чувств, которые может испытывать
-            уважающая себя личность."
+            уважающая себя личность.&ldquo
             <footer className="text-base text-blue-300 mt-4 not-italic">
               — Директор сервисного центра {`«Five Service»`}
             </footer>

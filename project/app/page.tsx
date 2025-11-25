@@ -1,13 +1,49 @@
 import Hero from "@/components/home/Hero";
 import Services from "@/components/home/Services";
 import Benefits from "@/components/home/Benefits";
-import Reviews from "@/components/home/Reviews";
-import Masters from "@/components/home/Masters";
-import HowWeWork from "@/components/home/HowWeWork";
-import Contact from "@/components/home/Contact";
-import Calculator from "@/components/home/Calculator";
-import FAQ from "@/components/common/FAQ";
 import Head from "next/head";
+import dynamic from "next/dynamic";
+
+// Lazy load компоненты, которые не видны при первой загрузке
+const Reviews = dynamic(() => import("@/components/home/Reviews"), {
+  loading: () => (
+    <div style={{ minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div>Загрузка отзывов...</div>
+    </div>
+  )
+});
+
+const Masters = dynamic(() => import("@/components/home/Masters"), {
+  loading: () => (
+    <div style={{ minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div>Загрузка информации о мастерах...</div>
+    </div>
+  )
+});
+
+const Contact = dynamic(() => import("@/components/home/Contact"), {
+  loading: () => (
+    <div style={{ minHeight: '500px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div>Загрузка контактов...</div>
+    </div>
+  )
+});
+
+const Calculator = dynamic(() => import("@/components/home/Calculator"), {
+  loading: () => (
+    <div style={{ minHeight: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div>Загрузка калькулятора...</div>
+    </div>
+  )
+});
+
+const FAQ = dynamic(() => import("@/components/common/FAQ"), {
+  loading: () => (
+    <div style={{ minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div>Загрузка вопросов и ответов...</div>
+    </div>
+  )
+});
 
 export default function Home() {
   return (
@@ -137,6 +173,7 @@ export default function Home() {
 
         <Benefits />
 
+        {/* Lazy loaded компоненты */}
         <Calculator />
 
         <div itemScope itemType="https://schema.org/Review">

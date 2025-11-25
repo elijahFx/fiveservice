@@ -130,7 +130,6 @@ const FaqList = () => {
               >
                 Оставить заявку
               </button>
-              // И не забудьте добавить модальное окно в рендер:
               {isModalOpen && (
                 <CallbackModal
                   isOpen={isModalOpen}

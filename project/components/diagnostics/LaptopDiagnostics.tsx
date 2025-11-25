@@ -4,6 +4,9 @@
 import { useState } from "react";
 import Link from "next/link";
 
+const URLS = ["fsv.by", "testend.site"]
+const BASIC_URL = URLS[1]
+
 interface DiagnosisStep {
   id: string;
   title: string;
@@ -196,7 +199,7 @@ export default function LaptopDiagnostics() {
         "Сложная аппаратная проблема — нужна диагностика на специальном оборудовании. Не разбирайте ноутбук самостоятельно.",
       additionalLink: {
         text: "подробнее о ремонте материнской платы",
-        href: "https://fsv.by/services/motherboard-repair",
+        href: `https://${BASIC_URL}/services/motherboard-repair`,
       },
       ctaText: "Узнать стоимость ремонта",
       eventAction: "cta-no-power",
@@ -212,7 +215,7 @@ export default function LaptopDiagnostics() {
         "Часто проблема решается ремонтом или заменой разъёма. Мы можем точно определить причину.",
       additionalLink: {
         text: "подробнее о ремонте разъёма питания",
-        href: "https://fsv.by/services/powerconnection",
+        href: `https://${BASIC_URL}/services/powerconnection`,
       },
       ctaText: "Узнать стоимость ремонта разъёма",
       eventAction: "cta-no-charge",
@@ -228,7 +231,7 @@ export default function LaptopDiagnostics() {
         "Дальнейшее включение может усугубить поломку. Необходимо срочно нести ноутбук в сервис.",
       additionalLink: {
         text: "подробнее о ремонте материнской платы",
-        href: "https://fsv.by/services/motherboard-repair",
+        href: `https://${BASIC_URL}/services/motherboard-repair`,
       },
       ctaText: "Продиагностировать",
       eventAction: "cta-turn-off",
@@ -243,7 +246,7 @@ export default function LaptopDiagnostics() {
         "Лучшее решение для скорости — установка SSD и переустановка системы. Это даст вашему ноутбуку вторую жизнь!",
       additionalLink: {
         text: "подробнее об SSD",
-        href: "https://fsv.by/services/software",
+        href: `https://${BASIC_URL}/services/software`,
       },
       ctaText: "Узнать цену установки SSD",
       eventAction: "cta-slow",
@@ -258,7 +261,7 @@ export default function LaptopDiagnostics() {
         "Игнорирование перегрева может привести к выходу из строя видеочипа или процессора. Рекомендуется профилактическая чистка.",
       additionalLink: {
         text: "подробнее о чистке ноутбука",
-        href: "https://fsv.by/services/cleaning",
+        href: `https://${BASIC_URL}/services/cleaning`,
       },
       ctaText: "Пройти диагностику",
       eventAction: "cta-hot",
@@ -289,7 +292,7 @@ export default function LaptopDiagnostics() {
         "Ремонт видеочипа — сложная процедура, требующая BGA-пайки. Шлейф меняется проще. Нужна точная диагностика.",
       additionalLink: {
         text: "подробнее о ремонте видеочипа",
-        href: "https://fsv.by/services",
+        href: `https://${BASIC_URL}/services#navbar`,
       },
       ctaText: "Пройти диагностику",
       eventAction: "cta-stripes",
@@ -319,7 +322,7 @@ export default function LaptopDiagnostics() {
         "К сожалению, разбитый экран ремонту не подлежит. Требуется его полная замена. У нас есть экраны для большинства моделей в наличии.",
       additionalLink: {
         text: "подробнее о замене матрицы",
-        href: "https://fsv.by/services/screenreplacement",
+        href: `https://${BASIC_URL}/services/screenreplacement`,
       },
       ctaText: "Подобрать матрицу и узнать цену",
       eventAction: "cta-cracked",

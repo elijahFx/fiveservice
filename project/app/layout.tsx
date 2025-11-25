@@ -2,13 +2,12 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Suspense } from "react";
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import ScrollToTop from "@/components/layout/ScrollToTop";
-import { SimpleAnalytics } from "@/components/analytics/AnalyticsProvider";
 import SiteMap from "@/components/layout/SiteMap";
-import CookieConsent from "@/components/layout/CookieConsent";
+import Script from "next/script";
+import LazyCookieConsent from "@/components/layout/LazyCookieConsent"; // ← Импортируем здесь
 
 const inter = Inter({ subsets: ["latin", "cyrillic"] });
 
@@ -46,32 +45,49 @@ export const metadata: Metadata = {
   },
 };
 
-// Вынесите скрипты в отдельный компонент
-function AnalyticsScripts() {
+// Предзагрузка критических ресурсов
+function PreloadResources() {
   return (
     <>
-      <script
+      <link rel="preconnect" href="https://mc.yandex.ru" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="https://mc.yandex.ru" />
+      <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    </>
+  );
+}
+
+// Аналитика с быстрой загрузкой после интерактивности
+function FastAnalytics() {
+  return (
+    <>
+      {/* Яндекс.Метрика - загружается сразу после интерактивности страницы */}
+      <Script
+        id="yandex-metrica"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
-            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-            m[i].l=1*new Date();
-            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+            (function(m,e,t,r,i,k,a){
+              m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+              m[i].l=1*new Date();
+              k=e.createElement(t),a=e.getElementsByTagName(t)[0];
+              k.async=1;k.src=r;a.parentNode.insertBefore(k,a);
+            })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+            
             ym(1234567, "init", {
-              clickmap:true,
-              trackLinks:true,
-              accurateTrackBounce:true,
-              webvisor:true
+              clickmap: true,
+              trackLinks: true,
+              accurateTrackBounce: true,
+              webvisor: true
             });
           `,
         }}
       />
-      <script
-        async
-        src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
-      />
-      <script
+
+      {/* Google Analytics - загружается одновременно с Яндекс.Метрикой */}
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
@@ -81,6 +97,8 @@ function AnalyticsScripts() {
           `,
         }}
       />
+
+      {/* Noscript для пользователей с отключенным JavaScript */}
       <noscript>
         <div>
           <img
@@ -102,7 +120,11 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
-        <AnalyticsScripts />
+        <PreloadResources />
+		<link rel="manifest" href="/manifest.json" /> 
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="FiveService" /> 
         <link
           rel="icon"
           href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='white'/><text x='16' y='21' text-anchor='middle' fill='%231e3a8a' font-family='Arial, sans-serif' font-size='16' font-weight='bold'>FS</text></svg>"
@@ -135,15 +157,20 @@ export default function RootLayout({
         />
       </head>
       <body className={inter.className}>
+        {/* Основной контент страницы */}
         <Navigation />
         <main>{children}</main>
         <Footer />
+        
+        {/* Вспомогательные компоненты */}
         <ScrollToTop />
         <SiteMap />
-        <CookieConsent />
-        <Suspense fallback={null}>
-          <SimpleAnalytics />
-        </Suspense>
+        
+        {/* CookieConsent с отложенной загрузкой */}
+        <LazyCookieConsent />
+        
+        {/* Аналитика загружается после того как страница стала интерактивной */}
+        <FastAnalytics />
       </body>
     </html>
   );
