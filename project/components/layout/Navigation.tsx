@@ -43,16 +43,16 @@ const Navigation = () => {
 
   const navItems = [
     { href: '/', label: 'Главная' },
-    { href: '/services', label: 'Цены' },
-    { href: '/articles', label: 'Статьи' },
-    { href: '/corporate', label: 'Юр. лицам' },
-    { href: '/questions', label: 'Вопросы' },
-    { href: '/reviews', label: 'Отзывы' },
-    { href: '/about', label: 'О нас' },
+    { href: '/services/#navbar', label: 'Цены' },
+    { href: '/articles/#navbar', label: 'Статьи' },
+    { href: '/corporate/#navbar', label: 'Юр. лицам' },
+    { href: '/questions/#navbar', label: 'Вопросы' },
+    { href: '/reviews/#navbar', label: 'Отзывы' },
+    { href: '/about/#navbar', label: 'О нас' },
   ];
 
   return (
-    <nav id='navbar' className="fixed top-0 w-full z-50 bg-white shadow-md transition-all duration-300">
+    <nav id="navbar" className="fixed top-0 w-full z-50 bg-white shadow-md transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-20">
           <Link href="/" className="flex items-center space-x-2">

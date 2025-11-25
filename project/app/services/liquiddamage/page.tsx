@@ -99,12 +99,12 @@ const LiquidDamagePage = () => {
   ];
 
   const warnings = [
-    "Самая большая ошибка многих пользователей — это попытка включить не просушенный ноутбук!",
-    "Нельзя включать устройство, залитое агрессивной жидкостью, которая добралась до материнской платы",
-    "Не сушите технику феном - только поплавите кнопки",
-    "Если клавиатура залита - ее в 90% случаях нужно менять на новую!",
-    "Дорожки кнопок клавиатуры не восстанавливаются",
-  ];
+  'Самая большая ошибка многих пользователей — это попытка включить не просушенный ноутбук!',
+  'Нельзя включать устройство, залитое агрессивной жидкостью, которая добралась до материнской платы',
+  'Не сушите технику феном — только поплавите кнопки',
+  'Если клавиатура залита — ее в 90% случаях нужно менять на новую!',
+  'Дорожки кнопок клавиатуры не восстанавливаются',
+];
 
   const consequences = [
     "Жидкостью разъедает все элементы на материнской плате",
@@ -153,12 +153,13 @@ const LiquidDamagePage = () => {
 
   return (
     <div className="min-h-screen bg-white pt-6">
+      {/* Hero Section - Navy Style */}
       <section className="relative bg-gradient-to-br from-navy-900 to-navy-700 text-white py-20">
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <Badge className="mb-4 bg-white text-navy-900 hover:bg-gray-100">
-              СРОЧНЫЙ РЕМОНТ
+              ⚠️ СРОЧНЫЙ РЕМОНТ
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
               Ремонт ноутбука залитого жидкостью
@@ -201,17 +202,20 @@ const LiquidDamagePage = () => {
         </div>
       </section>
 
+      {/* Emergency Alert */}
       <section className="py-8 bg-navy-800 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4">
             <AlertTriangle className="w-8 h-8 flex-shrink-0" />
             <p className="text-xl font-semibold">
-              В НОУТБУК ПОПАЛА ЖИДКОСТЬ? ПРОЛИЛИ ВОДУ, ЧАЙ, КОФЕ, НА КЛАВИАТУРУ НОУТБУКА?
+              В НОУТБУК ПОПАЛА ЖИДКОСТЬ? ПРОЛИЛИ ВОДУ, ЧАЙ, КОФЕ, НА КЛАВИАТУРУ
+              НОУТБУКА?
             </p>
           </div>
         </div>
       </section>
 
+      {/* Emergency Steps */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -251,6 +255,7 @@ const LiquidDamagePage = () => {
         </div>
       </section>
 
+      {/* Critical Warnings */}
       <section className="py-16 bg-navy-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -280,6 +285,7 @@ const LiquidDamagePage = () => {
         </div>
       </section>
 
+      {/* Liquids Damage */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -319,6 +325,7 @@ const LiquidDamagePage = () => {
         </div>
       </section>
 
+      {/* Why Not Wait */}
       <section className="py-16 bg-navy-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -341,12 +348,14 @@ const LiquidDamagePage = () => {
 
           <div className="bg-white border border-navy-200 rounded-2xl p-6">
             <p className="text-navy-800 font-semibold text-center">
-              Отключайте ноутбук от сети, снимайте батарею, звоните и привозите сразу в ремонт.
+              Отключайте ноутбук от сети, снимайте батарею, звоните и привозите
+              сразу в ремонт.
             </p>
           </div>
         </div>
       </section>
 
+      {/* Services */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -396,6 +405,7 @@ const LiquidDamagePage = () => {
         </div>
       </section>
 
+      {/* Guarantees */}
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
@@ -477,6 +487,7 @@ const LiquidDamagePage = () => {
         </div>
       </section>
 
+      {/* Emergency CTA */}
       <section className="py-16 bg-navy-600 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="bg-navy-700/50 backdrop-blur-sm rounded-2xl p-8 mb-8">
@@ -508,15 +519,17 @@ const LiquidDamagePage = () => {
 
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
             <p className="text-2xl font-bold mb-2">
-              ВРЕМЯ РАБОТЫ ПРОТИВ ВАС
+              ⏰ ВРЕМЯ РАБОТЫ ПРОТИВ ВАС
             </p>
             <p className="text-navy-100">
-              Каждая минута увеличивает риск необратимых повреждений. Действуйте сейчас!
+              Каждая минута увеличивает риск необратимых повреждений. Действуйте
+              сейчас!
             </p>
           </div>
         </div>
       </section>
 
+      {/* Callback Modal */}
       <CallbackModal
         isOpen={isCallbackModalOpen}
         onClose={handleCloseModal}
@@ -531,6 +544,7 @@ const LiquidDamagePage = () => {
         }}
       />
 
+      {/* Schema.org Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

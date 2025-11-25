@@ -58,7 +58,7 @@ const CookieConsent = () => {
 
           {/* Кнопки - вертикально на мобильных, горизонтально на десктопе */}
           <div className="flex flex-col sm:flex-row gap-2 mt-4">
-            <button
+			  <button
               onClick={acceptCookies}
               className="flex-1 px-4 py-3 sm:py-2.5 bg-navy-600 text-white text-sm font-medium 
                        rounded-lg hover:bg-navy-700 transform hover:scale-[1.02] 
@@ -74,7 +74,6 @@ const CookieConsent = () => {
             >
               Отказаться
             </button>
-            
           </div>
 
           {/* Ссылка на политику */}
