@@ -2,11 +2,12 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { URL } from "../../config";
 const NEW_URL = `http://localhost:5000/`
 const SUPER_NEW_URL = `https://testend2.site/`
+const LAST_URL = `https://backend.fsv.by/`
 
 export const filesApi = createApi({
   reducerPath: "filesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${SUPER_NEW_URL}`, // Базовый URL без дополнительных путей
+    baseUrl: `${LAST_URL}`, // Базовый URL без дополнительных путей
     prepareHeaders: (headers) => {
       const userInfo = localStorage.getItem("userASY");
       if (userInfo) {

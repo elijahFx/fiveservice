@@ -4,6 +4,7 @@ import { useState, useMemo, lazy, Suspense } from "react";
 import Image from "next/image";
 import { Phone, MessageCircle, CheckCircle, Star, Clock, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ImportantAnnouncement from "./Announcement";
 
 // Динамический импорт модального окна
 const CallbackModal = lazy(() => import("@/components/modal/CallbackModal"));
@@ -78,51 +79,40 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16 pb-8">
-      {/* Background Image с градиентным наложением */}
+      {/* Background Image с минимальным оформлением */}
       <div className="absolute inset-0">
         <Image
           src="/main.webp"
           alt="Ремонт ноутбуков в сервисном центре FiveService"
           fill
-          className="object-cover object-center scale-100 sm:scale-110 md:scale-105 lg:scale-100"
+          className="object-cover object-center scale-100 sm:scale-110 md:scale-105 lg:scale-100 blur-[1px]"
           priority
           quality={85}
           sizes="100vw"
           placeholder="blur"
-          blurDataURL="data:image/webp;base64,UklGRh4CAABXRUJQVlA4IBICAACwCACdASoWAAsAAAAAAwBQBOgCdAFAAAAAA+g=="
+          blurDataURL="data:image/webp;base64,UklGRh4CAABXRUJQVlA4IBICAACdASoWAAsAAAAAAwBQBOgCdAFAAAAAA+g=="
           style={{
-            objectPosition: "center 30%"
+            objectPosition: "center 30%",
+            filter: "blur(1px) brightness(0.8)"
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-navy-900/80 via-blue-900/70 to-purple-900/60" />
-        {/* Анимированные элементы фона */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-conic from-blue-500/10 via-transparent to-purple-500/10 animate-spin-slow" />
-          <div className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-conic from-green-500/10 via-transparent to-yellow-500/10 animate-spin-slow reverse" />
-        </div>
-      </div>
-
-      {/* Декоративные элементы */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-20 left-10 w-4 h-4 bg-blue-400/30 rounded-full animate-pulse" />
-        <div className="absolute top-16 right-20 w-6 h-6 bg-green-400/20 rounded-full animate-bounce delay-300" />
-        <div className="absolute top-40 left-1/4 w-3 h-3 bg-yellow-400/40 rounded-full animate-ping" />
-        <div className="absolute top-32 right-16 w-5 h-5 bg-purple-400/30 rounded-full animate-pulse delay-1000" />
-        <div className="absolute bottom-32 left-20 w-4 h-4 bg-cyan-400/25 rounded-full animate-bounce delay-700" />
-        <div className="absolute bottom-24 right-10 w-3 h-3 bg-orange-400/35 rounded-full animate-pulse delay-500" />
+        {/* Простой тёмный оверлей */}
+        <div className="absolute inset-0 bg-black/50" />
+        {/* Лёгкий градиент сверху для лучшей читаемости заголовка */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent" />
       </div>
 
       {/* Content с увеличенными отступами */}
-      <div className="relative  z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full mt-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center w-full mt-6">
         <div className="max-w-4xl mx-auto">
           
           {/* Основной заголовок с увеличенными отступами */}
           <div className="mb-6 sm:mb-12">
             <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-4 sm:mb-8 leading-tight">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 block">
+              <span className="text-white bg-clip-text block">
                 Ремонт ноутбуков
               </span>
-              <span className="block mt-2 sm:mt-4 bg-gradient-to-r from-white via-gray-200 to-gray-300 bg-clip-text text-transparent">
+              <span className="block mt-2 sm:mt-4 text-white bg-clip-text">
                 в Минске за 1 день
               </span>
             </h1>
@@ -192,6 +182,8 @@ const Hero = () => {
             </div>
           </div>
         </div>
+
+        <ImportantAnnouncement />
       </div>
 
       {/* Modal с Suspense */}

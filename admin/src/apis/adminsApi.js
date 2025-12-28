@@ -2,11 +2,12 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { URL } from "../../config";
 
 const BASE_URL = `http://localhost:5000/api/admin`;
+const NEW_BASE_UTL = `https://backend.fsv.by/api/admin`
 
 export const adminApi = createApi({
   reducerPath: "adminApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL,
+    baseUrl: NEW_BASE_UTL,
     prepareHeaders: (headers) => {
       const userInfo = localStorage.getItem("userASY");
       if (userInfo) {
